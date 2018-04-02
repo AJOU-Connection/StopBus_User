@@ -1,5 +1,7 @@
 package com.connection.stopbus.stopbus_user;
-
+/**
+ * Created by Danbk on 2018-03-29.
+ */
 import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -21,8 +23,8 @@ public class MainActivity extends Activity {
     private final long FINISH_INTERVAL_TIME = 2000;
 
     private static String[] PERMISSIONS = {
-            Manifest.permission.BLUETOOTH_PRIVILEGED,
-            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.BLUETOOTH,
+            Manifest.permission.BLUETOOTH_ADMIN,
             Manifest.permission.ACCESS_FINE_LOCATION
     };
 
@@ -120,6 +122,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.main_layout);
 
     }
-    
+    //[E] 앱시작 ( 기기 정보 로드 및 UI ) ----------------------------------------------------------------------------------------------------------------v
 
 }

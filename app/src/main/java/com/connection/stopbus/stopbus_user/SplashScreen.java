@@ -1,7 +1,7 @@
 package com.connection.stopbus.stopbus_user;
 
 /**
- * Created by tiger on 2018-04-03.
+ * Created by Danbk on 2018-04-03.
  */
 import android.app.Activity;
 import android.content.Intent;
