@@ -13,9 +13,17 @@
         android:textColor="@android:color/background_light"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:layout_marginBottom="34dp"
+        android:layout_below="@+id/logo"
+        android:layout_centerHorizontal="true"/>
 
-        android:layout_centerInParent="true" />
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/logo"
+        android:layout_centerInParent="true"
+
+        />
 
     <TextView
         android:id="@+id/textView2"

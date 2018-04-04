@@ -21,6 +21,8 @@
 
         <activity
             android:name=".MainActivity"/>
+        <activity
+            android:name=".ActivityFavourite"/>
     </application>
 
     <uses-permission android:name="android.permission.BLUETOOTH"/>

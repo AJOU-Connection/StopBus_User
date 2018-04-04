@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    >
+<RelativeLayout
+    android:id="@+id/search_layout"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="#00ACC1">
+    <ImageView
+        android:id="@+id/bus_stop_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="5dp"
+        android:layout_centerVertical="true"
+        android:background="@drawable/bus_stop" />
+    <TextView
+        android:id="@+id/search"
+        android:layout_width="260dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="버스 또는 정류장 검색"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="#BDBDBD"
+        android:background="@drawable/gray_border"
+        android:layout_toRightOf="@+id/bus_stop_image" />
+    <TextView
+        android:id="@+id/delete_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/search"
+        android:text="편집"
+        android:layout_centerVertical="true"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        />
+</RelativeLayout>
+
+    <TextView
+        android:id="@+id/favourite_bus"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@+id/search_layout"
+        android:background="#E0E0E0"
+        android:text="즐겨찾는 버스"
+        android:paddingLeft="15dp"
+        android:textStyle="bold"
+        android:gravity="center_vertical"
+        android:textSize="15sp"/>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/favourite_bus">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            tools:listitem="@layout/favourite_list_part" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+</RelativeLayout>

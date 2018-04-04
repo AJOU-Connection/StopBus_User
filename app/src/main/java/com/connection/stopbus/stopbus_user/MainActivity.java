@@ -5,6 +5,7 @@ package com.connection.stopbus.stopbus_user;
 import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ public class MainActivity extends Activity {
     private long backPressedTime = 0;
     private final int REQUEST_NEED = 100;
     private final long FINISH_INTERVAL_TIME = 2000;
+    private int STATUS = 0;
 
     private static String[] PERMISSIONS = {
             Manifest.permission.BLUETOOTH,
@@ -119,7 +121,11 @@ public class MainActivity extends Activity {
     //[S] 앱시작 ( 기기 정보 로드 및 UI ) ----------------------------------------------------------------------------------------------------------------
     public void StartApp() {
 
-        setContentView(R.layout.main_layout);
+        if(STATUS==0){
+            Intent i = new Intent(MainActivity.this, ActivityFavourite.class);
+            startActivity(i);
+        }
+
 
     }
     //[E] 앱시작 ( 기기 정보 로드 및 UI ) ----------------------------------------------------------------------------------------------------------------v
