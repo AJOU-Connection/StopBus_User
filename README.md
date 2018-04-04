@@ -12,7 +12,8 @@
 
 ## **StopBus for user 기능**
 
-- 유저 UI 제작 중
+- 유저 Permission
+- 유저 UI
 
 ## **사용 기술**
 1. GitHub: 프로젝트 소스코드 버전 관리
