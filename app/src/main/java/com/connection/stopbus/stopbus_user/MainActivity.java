@@ -33,7 +33,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.loading_sb);
+        setContentView(R.layout.activity_loading);
 
         Shared_Pref.init(getApplicationContext());
 
