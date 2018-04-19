@@ -1,15 +1,12 @@
 language: android
 android:
   components:
-  - tools
-  - platform-tools
-  - build-tools-26.0.2
-  - android-26
-  - extra-android-m2repository
-  - extra-google-m2repository
-before_install:
-- chmod +x gradlew
-- chmod +rx app 
-skip_cleanup: true
-script: 
-  - "sh script/build.sh"
+    - tools
+    - platform-tools
+    - tools
+
+    # The BuildTools version used by your project
+    - build-tools-26.0.2
+
+    # The SDK version used to compile your project
+    - android-26
