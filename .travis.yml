@@ -1,4 +1,8 @@
 language: android
+
+os:
+ - windows
+ 
 android:
   components:
     - tools
