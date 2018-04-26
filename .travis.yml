@@ -1,19 +1,39 @@
 language: android
-
+sudo: false
 os:
  - windows
 
 before_install:
 - chmod +x gradlew
 
+env:
+  global:
+   - ANDROID_API_LEVEL=26
+   - ANDROID_BUILD_TOOLS_VERSION=27.0.3
+   - EMULATOR_API_LEVEL=21
+
 android:
   components:
     - tools
     - platform-tools
     - tools
-
+    
     # The BuildTools version used by your project
-    - build-tools-27.0.3
-
+    - build-tools-$ANDROID_BUILD_TOOLS_VERSION
+    
     # The SDK version used to compile your project
-    - android-26
+    - android-$ANDROID_API_LEVEL
+
+    - android-$EMULATOR_API_LEVEL
+
+    - extra
+    - add-on
+    - sys-img-armeabi-v7a-android-22
+    - extra-google-m2repository
+    - extra-android-m2repository
+
+before_script:
+  - echo no | android create avd --force -n test -t android-$EMULATOR_API_LEVEL --abi armeabi-v7a
+  - emulator -avd test -no-skin -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
