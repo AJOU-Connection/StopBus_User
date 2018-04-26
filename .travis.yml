@@ -10,7 +10,7 @@ env:
   global:
    - ANDROID_API_LEVEL=26
    - ANDROID_BUILD_TOOLS_VERSION=27.0.3
-   - EMULATOR_API_LEVEL=22
+   - EMULATOR_API_LEVEL=21
 
 android:
   components:
@@ -28,7 +28,7 @@ android:
 
     - extra
     - add-on
-    - sys-img-armeabi-v7a-android-22
+    - sys-img-armeabi-v7a-android-21
     - extra-google-m2repository
     - extra-android-m2repository
 
