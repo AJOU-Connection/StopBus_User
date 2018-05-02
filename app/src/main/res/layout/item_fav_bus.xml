@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/job_list_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:background="@drawable/bg_round_rect">
+
+  <TextView
+      android:id="@+id/bus_num"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="3007"
+      />
+    <TextView
+        android:id="@+id/bus_type"
+        android:layout_below="@+id/bus_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="경기 수원시 직행 버스"/>
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+
+        android:background="@drawable/ic_star_black_36dp"
+        />
+
+
+</RelativeLayout>
