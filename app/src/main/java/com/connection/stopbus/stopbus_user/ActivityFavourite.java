@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -84,7 +83,7 @@ public class ActivityFavourite extends Activity{
 
         @Override
         public ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-            final View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.favourite_list_part, parent, false);
+            final View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.item_fav_bus, parent, false);
             return new ViewHolder(view);
         }
 

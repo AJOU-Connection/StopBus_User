@@ -75,7 +75,7 @@
             android:clipToPadding="false"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
-            tools:listitem="@layout/favourite_list_part" />
+            tools:listitem="@layout/item_fav_bus" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
 

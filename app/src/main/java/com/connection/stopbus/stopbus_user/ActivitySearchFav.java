@@ -27,6 +27,7 @@ public class ActivitySearchFav extends Activity{
 
 
     private SwipeRefreshLayout swipeContainer0;
+    private SwipeRefreshLayout swipeContainer1;
     private RecyclerView recyclerView;
     private RecyclerView recyclerView2;
 
@@ -66,10 +67,10 @@ public class ActivitySearchFav extends Activity{
             public Object instantiateItem(final ViewGroup container, final int position) {
                 View view = null;
 
-                if (position == 0) {        //작업 이력 레이아웃
+                if (position == 0) {  //작업 이력 레이아웃
                     view = LayoutInflater.from(
-                            getBaseContext()).inflate(R.layout.list_fav_bus, null, false);
-                    recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+                            getBaseContext()).inflate(R.layout.list_search_bus, null, false);
+                    recyclerView = (RecyclerView) view.findViewById(R.id.rv_search_bus_list);
                     swipeContainer0 = (SwipeRefreshLayout) view.findViewById(R.id.swipe_layout0);
                     // Setup refresh listener which triggers new data loading
                     swipeContainer0.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -95,18 +96,18 @@ public class ActivitySearchFav extends Activity{
 
 
                     view = LayoutInflater.from(
-                            getBaseContext()).inflate(R.layout.list_fav_bus, null, false);
-                    recyclerView2 = (RecyclerView) view.findViewById(R.id.rv);
-                    swipeContainer0 = (SwipeRefreshLayout) view.findViewById(R.id.swipe_layout0);
+                            getBaseContext()).inflate(R.layout.list_search_station, null, false);
+                    recyclerView2 = (RecyclerView) view.findViewById(R.id.rv_search_station_list);
+                    swipeContainer1 = (SwipeRefreshLayout) view.findViewById(R.id.swipe_layout0);
                     // Setup refresh listener which triggers new data loading
-                    swipeContainer0.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                    swipeContainer1.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                         @Override
                         public void onRefresh() {
                             // Your code to refresh the list here.
                             // Make sure you call swipeContainer.setRefreshing(false)
                             // once the network request has completed successfully.
 
-                            swipeContainer0.setRefreshing(false);
+                            swipeContainer1.setRefreshing(false);
 
                         }
                     });
@@ -192,7 +193,7 @@ public class ActivitySearchFav extends Activity{
 
         @Override
         public RecycleAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-            final View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.favourite_list_part, parent, false);
+            final View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.item_search_bus, parent, false);
             return new RecycleAdapter.ViewHolder(view);
         }
 
@@ -230,7 +231,7 @@ public class ActivitySearchFav extends Activity{
 
         @Override
         public RecycleAdapter2.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-            final View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.favourite_list_part, parent, false);
+            final View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.item_search_station, parent, false);
             return new RecycleAdapter2.ViewHolder(view);
         }
 

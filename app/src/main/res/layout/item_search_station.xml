@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_search_station"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:padding="5dp"
+    android:background="@drawable/bg_round_rect">
+
+  <TextView
+      android:id="@+id/station_name"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="5dp"
+      android:textStyle="bold"
+      android:textSize="14sp"
+      android:text="아주대.아주대병원입구.한국자산관리공사" />
+
+  <TextView
+      android:id="@+id/station_num"
+      android:layout_below="@+id/station_name"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="04237"/>
+
+  <TextView
+      android:id="@+id/divider"
+      android:layout_below="@+id/station_name"
+      android:layout_toRightOf="@+id/station_num"
+      android:layout_marginLeft="5dp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="|"/>
+
+  <TextView
+      android:id="@+id/station_way"
+      android:layout_below="@+id/station_name"
+      android:layout_toRightOf="@+id/divider"
+      android:layout_marginLeft="5dp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="창현고교.아주대학교.유신고교 방면"/>
+
+
+</RelativeLayout>

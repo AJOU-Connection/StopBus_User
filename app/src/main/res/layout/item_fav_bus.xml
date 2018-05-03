@@ -1,33 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/job_list_layout"
+    xmlns:toggle="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/favourite_list_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:background="@drawable/bg_round_rect">
+    android:layout_height="80dp"
+    android:background="@drawable/border">
 
-  <TextView
-      android:id="@+id/bus_num"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="3007"
-      />
-    <TextView
-        android:id="@+id/bus_type"
-        android:layout_below="@+id/bus_num"
+    <ImageView
+        android:id="@+id/delete_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="경기 수원시 직행 버스"/>
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentRight="true"
-
-        android:background="@drawable/ic_star_black_36dp"
+        android:background="@drawable/trash"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"/>
+    <TextView
+        android:id="@+id/bus_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/delete_btn"
+        android:text="3007"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:textSize="20sp"
+        android:textColor="#FF0000"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/bus_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/delete_btn"
+        android:layout_below="@+id/bus_num"
+        android:text="시외버스"
+        android:layout_marginLeft="23dp"
+        android:textSize="10sp"
+        android:textColor="#000000"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/bus_schedule_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/bus_num"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:text="기점 평일 05:00 ~ 22:10"
+        android:textSize="15sp"
+        android:textColor="#000000"
         />
+    <TextView
+        android:id="@+id/bus_schedule_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bus_schedule_1"
+        android:layout_toRightOf="@+id/bus_num"
+        android:layout_marginLeft="20dp"
+        android:text="회차 평일 06:00 ~ 23:20"
+        android:textSize="15sp"
+        android:textColor="#000000"/>
 
+    <com.zcw.togglebutton.ToggleButton
+        android:layout_width="54dp"
+        toggle:tbOnColor=   "#4BED90"
+        toggle:tbOffColor="#BDBDBD"
+        toggle:tbSpotColor="#FFFFFF"
+        toggle:tbOffBorderColor="#BDBDBD"
+        toggle:tbBorderWidth="2dp"
+        android:layout_height="30dp"
+        android:layout_toRightOf="@+id/bus_schedule_2"
+        android:layout_marginLeft="20dp"
+        android:layout_centerVertical="true"
+        >
 
+    </com.zcw.togglebutton.ToggleButton>
 </RelativeLayout>

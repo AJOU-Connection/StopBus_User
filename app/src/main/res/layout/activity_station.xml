@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:id="@+id/station_layout"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:background="#00ACC1">
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/ic_navigate_before_white_18dp" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/ic_home_white_36pt"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_alignParentRight="true"/>
+
+        <TextView
+            android:id="@+id/station_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="22117"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/back" />
+
+        <TextView
+            android:id="@+id/station_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/station_num"
+            android:text="레미안에스티지에스"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            android:layout_marginTop="5dp"
+            android:textColor="#FFFFFF"
+            android:layout_centerHorizontal="true"/>
+        <TextView
+            android:id="@+id/station_way"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/station_name"
+            android:text="롯데칠성 방면"
+            android:textSize="20sp"
+            android:layout_marginTop="5dp"
+            android:textColor="#FFFFFF"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/bus_tag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="버스"
+        android:layout_below="@+id/station_layout"
+        android:background="#eeeef0"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout0"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/bus_tag">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_search_bus_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            tools:listitem="@layout/item_search_bus" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</RelativeLayout>
