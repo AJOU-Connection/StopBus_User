@@ -43,3 +43,4 @@ dependencies {
     compile 'com.google.firebase:firebase-appindexing:11.8.0'
     compile 'com.firebase:firebase-jobdispatcher:0.6.0'
 }
+apply plugin: 'com.google.gms.google-services'

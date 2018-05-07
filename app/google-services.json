@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "531552797276",
+    "firebase_url": "https://stopbus-connection.firebaseio.com",
+    "project_id": "stopbus-connection",
+    "storage_bucket": "stopbus-connection.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:531552797276:android:ac7ddbe8ca3840bf",
+        "android_client_info": {
+          "package_name": "com.connection.stopbus.stopbus_user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "531552797276-1vqirklmouvipvjsvmao0b6qvdl59cc9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRxMgYwwn3hy79GVG6WI169YyIsPLM88c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

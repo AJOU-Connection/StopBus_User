@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+
 /**
  * Created by Danbk on 2018-04-04.
  */
@@ -62,7 +64,9 @@ public class ActivityFavourite extends Activity{
                 }
         );
 
-
+        // FCM 토큰
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        Log.d("sb", "MyFirebaseInstanceIDService> Refreshed token: " + refreshedToken);
 
     }
 
