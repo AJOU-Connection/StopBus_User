@@ -2,6 +2,7 @@ package com.connection.stopbus.stopbus_user;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -10,9 +11,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 
 import java.util.ArrayList;
@@ -34,13 +37,22 @@ public class ActivitySearchFav extends Activity{
     private RecycleAdapter SearchBusListAdapter = new RecycleAdapter(this);
     private RecycleAdapter2 SearchStationListAdapter = new RecycleAdapter2(this);
 
-
         @Override
         protected void onCreate(final Bundle savedInstanceState) {
 
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_search_fav);
 
+            findViewById(R.id.back).setOnClickListener(
+                    new Button.OnClickListener() {
+                        public void onClick(View v) {
+                            Log.d("sb", "back button pressed");
+                            Intent i = new Intent(ActivitySearchFav.this, ActivityFavourite.class);
+                            startActivity(i);
+
+                        }
+                    }
+            );
 
             initUI();
         }
@@ -133,20 +145,21 @@ public class ActivitySearchFav extends Activity{
         models.add(
                 new NavigationTabBar.Model.Builder(
                         getResources().getDrawable(R.drawable.ic_directions_bus_white_48pt),
-                        Color.parseColor(colors[0]))
+                        Color.parseColor(colors[4]))
                         .title("버스")
                         .build()
         );
         models.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_transfer_within_a_station_white_36pt),
-                        Color.parseColor(colors[0]))
+                        getResources().getDrawable(R.drawable.bus_stop),
+                        Color.parseColor(colors[4]))
                         .title("정류장")
                         .build()
         );
 
         navigationTabBar.setModels(models);
         navigationTabBar.setViewPager(viewPager, 0);
+        navigationTabBar.setTitleMode(NavigationTabBar.TitleMode.ACTIVE);
 
         //IMPORTANT: ENABLE SCROLL BEHAVIOUR IN COORDINATOR LAYOUT
         navigationTabBar.setBehaviorEnabled(false);

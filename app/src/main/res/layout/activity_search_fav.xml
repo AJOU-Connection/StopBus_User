@@ -26,35 +26,47 @@
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="버스 또는 정류장 검색"
+            android:hint="버스 또는 정류장 검색"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:textColor="#BDBDBD"
+            android:textColorHint="#BDBDBD"
             android:background="@drawable/gray_border"
             android:layout_toRightOf="@+id/back" />
 
     </RelativeLayout>
 
-    <devlight.io.library.ntb.NavigationTabBar
-        android:id="@+id/ntb_horizontal"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:layout_below = "@+id/search_layout"
-        android:background="#f2f2f2"
-        app:ntb_scaled="false"
-        app:ntb_tinted="true"
-        app:ntb_title_mode="all"
-        app:ntb_titled="true"
-        app:ntb_typeface="fonts/agency.ttf"
-        tools:layout_editor_absoluteY="439dp" />
+        android:id="@+id/linear"
+        android:orientation="vertical">
+
+        <devlight.io.library.ntb.NavigationTabBar
+            android:id="@+id/ntb_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#f2f2f2"
+            app:ntb_bg_color="#00ACC1"
+            app:ntb_scaled="false"
+            app:ntb_tinted="true"
+            app:ntb_title_mode="all"
+            android:padding="5dp"
+            app:ntb_titled="true"
+            app:ntb_typeface="fonts/agency.ttf"
+            tools:layout_editor_absoluteY="439dp" />
+
+    </LinearLayout>
+
+
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_horizontal_ntb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/ntb_horizontal"
+        android:layout_below="@+id/linear"
         android:background="#FAFAFA"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
