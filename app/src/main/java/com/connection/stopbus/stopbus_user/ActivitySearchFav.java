@@ -265,6 +265,7 @@ public class ActivitySearchFav extends Activity{
             public ViewHolder(final View itemView) {
                 super(itemView);
 
+
             }
         }
 
