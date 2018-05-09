@@ -21,7 +21,7 @@
         android:background="@drawable/bus_stop" />
     <TextView
         android:id="@+id/search"
-        android:layout_width="260dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
@@ -32,6 +32,7 @@
         android:paddingLeft="10dp"
         android:textSize="15sp"
         android:textStyle="bold"
+        android:layout_toLeftOf="@+id/delete_btn"
         android:textColor="#BDBDBD"
         android:background="@drawable/gray_border"
         android:layout_toRightOf="@+id/bus_stop_image" />
@@ -39,7 +40,8 @@
         android:id="@+id/delete_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/search"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
         android:text="편집"
         android:layout_centerVertical="true"
         android:textStyle="bold"

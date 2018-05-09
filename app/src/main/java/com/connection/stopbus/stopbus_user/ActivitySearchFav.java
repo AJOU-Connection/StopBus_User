@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 
 import java.util.ArrayList;
@@ -221,12 +222,14 @@ public class ActivitySearchFav extends Activity{
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-
-
+            public TextView bus_num;
+            public TextView bus_type;
 
             public ViewHolder(final View itemView) {
                 super(itemView);
 
+                bus_num = (TextView) itemView.findViewById(R.id.bus_num);
+                bus_type = (TextView) itemView.findViewById(R.id.bus_type);
 
             }
         }
@@ -260,12 +263,17 @@ public class ActivitySearchFav extends Activity{
 
         public class ViewHolder extends RecyclerView.ViewHolder {
 
+            public TextView station_name;
+            public TextView station_num;
+            public TextView station_way;
 
 
             public ViewHolder(final View itemView) {
                 super(itemView);
 
-
+                station_name = (TextView) itemView.findViewById(R.id.station_name);
+                station_num = (TextView) itemView.findViewById(R.id.station_num);
+                station_way = (TextView) itemView.findViewById(R.id.station_way);
             }
         }
 

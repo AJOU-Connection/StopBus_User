@@ -65,7 +65,8 @@
         toggle:tbOffBorderColor="#BDBDBD"
         toggle:tbBorderWidth="2dp"
         android:layout_height="30dp"
-        android:layout_toRightOf="@+id/bus_schedule_2"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
         android:layout_marginLeft="20dp"
         android:layout_centerVertical="true"
         >
