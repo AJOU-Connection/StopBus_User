@@ -1,6 +1,7 @@
 package com.connection.stopbus.stopbus_user;
 
 import android.net.Uri;
+import android.util.Log;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -27,7 +28,7 @@ public enum NetworkService implements NetworkInterface {
     private static OkHttpClient okHttpClient = null;
 
 
-    public final static String URL_BASE = "stop-bus.tk/driver/register";
+    public final static String URL_BASE = "http://stop-bus.tk/user/search?type=";
 
     /**
      * Method to build and return an OkHttpClient so we can set/get
@@ -109,20 +110,22 @@ public enum NetworkService implements NetworkInterface {
     public String postQuery(String api , Map args) {
 
         FormBody.Builder formBuilder = new FormBody.Builder();
-
         Set<String> keys = args.keySet();
         for(String key: keys){
             formBuilder.add(key, args.get(key).toString());
-
         }
+        Log.d("sb","222225123123:" + keys);
         RequestBody formBody = formBuilder.build();
-        Uri uri = Uri.parse(URL_BASE+api+".json")
+        Uri uri = Uri.parse(URL_BASE+api)
                 .buildUpon()
                 .build();
+        Log.d("sb","222225:" + formBody);
         URL url = buildURL(uri);
+        Log.d("sb","222225:"+ url);
         Request request = buildRequest(url)
                 .post(formBody)
                 .build();
+        Log.d("sb","222226:" + request);
         return getData(request);
     }
 
@@ -131,11 +134,14 @@ public enum NetworkService implements NetworkInterface {
     public String getQuery(String api , Map args) {
 
         Uri uri = null;
-        Uri.Builder builder = uri.parse(URL_BASE+api+".json").buildUpon();
+
+        Uri.Builder builder = uri.parse(URL_BASE+api).buildUpon();
 
         Set<String> keys = args.keySet();
+
         for(String key: keys){
             builder.appendQueryParameter(key, args.get(key).toString());
+
         }
 
         uri = builder.build();
