@@ -1,22 +1,26 @@
 package com.connection.stopbus.stopbus_user;
 
+import java.sql.Array;
+import java.util.Arrays;
+
 public  class ApiData {
 
 
     static class Resp {
-        public int result;
-        public String msg;
-        public String data;
+        public boolean result;
+        public int errorCode;
+        public String errorContent;
+        public Array body;
     }
 
     static class Route {
         public int districtCd;
-        public int routeNumber;
+        public String routeNumber;
         public String routeTypeName;
     }
     static class Station {
         public int districtCd;
-        public int stationNumber;
+        public String stationNumber;
         public String stationName;
         public String stationDirect;
     }

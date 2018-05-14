@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -95,6 +96,7 @@ public class ActivitySearchFav extends Activity{
                 public void afterTextChanged(Editable editable) {
 
                     CallData("route");
+                    CallData("station");
 
 
                 }
@@ -163,6 +165,7 @@ public class ActivitySearchFav extends Activity{
                             )
                     );
                     recyclerView.setAdapter(SearchBusListAdapter);
+                    CallData("route");
 
                 } else if (position == 1) {
 
@@ -189,7 +192,7 @@ public class ActivitySearchFav extends Activity{
                             )
                     );
                     recyclerView2.setAdapter(SearchStationListAdapter);
-
+                    CallData("station");
                 }
 
                 container.addView(view);
@@ -263,46 +266,44 @@ public class ActivitySearchFav extends Activity{
                 final Map<String, String> args = new HashMap<String, String>();
                 args.put("keyword",  SearchText.getText().toString()); //POST
 
-/*
-                JSONObject sendData = new JSONObject();
-                try {
-                    sendData.put("keyword" ,  SearchText.getText().toString());
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-*/
                 try {
 
                     final String response = NetworkService.INSTANCE.postQuery(api, args);
                     Log.d("sb","333333"+response);
+
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
+
                             if (api.equals("route")) {
-                                ApiData.Resp _resp = new Gson().fromJson(response.trim(), ApiData.Resp.class);
-                                if (_resp.data.equals("")) {
-                                    Log.d("sb", ">> job_list > data 0");
-                                } else {
-                                    ApiData.Route[] arr = new Gson().fromJson(_resp.data, ApiData.Route[].class);
-                                    RouteList = Arrays.asList(arr);
-                                    CopyRouteList = new ArrayList<ApiData.Route>();
-                                    CopyRouteList.addAll(RouteList);
+                                try {
+                                    JSONArray jarray = new JSONObject(response).getJSONArray("body");   // JSONArray 생성
+
+                                        ApiData.Route[] arr = new Gson().fromJson(jarray.toString(), ApiData.Route[].class);
+                                        RouteList = Arrays.asList(arr);
+                                        CopyRouteList = new ArrayList<ApiData.Route>();
+                                        CopyRouteList.addAll(RouteList);
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
                                 SearchBusListAdapter.notifyDataSetChanged();
 
                             } else if (api.equals("station")) {
-                                ApiData.Resp _resp2 = new Gson().fromJson(response.trim(), ApiData.Resp.class);
-                                if (_resp2.data.equals("")) {
+                                try {
+                                    JSONArray jarray = new JSONObject(response).getJSONArray("body");   // JSONArray 생성
 
-                                } else {
-                                    ApiData.Station[] arr2 = new Gson().fromJson(_resp2.data, ApiData.Station[].class);
-                                    StationList = Arrays.asList(arr2);
-                                    CopyStationList = new ArrayList<ApiData.Station>();
-                                    CopyStationList.addAll(StationList);
+                                        ApiData.Station[] arr2 = new Gson().fromJson(jarray.toString(), ApiData.Station[].class);
+                                        StationList = Arrays.asList(arr2);
+                                        CopyStationList = new ArrayList<ApiData.Station>();
+                                        CopyStationList.addAll(StationList);
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
                                 SearchStationListAdapter.notifyDataSetChanged();
                             }
+
                         }
                     });
                 } catch (Exception e) {

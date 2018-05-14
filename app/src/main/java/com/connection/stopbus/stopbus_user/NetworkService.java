@@ -3,6 +3,8 @@ package com.connection.stopbus.stopbus_user;
 import android.net.Uri;
 import android.util.Log;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
@@ -14,10 +16,13 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.FormBody;
 import okhttp3.Interceptor;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import static com.connection.stopbus.stopbus_user.JsonUtil.getJsonStringFromMap;
 
 
 public enum NetworkService implements NetworkInterface {
@@ -111,21 +116,35 @@ public enum NetworkService implements NetworkInterface {
 
         FormBody.Builder formBuilder = new FormBody.Builder();
         Set<String> keys = args.keySet();
-        for(String key: keys){
-            formBuilder.add(key, args.get(key).toString());
-        }
-        Log.d("sb","222225123123:" + keys);
-        RequestBody formBody = formBuilder.build();
-        Uri uri = Uri.parse(URL_BASE+api)
-                .buildUpon()
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject = getJsonStringFromMap(args);
+
+        Log.d("sb","jsonObject:" + jsonObject);
+
+        OkHttpClient client = new OkHttpClient();
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON, jsonObject.toString());
+        Request request = new Request.Builder()
+                .url(URL_BASE+api)
+                .post(body)
                 .build();
-        Log.d("sb","222225:" + formBody);
-        URL url = buildURL(uri);
-        Log.d("sb","222225:"+ url);
-        Request request = buildRequest(url)
-                .post(formBody)
-                .build();
-        Log.d("sb","222226:" + request);
+//
+//        for(String key: keys){
+//            formBuilder.add(key, args.get(key).toString());
+//        }
+//        Log.d("sb","222225123123:" + keys);
+//        RequestBody formBody = formBuilder.build();
+//        Uri uri = Uri.parse(URL_BASE+api)
+//                .buildUpon()
+//                .build();
+//        Log.d("sb","222225:" + formBody);
+//        URL url = buildURL(uri);
+//        Log.d("sb","222225:"+ url);
+//        Request request = buildRequest(url)
+//                .post(formBody)
+//                .build();
+//        Log.d("sb","222226:" + request);
         return getData(request);
     }
 
