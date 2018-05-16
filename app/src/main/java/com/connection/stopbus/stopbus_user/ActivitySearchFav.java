@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -95,8 +96,8 @@ public class ActivitySearchFav extends Activity{
                 @Override
                 public void afterTextChanged(Editable editable) {
 
-                    CallData("route");
-                    CallData("station");
+                    CallData("search?type=route");
+                    CallData("search?type=station");
 
 
                 }
@@ -154,7 +155,7 @@ public class ActivitySearchFav extends Activity{
                             // Your code to refresh the list here.
                             // Make sure you call swipeContainer.setRefreshing(false)
                             // once the network request has completed successfully.
-                            CallData("route");
+                            CallData("search?type=route");
                             swipeContainer0.setRefreshing(false);
 
                         }
@@ -165,7 +166,7 @@ public class ActivitySearchFav extends Activity{
                             )
                     );
                     recyclerView.setAdapter(SearchBusListAdapter);
-                    CallData("route");
+                    CallData("search?type=route");
 
                 } else if (position == 1) {
 
@@ -181,7 +182,7 @@ public class ActivitySearchFav extends Activity{
                             // Your code to refresh the list here.
                             // Make sure you call swipeContainer.setRefreshing(false)
                             // once the network request has completed successfully.
-                            CallData("station");
+                            CallData("search?type=station");
                             swipeContainer1.setRefreshing(false);
 
                         }
@@ -192,7 +193,7 @@ public class ActivitySearchFav extends Activity{
                             )
                     );
                     recyclerView2.setAdapter(SearchStationListAdapter);
-                    CallData("station");
+                    CallData("search?type=station");
                 }
 
                 container.addView(view);
@@ -275,7 +276,7 @@ public class ActivitySearchFav extends Activity{
                         @Override
                         public void run() {
 
-                            if (api.equals("route")) {
+                            if (api.equals("search?type=route")) {
                                 try {
                                     JSONArray jarray = new JSONObject(response).getJSONArray("body");   // JSONArray 생성
 
@@ -289,7 +290,7 @@ public class ActivitySearchFav extends Activity{
                                 }
                                 SearchBusListAdapter.notifyDataSetChanged();
 
-                            } else if (api.equals("station")) {
+                            } else if (api.equals("search?type=station")) {
                                 try {
                                     JSONArray jarray = new JSONObject(response).getJSONArray("body");   // JSONArray 생성
 
@@ -378,6 +379,20 @@ public class ActivitySearchFav extends Activity{
             holder.station_name.setText(StationList.get(position).stationNumber);
             holder.station_num.setText(StationList.get(position).stationName);
             holder.station_way.setText(StationList.get(position).stationDirect);
+
+            holder.item_search_station.setOnClickListener(
+                    new Button.OnClickListener() {
+                        public void onClick(View v) {
+
+                            Shared_Pref.stationNumber = StationList.get(position).stationNumber;
+                            Shared_Pref.districtCd = StationList.get(position).districtCd;
+                            Log.d("sb", "station's bus list gogo");
+                            Intent i = new Intent(ActivitySearchFav.this, ActivityStation.class);
+                            startActivity(i);
+
+                        }
+                    }
+            );
         }
 
         @Override
@@ -390,6 +405,7 @@ public class ActivitySearchFav extends Activity{
             public TextView station_name;
             public TextView station_num;
             public TextView station_way;
+            public RelativeLayout item_search_station;
 
 
             public ViewHolder(final View itemView) {
@@ -398,6 +414,7 @@ public class ActivitySearchFav extends Activity{
                 station_name = (TextView) itemView.findViewById(R.id.station_name);
                 station_num = (TextView) itemView.findViewById(R.id.station_num);
                 station_way = (TextView) itemView.findViewById(R.id.station_way);
+                item_search_station = (RelativeLayout) itemView.findViewById(R.id.item_search_station);
             }
         }
 

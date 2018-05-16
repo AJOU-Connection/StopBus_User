@@ -3,6 +3,10 @@ package com.connection.stopbus.stopbus_user;
 import java.sql.Array;
 import java.util.Arrays;
 
+/**
+ * Created by Danbk on 2018-05-06.
+ */
+
 public  class ApiData {
 
 

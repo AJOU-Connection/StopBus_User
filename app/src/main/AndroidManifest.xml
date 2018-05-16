@@ -27,6 +27,8 @@
             android:name=".ActivityFavourite"/>
         <activity
             android:name=".ActivitySearchFav"/>
+        <activity
+            android:name=".ActivityStation"/>
 
         <!-- [START firebase_service] -->
         <service

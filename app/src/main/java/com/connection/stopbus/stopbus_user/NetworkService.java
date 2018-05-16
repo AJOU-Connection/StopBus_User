@@ -24,6 +24,9 @@ import okhttp3.Response;
 
 import static com.connection.stopbus.stopbus_user.JsonUtil.getJsonStringFromMap;
 
+/**
+ * Motivated by Danbk on 2018-05-14.
+ */
 
 public enum NetworkService implements NetworkInterface {
     INSTANCE;
@@ -33,7 +36,7 @@ public enum NetworkService implements NetworkInterface {
     private static OkHttpClient okHttpClient = null;
 
 
-    public final static String URL_BASE = "http://stop-bus.tk/user/search?type=";
+    public final static String URL_BASE = "http://stop-bus.tk/user/";
 
     /**
      * Method to build and return an OkHttpClient so we can set/get

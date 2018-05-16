@@ -68,8 +68,7 @@
         android:background="#eeeef0"
         android:paddingLeft="5dp"
         android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        />
+        android:paddingBottom="5dp" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_layout0"
@@ -85,7 +84,7 @@
             android:clipToPadding="false"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
-            tools:listitem="@layout/item_search_bus" />
+            tools:listitem="@layout/item_station_bus" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>
