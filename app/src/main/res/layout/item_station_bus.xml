@@ -7,52 +7,51 @@
     android:background="@drawable/bg_round_rect">
 
     <TextView
-        android:id="@+id/bus_num"
+        android:id="@+id/routeNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="3007"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
         android:textSize="20sp"
-        android:textColor="#FF0000"
         android:textStyle="bold"/>
 
     <TextView
-        android:id="@+id/bus_type"
+        android:id="@+id/routeTypeName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/bus_num"
+        android:layout_below="@+id/routeNumber"
         android:text="시외버스"
         android:layout_marginLeft="20dp"
         android:textSize="10sp"
         android:textColor="#000000"
         android:textStyle="bold"/>
     <TextView
-        android:id="@+id/bus_time_1"
+        android:id="@+id/predictTime1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/bus_num"
+        android:layout_toRightOf="@+id/routeTypeName"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="18dp"
         android:text="4분"
         android:textSize="15sp"
         android:textColor="#000000" />
     <TextView
-        android:id="@+id/bus_location1"
+        android:id="@+id/locationNo1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/bus_time_1"
+        android:layout_toRightOf="@id/predictTime1"
         android:layout_marginTop="19dp"
         android:layout_marginLeft="10dp"
         android:text="1번째 전"
         android:textSize="10sp"/>
 
     <TextView
-        android:id="@+id/bus_time_2"
+        android:id="@+id/predictTime2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/bus_time_1"
-        android:layout_toRightOf="@+id/bus_num"
+        android:layout_below="@+id/predictTime1"
+        android:layout_toRightOf="@+id/routeTypeName"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="40dp"
         android:text="14분"
@@ -60,11 +59,11 @@
         android:textColor="#000000"/>
 
     <TextView
-        android:id="@+id/bus_location2"
+        android:id="@+id/locationNo2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/bus_time_2"
-        android:layout_below="@+id/bus_time_1"
+        android:layout_toRightOf="@id/predictTime2"
+        android:layout_below="@+id/predictTime1"
         android:text="2번째 전"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="9dp"

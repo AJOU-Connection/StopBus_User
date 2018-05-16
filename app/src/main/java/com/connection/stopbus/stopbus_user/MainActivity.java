@@ -123,6 +123,8 @@ public class MainActivity extends Activity {
 
         if(STATUS==0){
             Intent i = new Intent(MainActivity.this, ActivityFavourite.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
         }
 

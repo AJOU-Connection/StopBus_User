@@ -15,13 +15,18 @@ public class JsonUtil {
     /**
      * Map을 json으로 변환한다.
      */
-    public static JSONObject getJsonStringFromMap(Map<String, Object> map) {
+    public static JSONObject getJsonStringFromMap(Map<String, String> map) {
         JSONObject jsonObject = new JSONObject();
-
+        Object value;
         try{
-            for (Map.Entry<String, Object> entry : map.entrySet()) {
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+
                 String key = entry.getKey();
-                Object value = entry.getValue();
+                if(key == "districtCd"){
+                    value = Integer.parseInt(entry.getValue());
+                }else {
+                    value = entry.getValue();
+                }
                 jsonObject.put(key, value);
             }
         }catch (JSONException e){

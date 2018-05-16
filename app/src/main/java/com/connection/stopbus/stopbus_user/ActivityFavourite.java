@@ -59,6 +59,7 @@ public class ActivityFavourite extends Activity{
                     public void onClick(View v) {
                         Log.d("sb", "search");
                         Intent i = new Intent(ActivityFavourite.this, ActivitySearchFav.class);
+                        i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(i);
                     }
                 }

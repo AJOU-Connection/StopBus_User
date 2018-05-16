@@ -117,9 +117,6 @@ public enum NetworkService implements NetworkInterface {
     @Override
     public String postQuery(String api , Map args) {
 
-        FormBody.Builder formBuilder = new FormBody.Builder();
-        Set<String> keys = args.keySet();
-
         JSONObject jsonObject = new JSONObject();
         jsonObject = getJsonStringFromMap(args);
 
@@ -132,22 +129,7 @@ public enum NetworkService implements NetworkInterface {
                 .url(URL_BASE+api)
                 .post(body)
                 .build();
-//
-//        for(String key: keys){
-//            formBuilder.add(key, args.get(key).toString());
-//        }
-//        Log.d("sb","222225123123:" + keys);
-//        RequestBody formBody = formBuilder.build();
-//        Uri uri = Uri.parse(URL_BASE+api)
-//                .buildUpon()
-//                .build();
-//        Log.d("sb","222225:" + formBody);
-//        URL url = buildURL(uri);
-//        Log.d("sb","222225:"+ url);
-//        Request request = buildRequest(url)
-//                .post(formBody)
-//                .build();
-//        Log.d("sb","222226:" + request);
+
         return getData(request);
     }
 

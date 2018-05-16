@@ -76,6 +76,7 @@ public class ActivitySearchFav extends Activity{
                         public void onClick(View v) {
                             Log.d("sb", "back button pressed");
                             Intent i = new Intent(ActivitySearchFav.this, ActivityFavourite.class);
+                            i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(i);
 
                         }
@@ -376,16 +377,19 @@ public class ActivitySearchFav extends Activity{
         public void onBindViewHolder(final RecycleAdapter2.ViewHolder holder, final int position) {
 
 
-            holder.station_name.setText(StationList.get(position).stationNumber);
-            holder.station_num.setText(StationList.get(position).stationName);
+            holder.station_num.setText(StationList.get(position).stationNumber);
+            holder.station_name.setText(StationList.get(position).stationName);
             holder.station_way.setText(StationList.get(position).stationDirect);
 
             holder.item_search_station.setOnClickListener(
                     new Button.OnClickListener() {
                         public void onClick(View v) {
 
-                            Shared_Pref.stationNumber = StationList.get(position).stationNumber;
+                            Shared_Pref.stationNumber = StationList.get(position).stationNumber.trim();
+                            Shared_Pref.stationName = StationList.get(position).stationName;
                             Shared_Pref.districtCd = StationList.get(position).districtCd;
+                            Shared_Pref.stationDirect = StationList.get(position).stationDirect;
+
                             Log.d("sb", "station's bus list gogo");
                             Intent i = new Intent(ActivitySearchFav.this, ActivityStation.class);
                             startActivity(i);
