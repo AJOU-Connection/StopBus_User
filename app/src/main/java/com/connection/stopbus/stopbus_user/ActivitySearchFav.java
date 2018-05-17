@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -249,6 +250,13 @@ public class ActivitySearchFav extends Activity{
             @Override
             public void onPageSelected(final int position) {
 
+
+                if(position==0){
+                    SearchText.setInputType(InputType.TYPE_CLASS_DATETIME);
+                }else{
+                    SearchText.setInputType(InputType.TYPE_CLASS_TEXT);
+                    SearchText.setPrivateImeOptions("defaultInputmode=korean");
+                }
             }
 
             @Override

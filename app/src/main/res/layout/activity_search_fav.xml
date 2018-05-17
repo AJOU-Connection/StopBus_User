@@ -28,6 +28,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:hint="버스 또는 정류장 검색"
+            android:inputType="datetime"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:textSize="15sp"
