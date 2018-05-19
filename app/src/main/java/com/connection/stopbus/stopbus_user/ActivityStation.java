@@ -221,8 +221,6 @@ public class ActivityStation extends Activity{
                             }
                         }
                 );
-gi
-
 
             }catch (Exception e){
                 e.printStackTrace();
