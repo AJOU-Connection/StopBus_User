@@ -45,4 +45,40 @@ public  class ApiData {
         public String routeTypeName;
     }
 
+    static class BusStation{
+        public String stationNumber;
+        public String stationName;
+        public String stationSeq;
+
+    }
+
+    static class routeInfo{
+        public int districtCd;
+        public String downFirstTime;
+        public String downLastTime;
+        public int endStationNumber;
+        public int endStationID;
+        public String endStationName;
+        public String regionName;
+        public int routeID;
+        public String routeNumber;
+        public String routeTypeName;
+        public int startStationNumber;
+        public int startStationID;
+        public String startStationName;
+        public String upFirstTime;
+        public String upLastTime;
+
+    }
+
+    static class  busLocation{
+
+        public int endBus;
+        public int lowPlate;
+        public String plateNo;
+        public int remainSeatCnt;
+        public int stationID;
+        public int stationSeq;
+    }
+
 }

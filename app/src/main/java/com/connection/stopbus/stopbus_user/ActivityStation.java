@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -206,6 +207,23 @@ public class ActivityStation extends Activity{
                     holder.locationNo2.setVisibility(View.VISIBLE);
                 }
 
+                holder.bus_list_layout.setOnClickListener(
+                        new Button.OnClickListener() {
+                            public void onClick(View v) {
+
+                                Shared_Pref.routeId = StationBusList.get(position).routeId;
+
+
+                                Log.d("sb", "bus route list gogo");
+                                Intent i = new Intent(ActivityStation.this, ActivityBus.class);
+                                startActivity(i);
+
+                            }
+                        }
+                );
+gi
+
+
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -229,6 +247,7 @@ public class ActivityStation extends Activity{
             public TextView routeId;
             public TextView routeNumber;
             public TextView routeTypeName;
+            public RelativeLayout bus_list_layout;
 
             public ViewHolder(final View itemView) {
                 super(itemView);
@@ -244,6 +263,8 @@ public class ActivityStation extends Activity{
                 //routeId = (TextView) itemView.findViewById(R.id.routeId);
                 routeNumber = (TextView) itemView.findViewById(R.id.routeNumber);
                 routeTypeName= (TextView) itemView.findViewById(R.id.routeTypeName);
+
+                bus_list_layout = (RelativeLayout)itemView.findViewById(R.id.bus_list_layout);
 
 
             }

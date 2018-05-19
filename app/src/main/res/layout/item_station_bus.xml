@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:toggle="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/favourite_list_layout"
+    android:id="@+id/bus_list_layout"
     android:layout_width="match_parent"
     android:layout_height="80dp"
     android:background="@drawable/bg_round_rect">

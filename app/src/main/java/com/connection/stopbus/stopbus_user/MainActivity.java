@@ -4,6 +4,7 @@ package com.connection.stopbus.stopbus_user;
  */
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,9 +13,16 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import java.util.ArrayList;
+import java.util.UUID;
+import static com.connection.stopbus.stopbus_user.Shared_Pref.DeviceId;
+import static com.connection.stopbus.stopbus_user.Shared_Pref.Token;
 
 public class MainActivity extends Activity {
 
@@ -27,7 +35,8 @@ public class MainActivity extends Activity {
     private static String[] PERMISSIONS = {
             Manifest.permission.BLUETOOTH,
             Manifest.permission.BLUETOOTH_ADMIN,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.READ_PHONE_STATE
     };
 
     @Override
@@ -120,6 +129,26 @@ public class MainActivity extends Activity {
 
     //[S] 앱시작 ( 기기 정보 로드 및 UI ) ----------------------------------------------------------------------------------------------------------------
     public void StartApp() {
+
+        try {
+            TelephonyManager tm = (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
+
+            String tmDevice = "" + tm.getDeviceId();
+            String tmSerial = "" + tm.getSimSerialNumber();
+            String androidId = "" + android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+            UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
+            DeviceId = deviceUuid.toString();
+
+            // FCM 토큰
+            String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+            Log.d("sb", "MyFirebaseInstanceIDService> Refreshed token: " + refreshedToken);
+            Token = refreshedToken;
+
+        } catch (SecurityException e) {
+
+        }
+
+        Log.d("sb","DeviceId: "+DeviceId);
 
         if(STATUS==0){
             Intent i = new Intent(MainActivity.this, ActivityFavourite.class);

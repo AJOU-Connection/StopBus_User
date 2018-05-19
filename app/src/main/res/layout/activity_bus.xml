@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:id="@+id/bus_layout"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:background="#00ACC1">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/ic_navigate_before_white_18dp" />
+
+        <ImageView
+            android:id="@+id/home"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/ic_home_white_36pt"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_alignParentRight="true"/>
+
+        <TextView
+            android:id="@+id/bus_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="경기 수원시 직행버스"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/back" />
+
+        <TextView
+            android:id="@+id/bus_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bus_type"
+            android:text="3007"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            android:layout_marginTop="5dp"
+            android:textColor="#FFFFFF"
+            android:layout_centerHorizontal="true"/>
+        <RelativeLayout
+            android:id="@+id/startendlayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bus_num"
+            android:layout_centerHorizontal="true" >
+
+            <TextView
+                android:id="@+id/startStationName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="부개역.상동차고지"
+                android:textSize="10sp"
+                android:layout_marginTop="5dp"
+                android:textColor="#FFFFFF"
+                android:layout_marginRight="5dp"/>
+            <TextView
+                android:id="@+id/divider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⇔"
+                android:textSize="15sp"
+                android:layout_marginTop="0dp"
+                android:layout_toRightOf="@+id/startStationName"
+                android:textColor="#FFFFFF"/>
+            <TextView
+                android:id="@+id/endStationName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="63빌딩. 가톨릭대학교여의도성모병원"
+                android:textSize="10sp"
+                android:layout_marginTop="5dp"
+                android:textColor="#FFFFFF"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/divider" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/moreInfo"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/info"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="17dp"
+            android:layout_below="@+id/startendlayout"/>
+
+    </RelativeLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout0"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/bus_layout">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_station_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            tools:listitem="@layout/item_route" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</RelativeLayout>

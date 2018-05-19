@@ -65,9 +65,6 @@ public class ActivityFavourite extends Activity{
                 }
         );
 
-        // FCM 토큰
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d("sb", "MyFirebaseInstanceIDService> Refreshed token: " + refreshedToken);
 
     }
 
