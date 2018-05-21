@@ -213,7 +213,6 @@ public class ActivityStation extends Activity{
 
                                 Shared_Pref.routeId = StationBusList.get(position).routeId;
 
-
                                 Log.d("sb", "bus route list gogo");
                                 Intent i = new Intent(ActivityStation.this, ActivityBus.class);
                                 startActivity(i);

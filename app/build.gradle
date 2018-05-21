@@ -38,9 +38,9 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.8.0'
     compile 'com.squareup.okhttp3:okhttp-urlconnection:3.8.0'
 
-    compile 'com.google.firebase:firebase-core:11.8.0'
-    compile 'com.google.firebase:firebase-messaging:11.8.0'
-    compile 'com.google.firebase:firebase-appindexing:11.8.0'
+    compile 'com.google.firebase:firebase-core:15.0.2'
+    compile 'com.google.firebase:firebase-messaging:15.0.2'
+    compile 'com.google.firebase:firebase-appindexing:15.0.0'
     compile 'com.firebase:firebase-jobdispatcher:0.6.0'
 
     compile 'com.google.code.gson:gson:2.8.2'

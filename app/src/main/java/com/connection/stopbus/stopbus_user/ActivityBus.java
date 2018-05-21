@@ -44,11 +44,10 @@ public class ActivityBus extends Activity{
     private List<ApiData.BusStation> BusStationList = new ArrayList<ApiData.BusStation>();
     private List<ApiData.BusStation> CopyBusStationList;
 
-    private List<ApiData.routeInfo> routeInfoList = new ArrayList<ApiData.routeInfo>();
-    private List<ApiData.routeInfo> CopyrouteInfoList;
-
     private List<ApiData.busLocation> busLocationList = new ArrayList<ApiData.busLocation>();
     private List<ApiData.busLocation> CopybusLocationList;
+
+
 
     Handler mHandler = new Handler();
 
@@ -81,7 +80,7 @@ public class ActivityBus extends Activity{
                 swipeContainer.setRefreshing(false);
             }
         });
-        recyclerView = (RecyclerView) findViewById(R.id.rv_station_bus_list);
+        recyclerView = (RecyclerView) findViewById(R.id.rv_station_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(
                         getBaseContext(), LinearLayoutManager.VERTICAL, false
@@ -136,6 +135,9 @@ public class ActivityBus extends Activity{
 
                                     JSONArray jarray = new JSONObject(response).getJSONArray("body");   // JSONArray 생성
 
+
+                                    Log.d("sb","asdf2222");
+
                                     ApiData.BusStation[] arr = new Gson().fromJson(jarray.toString(), ApiData.BusStation[].class);
                                     BusStationList = Arrays.asList(arr);
                                     CopyBusStationList = new ArrayList<ApiData.BusStation>();
@@ -149,24 +151,27 @@ public class ActivityBus extends Activity{
                             } else if(api.equals("routeInfo")) {
                                 try {
 
-                                    JSONArray jarray = new JSONObject(response).getJSONArray("body");   // JSONArray 생성
 
-                                    ApiData.routeInfo[] arr = new Gson().fromJson(jarray.toString(), ApiData.routeInfo[].class);
-                                    routeInfoList = Arrays.asList(arr);
-                                    CopyrouteInfoList = new ArrayList<ApiData.routeInfo>();
-                                    CopyrouteInfoList.addAll(routeInfoList);
+                                    Log.d("sb","asdfasdfasdf");
+                                    JSONObject jObject = new JSONObject(response).getJSONObject("body");
+
+                                    Log.d("sb","jobject"+ jObject);
+
+                                    ApiData.routeInfo routeInfo = new Gson().fromJson(jObject.toString(), ApiData.routeInfo.class);
+
+                                    Log.d("sb","routeInfo: "+ routeInfo.toString());
 
                                     bus_type = (TextView) findViewById(R.id.bus_type);
-                                    bus_type.setText(routeInfoList.get(0).routeTypeName);
+                                    bus_type.setText(routeInfo.routeTypeName);
 
                                     bus_num = (TextView) findViewById(R.id.bus_num);
-                                    bus_num.setText(routeInfoList.get(0).routeNumber);
+                                    bus_num.setText(routeInfo.routeNumber);
 
                                     startStationName = (TextView) findViewById(R.id.startStationName);
-                                    startStationName.setText(routeInfoList.get(0).startStationName);
+                                    startStationName.setText(routeInfo.startStationName);
 
                                     endStationName = (TextView) findViewById(R.id.endStationName);
-                                    endStationName.setText(routeInfoList.get(0).endStationName);
+                                    endStationName.setText(routeInfo.endStationName);
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -220,7 +225,7 @@ public class ActivityBus extends Activity{
             try {
 
                 holder.stationName.setText(BusStationList.get(position).stationName);
-                holder.stationNumber.setText(BusStationList.get(position).stationNumber);
+                holder.stationNumber.setText(BusStationList.get(position).stationNumber.trim());
 
 
             }catch (Exception e){
