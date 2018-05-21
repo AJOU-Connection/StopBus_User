@@ -35,7 +35,8 @@
             android:textStyle="bold"
             android:textColorHint="#BDBDBD"
             android:background="@drawable/gray_border"
-            android:layout_toRightOf="@+id/back" />
+            android:layout_toRightOf="@+id/back"
+            android:saveEnabled="true"/>
 
     </RelativeLayout>
 

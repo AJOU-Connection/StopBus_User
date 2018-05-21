@@ -400,6 +400,7 @@ public class ActivitySearchFav extends Activity{
 
                             Log.d("sb", "station's bus list gogo");
                             Intent i = new Intent(ActivitySearchFav.this, ActivityStation.class);
+
                             startActivity(i);
 
                         }
