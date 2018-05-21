@@ -5,7 +5,6 @@
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     android:layout_marginBottom="1dp"
-    android:padding="15dp"
     android:background="@drawable/bg_round_rect">
 
     <ImageView
@@ -13,12 +12,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/ic_directions_bus_48pt"/>
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:background=""/>
+        android:background="@drawable/line"/>
 
     <TextView
         android:id="@+id/stationName"
@@ -26,6 +27,7 @@
         android:layout_height="wrap_content"
         android:text="부개역.상동차고지"
         android:textStyle="bold"
+        android:layout_marginTop="15dp"
         android:layout_marginLeft="100dp"/>
 
     <TextView
