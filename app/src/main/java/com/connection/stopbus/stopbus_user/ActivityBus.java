@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -188,6 +191,23 @@ public class ActivityBus extends Activity{
                                     CopybusLocationList = new ArrayList<ApiData.busLocation>();
                                     CopybusLocationList.addAll(busLocationList);
 
+                                    Log.d("sb","busLocationList: "+ busLocationList);
+
+                                    Collections.sort(busLocationList, new Comparator<ApiData.busLocation>() {
+                                        @Override
+                                        public int compare(ApiData.busLocation first, ApiData.busLocation second) {
+                                            if(first.getStationSeq()  > second.getStationSeq()){
+                                                return 1;
+                                            }else if(first.getStationSeq()  < second.getStationSeq()){
+                                                return -1;
+                                            }else {
+                                                return 0;
+                                            }
+                                        }
+                                    });
+
+                                    Log.d("sb","busLocationList2: "+ busLocationList);
+
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -226,6 +246,21 @@ public class ActivityBus extends Activity{
 
                 holder.stationName.setText(BusStationList.get(position).stationName);
                 holder.stationNumber.setText(BusStationList.get(position).stationNumber.trim());
+                Log.d("sb","position: "+ position);
+
+                for(int i =0; i < busLocationList.size(); i++){
+                    Log.d("sb","busLocationList.get(i).stationSeq: "+ busLocationList.get(i).stationSeq +" i : " + i);
+
+                    if(busLocationList.get(i).stationSeq ==position+1){
+
+                        holder.bus.setVisibility(View.VISIBLE);
+                        break;
+                    }else{
+                        holder.bus.setVisibility(View.GONE);
+                    }
+
+                }
+
 
 
             }catch (Exception e){
@@ -242,18 +277,21 @@ public class ActivityBus extends Activity{
 
             public TextView stationName;
             public TextView stationNumber;
+            public ImageView bus;
 
             public ViewHolder(final View itemView) {
                 super(itemView);
 
                 stationName = (TextView) itemView.findViewById(R.id.stationName);
                 stationNumber = (TextView) itemView.findViewById(R.id.stationNumber);
+                bus = (ImageView) itemView.findViewById(R.id.bus);
 
 
             }
         }
 
     }
+
 
 
 }

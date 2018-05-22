@@ -48,7 +48,7 @@ public  class ApiData {
     static class BusStation{
         public String stationNumber;
         public String stationName;
-        public String stationSeq;
+        public int stationSeq;
 
     }
 
@@ -56,14 +56,14 @@ public  class ApiData {
         public int districtCd;
         public String downFirstTime;
         public String downLastTime;
-        public int endStationNumber;
+        public String endStationNumber;
         public int endStationID;
         public String endStationName;
         public String regionName;
         public int routeID;
         public String routeNumber;
         public String routeTypeName;
-        public int startStationNumber;
+        public String startStationNumber;
         public int startStationID;
         public String startStationName;
         public String upFirstTime;
@@ -77,8 +77,12 @@ public  class ApiData {
         public int lowPlate;
         public String plateNo;
         public int remainSeatCnt;
-        public int stationID;
+        public String stationID;
         public int stationSeq;
+
+        public int getStationSeq() {
+            return stationSeq;
+        }
     }
 
 }
