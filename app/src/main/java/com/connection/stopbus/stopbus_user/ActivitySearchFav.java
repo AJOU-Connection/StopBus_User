@@ -400,9 +400,14 @@ public class ActivitySearchFav extends Activity{
         public void onBindViewHolder(final RecycleAdapter2.ViewHolder holder, final int position) {
 
 
-            holder.station_num.setText(StationList.get(position).stationNumber);
+            holder.station_num.setText(StationList.get(position).stationNumber.trim());
             holder.station_name.setText(StationList.get(position).stationName);
-            holder.station_way.setText(StationList.get(position).stationDirect);
+            if(StationList.get(position).stationDirect.equals("")){
+                holder.station_way.setVisibility(View.GONE);
+            }else{
+                holder.station_way.setText("| "+ StationList.get(position).stationDirect + " 방면");
+            }
+
 
             holder.item_search_station.setOnClickListener(
                     new Button.OnClickListener() {

@@ -17,6 +17,10 @@ public  class ApiData {
         public Array body;
     }
 
+    static class MyFavBus{
+
+    }
+
     static class Route {
         public String districtCd;
         public String routeNumber;

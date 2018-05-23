@@ -112,7 +112,19 @@ public class ActivityBus extends Activity{
                 new Button.OnClickListener() {
                     public void onClick(View v) {
                         Log.d("sb", "home button pressed");
-                        Intent i = new Intent(ActivityBus.this, ActivityStation.class);
+                        Intent i = new Intent(ActivityBus.this, ActivityFavourite.class);
+                        i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(i);
+
+                    }
+                }
+        );
+
+        findViewById(R.id.moreInfo).setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View v) {
+                        Log.d("sb", "more info button pressed");
+                        Intent i = new Intent(ActivityBus.this, ActivityMoreInfo.class);
                         i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(i);
 
@@ -264,7 +276,14 @@ public class ActivityBus extends Activity{
                         holder.bus_info_layout.setVisibility(View.VISIBLE);
 
                         holder.plateNo.setText(busLocationList.get(i).plateNo.substring(5));
-                        holder.remainSeatCnt.setText(busLocationList.get(i).remainSeatCnt+"석");
+
+                        if(busLocationList.get(i).remainSeatCnt.equals("-1")){
+                            holder.remainSeatCnt.setVisibility(View.INVISIBLE);
+                        }
+                        else{
+                            holder.remainSeatCnt.setText(busLocationList.get(i).remainSeatCnt+"석");
+                        }
+
 
                         break;
                     }else{
