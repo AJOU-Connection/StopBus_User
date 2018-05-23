@@ -11,7 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
 
-
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id"/>
 
         <activity android:name=".SplashScreen">
             <intent-filter>
@@ -30,7 +32,14 @@
         <activity
             android:name=".ActivityStation"/>
         <activity
-            android:name=".ActivityBus"/>
+            android:name=".ActivityBus">
+            <intent-filter>
+                <action android:name="OPEN_ACTIVITY_1" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ActivityMoreInfo"/>
 
         <!-- [START firebase_service] -->
         <service

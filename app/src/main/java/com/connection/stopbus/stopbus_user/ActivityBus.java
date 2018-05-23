@@ -66,6 +66,16 @@ public class ActivityBus extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bus);
 
+        if (getIntent().getExtras() != null) {
+
+                Object value = getIntent().getExtras().get("routeID");
+                Log.d("sb", " Value: " + value);
+                Shared_Pref.routeId =  Integer.parseInt(value.toString());
+
+
+        }
+
+
         CallData("busStationList");
         CallData("routeInfo");
         CallData("busLocationList");

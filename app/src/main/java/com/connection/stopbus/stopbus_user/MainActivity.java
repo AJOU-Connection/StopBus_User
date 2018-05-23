@@ -44,6 +44,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
+
+
         Shared_Pref.init(getApplicationContext());
 
         //[S] 퍼미션 체크 ----------------------------------------------------------------------------------------------------------------

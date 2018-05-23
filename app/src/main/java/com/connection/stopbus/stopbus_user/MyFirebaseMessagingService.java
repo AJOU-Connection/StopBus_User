@@ -16,6 +16,7 @@
 
 package com.connection.stopbus.stopbus_user;
 
+import android.app.LauncherActivity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -60,6 +61,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
+        Log.d("sb","sdfsdfsd");
+
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             //Log.d(TAG, "Message data payload: " + remoteMessage.getData());
@@ -79,6 +82,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
+            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+        }else{
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
 
@@ -117,7 +122,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Log.d(TAG, "_______________ sendNotification");
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, ActivityBus.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
