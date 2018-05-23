@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -254,9 +255,19 @@ public class ActivityBus extends Activity{
                     if(busLocationList.get(i).stationSeq ==position+1){
 
                         holder.bus.setVisibility(View.VISIBLE);
+                        holder.plateNo.setVisibility(View.VISIBLE);
+                        holder.remainSeatCnt.setVisibility(View.VISIBLE);
+                        holder.bus_info_layout.setVisibility(View.VISIBLE);
+
+                        holder.plateNo.setText(busLocationList.get(i).plateNo.substring(5));
+                        holder.remainSeatCnt.setText(busLocationList.get(i).remainSeatCnt+"석");
+
                         break;
                     }else{
-                        holder.bus.setVisibility(View.GONE);
+                        holder.bus.setVisibility(View.INVISIBLE);
+                        holder.plateNo.setVisibility(View.INVISIBLE);
+                        holder.remainSeatCnt.setVisibility(View.INVISIBLE);
+                        holder.bus_info_layout.setVisibility(View.INVISIBLE);
                     }
 
                 }
@@ -278,6 +289,9 @@ public class ActivityBus extends Activity{
             public TextView stationName;
             public TextView stationNumber;
             public ImageView bus;
+            public TextView plateNo;
+            public TextView remainSeatCnt;
+            public RelativeLayout bus_info_layout;
 
             public ViewHolder(final View itemView) {
                 super(itemView);
@@ -285,6 +299,9 @@ public class ActivityBus extends Activity{
                 stationName = (TextView) itemView.findViewById(R.id.stationName);
                 stationNumber = (TextView) itemView.findViewById(R.id.stationNumber);
                 bus = (ImageView) itemView.findViewById(R.id.bus);
+                plateNo = (TextView) itemView.findViewById(R.id.plateNo);
+                remainSeatCnt = (TextView) itemView.findViewById(R.id.remainSeatCnt);
+                bus_info_layout = (RelativeLayout) itemView.findViewById(R.id.bus_info_layout);
 
 
             }

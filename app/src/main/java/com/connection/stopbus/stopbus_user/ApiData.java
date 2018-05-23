@@ -76,7 +76,7 @@ public  class ApiData {
         public int endBus;
         public int lowPlate;
         public String plateNo;
-        public int remainSeatCnt;
+        public String remainSeatCnt;
         public String stationID;
         public int stationSeq;
 
