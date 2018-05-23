@@ -89,9 +89,7 @@ public class ActivityStation extends Activity{
                 new Button.OnClickListener() {
                     public void onClick(View v) {
                         Log.d("sb", "back button pressed");
-                        Intent i = new Intent(ActivityStation.this, ActivitySearchFav.class);
-                        i.addFlags(i.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        startActivity(i);
+                        finish();
 
                     }
                 }

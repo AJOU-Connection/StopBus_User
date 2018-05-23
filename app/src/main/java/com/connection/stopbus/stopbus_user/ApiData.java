@@ -21,6 +21,7 @@ public  class ApiData {
         public String districtCd;
         public String routeNumber;
         public String routeTypeName;
+        public int routeID;
     }
     static class Station {
         public int districtCd;

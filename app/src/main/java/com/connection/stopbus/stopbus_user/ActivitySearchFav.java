@@ -76,9 +76,7 @@ public class ActivitySearchFav extends Activity{
                     new Button.OnClickListener() {
                         public void onClick(View v) {
                             Log.d("sb", "back button pressed");
-                            Intent i = new Intent(ActivitySearchFav.this, ActivityFavourite.class);
-                            i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(i);
+                            finish();
 
                         }
                     }
@@ -344,6 +342,21 @@ public class ActivitySearchFav extends Activity{
 
             holder.bus_num.setText(RouteList.get(position).routeNumber);
             holder.bus_type.setText(RouteList.get(position).routeTypeName);
+
+            holder.item_fav_bus.setOnClickListener(
+                    new Button.OnClickListener() {
+                        public void onClick(View v) {
+
+                            Shared_Pref.routeId = RouteList.get(position).routeID;
+
+                            Log.d("sb", "bus route list gogo");
+                            Intent i = new Intent(ActivitySearchFav.this, ActivityBus.class);
+
+                            startActivity(i);
+
+                        }
+                    }
+            );
         }
 
         @Override
@@ -354,12 +367,14 @@ public class ActivitySearchFav extends Activity{
         public class ViewHolder extends RecyclerView.ViewHolder {
             public TextView bus_num;
             public TextView bus_type;
+            public RelativeLayout item_fav_bus;
 
             public ViewHolder(final View itemView) {
                 super(itemView);
 
                 bus_num = (TextView) itemView.findViewById(R.id.bus_num);
                 bus_type = (TextView) itemView.findViewById(R.id.bus_type);
+                item_fav_bus = (RelativeLayout)itemView.findViewById(R.id.item_fav_bus);
 
             }
         }

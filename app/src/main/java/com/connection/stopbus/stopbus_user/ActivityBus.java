@@ -96,9 +96,13 @@ public class ActivityBus extends Activity{
                 new Button.OnClickListener() {
                     public void onClick(View v) {
                         Log.d("sb", "back button pressed");
+                        finish();
+
+                        /*
                         Intent i = new Intent(ActivityBus.this, ActivityStation.class);
                         i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(i);
+                        */
 
                     }
                 }

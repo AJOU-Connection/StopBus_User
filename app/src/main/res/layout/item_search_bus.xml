@@ -24,12 +24,10 @@
       android:text="경기 수원시 직행 버스"/>
 
   <ImageView
-      android:layout_width="40dp"
-      android:layout_height="40dp"
+      android:layout_width="30dp"
+      android:layout_height="30dp"
       android:layout_alignParentRight="true"
-
+      android:layout_centerVertical="true"
       android:background="@drawable/ic_star_black_36dp"
       />
-
-
 </RelativeLayout>
