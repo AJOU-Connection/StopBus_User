@@ -148,8 +148,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        final String ChannelID="stopbus";
-        CharSequence name="Ragav";
+        final String ChannelID= getString(R.string.default_notification_channel_id);
+        CharSequence name="stopbus";
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_HIGH;
