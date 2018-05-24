@@ -63,11 +63,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Log.d("sb","sdfsdfsd");
 
+        String Title = remoteMessage.getData().get("Title");
+        String Message = remoteMessage.getData().get("Message");
+        String routeID = remoteMessage.getData().get("routeID");
+
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             //Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-            String Title = remoteMessage.getData().get("Title");
-            String Message = remoteMessage.getData().get("Message");
+
 
             if (/* Check if data needs to be processed by long running job */ true) {
                 // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
@@ -77,13 +80,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 handleNow();
             }
 
-            sendNotification(remoteMessage.getData().toString() ,Title, Message);
+            Log.d("sb","Body: " + Message);
+            Shared_Pref.routeId = Integer.parseInt(routeID.toString());
+            sendNotification(Title,Message);
         }
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-        }else{
+            sendNotification(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
 
@@ -118,7 +122,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      *
      * @param messageBody FCM message body received.
      */
-    private void sendNotification(String messageBody , String Title, String Message) {
+    private void sendNotification(String Title, String Message) {
 
         Log.d(TAG, "_______________ sendNotification");
 

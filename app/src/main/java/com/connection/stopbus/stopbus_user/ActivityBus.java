@@ -72,7 +72,6 @@ public class ActivityBus extends Activity{
                 Log.d("sb", " Value: " + value);
                 Shared_Pref.routeId =  Integer.parseInt(value.toString());
 
-
         }
 
 
