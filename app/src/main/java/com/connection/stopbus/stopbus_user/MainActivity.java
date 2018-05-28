@@ -7,6 +7,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,9 +22,9 @@ import android.widget.Toast;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
-import static com.connection.stopbus.stopbus_user.Shared_Pref.DeviceId;
-import static com.connection.stopbus.stopbus_user.Shared_Pref.Token;
 
 public class MainActivity extends Activity {
 
@@ -31,6 +33,9 @@ public class MainActivity extends Activity {
     private final int REQUEST_NEED = 100;
     private final long FINISH_INTERVAL_TIME = 2000;
     private int STATUS = 0;
+    //SharedPref
+    SharedPreferences pref;
+
 
     private static String[] PERMISSIONS = {
             Manifest.permission.BLUETOOTH,
@@ -44,10 +49,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-
-
         Shared_Pref.init(getApplicationContext());
-
+        Log.d("sb", "start app!!!");
         //[S] 퍼미션 체크 ----------------------------------------------------------------------------------------------------------------
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int permissionDeniedCount = 0;
@@ -67,7 +70,9 @@ public class MainActivity extends Activity {
             //시작!!!!!
             StartApp();
         }
+
     }
+
 
     private void doRequestPermission() {
         ArrayList<String> notGrantedPermissions = new ArrayList<>();
@@ -132,25 +137,45 @@ public class MainActivity extends Activity {
     //[S] 앱시작 ( 기기 정보 로드 및 UI ) ----------------------------------------------------------------------------------------------------------------
     public void StartApp() {
 
+
+
         try {
             TelephonyManager tm = (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
 
             String tmDevice = "" + tm.getDeviceId();
             String tmSerial = "" + tm.getSimSerialNumber();
             String androidId = "" + android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+            // UUID
             UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
-            DeviceId = deviceUuid.toString();
-
             // FCM 토큰
             String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+
+            pref = getSharedPreferences("a", MODE_PRIVATE);
+
+            Log.d("sb", "Shared : " + pref.getString("Token", "") );
+
+            if(pref.getString("Token","").equals(refreshedToken)){
+                Log.d("sb", "same token!" );
+            }else{
+                Log.d("sb","12415543aslkdrlnaksnrllksadrnlkasdrndlkr");
+                CallData("register");
+            }
+
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putString("DeviceId", deviceUuid.toString());
+            editor.putString("Token", refreshedToken);
+            editor.commit();
+
             Log.d("sb", "MyFirebaseInstanceIDService> Refreshed token: " + refreshedToken);
-            Token = refreshedToken;
+            Log.d("sb","DeviceId: "+deviceUuid.toString());
+
+
 
         } catch (SecurityException e) {
 
         }
 
-        Log.d("sb","DeviceId: "+DeviceId);
+
 
         if(STATUS==0){
             Intent i = new Intent(MainActivity.this, ActivityFavourite.class);
@@ -162,5 +187,27 @@ public class MainActivity extends Activity {
 
     }
     //[E] 앱시작 ( 기기 정보 로드 및 UI ) ----------------------------------------------------------------------------------------------------------------v
+    public synchronized void CallData(final String api) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final Map<String, String> args = new HashMap<String, String>();
+                Log.d("sb", "token:" + Shared_Pref.Token +"UUID: " + Shared_Pref.DeviceId);
+                args.put("token",  pref.getString("Token","")); //POST
+                args.put("UUID",  pref.getString("DeviceId","")); //POST
 
+                try {
+
+                    final String response = NetworkService.INSTANCE.postQuery(api, args);
+                    Log.d("sb","333333"+response);
+
+
+                } catch (Exception e) {
+                }
+            }
+        }).start();
+
+    }
 }
+
+

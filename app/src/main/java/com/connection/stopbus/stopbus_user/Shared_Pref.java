@@ -12,8 +12,8 @@ import android.content.SharedPreferences;
 public class Shared_Pref {
     private static SharedPreferences mSharedPref;
 
-    public static String Token = null;
-    public static String DeviceId = null;
+    public static String Token;
+    public static String DeviceId;
 
     //정류장별 버스 리스트를 받아오기 위함
     public static String stationNumber =null;
