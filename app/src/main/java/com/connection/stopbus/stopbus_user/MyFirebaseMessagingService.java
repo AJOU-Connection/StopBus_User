@@ -39,6 +39,9 @@ import com.firebase.jobdispatcher.Job;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import static android.support.v4.app.NotificationCompat.DEFAULT_SOUND;
+import static android.support.v4.app.NotificationCompat.DEFAULT_VIBRATE;
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "sb";
@@ -89,11 +92,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             sendNotification(Title,Message);
         }
         // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            sendNotification(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-        }
-
+     //   if (remoteMessage.getNotification() != null) {
+     //       sendNotification(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
+     //       Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+     //   }
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
     }
@@ -143,7 +145,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentTitle(Title)
                 .setContentText(Message)
                 .setAutoCancel(true)
+                .setVibrate(new long[]{1000, 1000})
                 .setSound(defaultSoundUri)
+                .setDefaults(DEFAULT_SOUND | DEFAULT_VIBRATE)
                 .setContentIntent(pendingIntent);
 
 
@@ -157,12 +161,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             mChannel.setDescription(Message);
             mChannel.enableLights(true);
             mChannel.setLightColor(Color.CYAN);
-            Log.d("sb", "11111111111");
+            mChannel.enableVibration(true);
+            mChannel.setVibrationPattern(new long[]{100, 200, 100, 200});
             notificationBuilder.setChannelId(ChannelID);
             notificationManager.createNotificationChannel(mChannel);
 
         }
-        Log.d("sb", "222222222222222222222");
 
             notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
