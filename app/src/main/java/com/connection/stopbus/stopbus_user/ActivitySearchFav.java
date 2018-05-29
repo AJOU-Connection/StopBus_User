@@ -3,6 +3,7 @@ package com.connection.stopbus.stopbus_user;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,8 +39,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import devlight.io.library.ntb.NavigationTabBar;
 
@@ -66,11 +71,15 @@ public class ActivitySearchFav extends Activity{
     private List<ApiData.Route> CopyRouteList;
     private List<ApiData.Station> CopyStationList;
 
+    private SharedPreferences pref;
+    private List<String> favourite_list =new ArrayList<>();
+
         @Override
         protected void onCreate(final Bundle savedInstanceState) {
 
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_search_fav);
+            pref = getSharedPreferences("App_settings", MODE_PRIVATE);
 
             findViewById(R.id.back).setOnClickListener(
                     new Button.OnClickListener() {
@@ -156,6 +165,7 @@ public class ActivitySearchFav extends Activity{
                             // Make sure you call swipeContainer.setRefreshing(false)
                             // once the network request has completed successfully.
                             CallData("search?type=route");
+
                             swipeContainer0.setRefreshing(false);
 
                         }
@@ -340,8 +350,71 @@ public class ActivitySearchFav extends Activity{
         @Override
         public void onBindViewHolder(final RecycleAdapter.ViewHolder holder, final int position) {
 
+
+           final Set<String> sharedString=pref.getStringSet("Favourite", new HashSet<String>());
+            Log.d("sb", "sharedString : "+ sharedString);
+            final String route_id = Integer.toString(RouteList.get(position).routeID);
+
+            if(sharedString != null){
+                Iterator<String> iterator = sharedString.iterator();
+
+                while(iterator.hasNext()){
+                    String id = iterator.next();
+                   // Log.d("sb", "items : "+ id);
+                    if(id.equals(route_id)){
+                        holder.favourite_btn.setImageResource(R.drawable.ic_star_yellow_36dp);
+                        break;
+                    }else{
+                        holder.favourite_btn.setImageResource(R.drawable.ic_star_black_36dp);
+                    }
+                }
+            }
+
             holder.bus_num.setText(RouteList.get(position).routeNumber);
             holder.bus_type.setText(RouteList.get(position).routeTypeName);
+
+            holder.favourite_btn.setOnClickListener(
+                    new Button.OnClickListener() {
+                        public void onClick(View v) {
+
+                            if(sharedString.toString().equals("[]")){
+                                Log.d("sb", "no favourite");
+                                holder.favourite_btn.setImageResource(R.drawable.ic_star_yellow_36dp);
+                                // add values for your ArrayList any where...
+
+                                favourite_list.add(route_id);
+                                addPref();
+                                SearchBusListAdapter.notifyDataSetChanged();
+
+                            }else{
+                                Iterator<String> iterator = sharedString.iterator();
+                                while(iterator.hasNext()){
+                                    String id = iterator.next();
+                                    Log.d("sb", "id : "+ id);
+                                    Log.d("sb","routeID : "+ route_id);
+                                    if(id.equals(route_id)){
+                                        Log.d("sb", "delete");
+                                        holder.favourite_btn.setImageResource(R.drawable.ic_star_black_36dp);
+
+                                        favourite_list.remove(route_id);
+                                        addPref();
+                                        SearchBusListAdapter.notifyDataSetChanged();
+                                        break;
+                                    }else{
+                                        Log.d("sb", "add");
+                                        holder.favourite_btn.setImageResource(R.drawable.ic_star_yellow_36dp);
+                                        // add values for your ArrayList any where...
+
+                                        favourite_list.add(route_id);
+                                        addPref();
+                                        SearchBusListAdapter.notifyDataSetChanged();
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+            );
 
             holder.item_fav_bus.setOnClickListener(
                     new Button.OnClickListener() {
@@ -368,6 +441,7 @@ public class ActivitySearchFav extends Activity{
             public TextView bus_num;
             public TextView bus_type;
             public RelativeLayout item_fav_bus;
+            public ImageView favourite_btn;
 
             public ViewHolder(final View itemView) {
                 super(itemView);
@@ -375,11 +449,23 @@ public class ActivitySearchFav extends Activity{
                 bus_num = (TextView) itemView.findViewById(R.id.bus_num);
                 bus_type = (TextView) itemView.findViewById(R.id.bus_type);
                 item_fav_bus = (RelativeLayout)itemView.findViewById(R.id.item_fav_bus);
+                favourite_btn = (ImageView)itemView.findViewById(R.id.favourite_btn);
 
             }
         }
 
     }
+
+    private void addPref() {
+        SharedPreferences.Editor editor = pref.edit();
+        Set<String> set = new HashSet<String>();
+        Log.d("sb", "favourite_list: " + favourite_list);
+        set.addAll(favourite_list);
+        editor.putStringSet("Favourite", set);
+        editor.apply();
+        Log.d("sb","add set: "+set);
+    }
+
 
     public class RecycleAdapter2 extends RecyclerView.Adapter<RecycleAdapter2.ViewHolder> {
 

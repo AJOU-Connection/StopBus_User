@@ -191,14 +191,14 @@ public class ActivityStation extends Activity{
                     holder.routeNumber.setTextColor(Color.parseColor("#F33D46"));
                 }
 
-                if(StationBusList.get(position).predictTime1.equals("0")){
+                if(StationBusList.get(position).predictTime1.equals("-1")||StationBusList.get(position).predictTime1.equals("0")){
                     holder.predictTime1.setText("도착정보없음");
                     holder.locationNo1.setVisibility(View.GONE);
                 }else{
                     holder.locationNo1.setVisibility(View.VISIBLE);
                 }
 
-                if(StationBusList.get(position).predictTime2.equals("0")){
+                if(StationBusList.get(position).predictTime2.equals("-1")||StationBusList.get(position).predictTime2.equals("0")){
                     holder.predictTime2.setText("도착정보없음");
                     holder.locationNo2.setVisibility(View.GONE);
                 }else{

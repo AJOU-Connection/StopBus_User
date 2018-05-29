@@ -7,7 +7,10 @@
     android:layout_marginBottom="10dp"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
-    android:padding="5dp"
+    android:paddingBottom="20dp"
+    android:paddingTop="20dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
     android:background="@drawable/bg_round_rect">
 
   <TextView
@@ -24,6 +27,7 @@
       android:text="경기 수원시 직행 버스"/>
 
   <ImageView
+      android:id="@+id/favourite_btn"
       android:layout_width="30dp"
       android:layout_height="30dp"
       android:layout_alignParentRight="true"

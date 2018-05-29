@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="3007"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="15dp"
         android:textSize="20sp"
         android:textStyle="bold"/>
 
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/routeNumber"
         android:text="시외버스"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="15dp"
         android:textSize="10sp"
         android:textColor="#000000"
         android:textStyle="bold"/>
@@ -30,8 +30,7 @@
         android:id="@+id/predictTime1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/routeTypeName"
-        android:layout_marginLeft="40dp"
+        android:layout_marginLeft="130dp"
         android:layout_marginTop="18dp"
         android:text="4분"
         android:textSize="15sp"
@@ -51,9 +50,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/predictTime1"
-        android:layout_toRightOf="@+id/routeTypeName"
         android:layout_marginTop="5dp"
-        android:layout_marginLeft="40dp"
+        android:layout_marginLeft="130dp"
         android:text="14분"
         android:textSize="15sp"
         android:textColor="#000000"/>
@@ -70,11 +68,11 @@
         android:textSize="10sp"/>
 
     <ImageView
-        android:id="@+id/delete_btn"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:id="@+id/favourite_btn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@drawable/ic_star_black_36dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="15dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"/>
 

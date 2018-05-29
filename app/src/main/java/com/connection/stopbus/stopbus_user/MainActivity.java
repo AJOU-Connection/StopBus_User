@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -156,8 +155,9 @@ public class MainActivity extends Activity {
 
             if(pref.getString("Token","").equals(refreshedToken)){
                 Log.d("sb", "same token!" );
+            }else if(pref.getString("Token","").equals(null)){
+                CallData("register");
             }else{
-                Log.d("sb","12415543aslkdrlnaksnrllksadrnlkasdrndlkr");
                 CallData("register");
             }
 
@@ -192,7 +192,6 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 final Map<String, String> args = new HashMap<String, String>();
-                Log.d("sb", "token:" + Shared_Pref.Token +"UUID: " + Shared_Pref.DeviceId);
                 args.put("token",  pref.getString("Token","")); //POST
                 args.put("UUID",  pref.getString("DeviceId","")); //POST
 
