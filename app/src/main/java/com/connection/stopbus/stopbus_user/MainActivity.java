@@ -11,21 +11,36 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.RemoteException;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.BeaconConsumer;
+import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.RangeNotifier;
+import org.altbeacon.beacon.Region;
+
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements BeaconConsumer{
 
 
     private long backPressedTime = 0;
@@ -34,6 +49,14 @@ public class MainActivity extends Activity {
     private int STATUS = 0;
     //SharedPref
     SharedPreferences pref;
+
+    private final MyHandler mHandler = new MyHandler(this);
+
+    private BeaconManager beaconManager;
+
+
+    //감지된 비콘들을 임시로 담을 리스트
+    private List<Beacon> beaconList = new ArrayList<>();
 
 
     private static String[] PERMISSIONS = {
@@ -50,6 +73,19 @@ public class MainActivity extends Activity {
 
         Shared_Pref.init(getApplicationContext());
         Log.d("sb", "start app!!!");
+
+        //비콘매니저 객체 초기화
+        beaconManager = BeaconManager.getInstanceForApplication(this);
+
+        // To detect proprietary beacons, you must add a line like below corresponding to your beacon
+        // type.  Do a web search for "setBeaconLayout" to get the proper expression.
+        beaconManager.getBeaconParsers().add(new BeaconParser().
+                setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:23-24"));
+        //위 숫자가 detect 숫자. 바꾸면 인식안됨
+        beaconManager.bind(this);
+        //인식 시작
+        mHandler.sendEmptyMessage(0);
+
         //[S] 퍼미션 체크 ----------------------------------------------------------------------------------------------------------------
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int permissionDeniedCount = 0;
@@ -118,6 +154,88 @@ public class MainActivity extends Activity {
     }
     //[E] 퍼미션 체크 ----------------------------------------------------------------------------------------------------------------
 
+    //[S] 비콘 ----------------------------------------------------------------------------------------------------------------
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        beaconManager.unbind(this);
+    }
+
+    @Override
+    public void onBeaconServiceConnect() {
+        beaconManager.addRangeNotifier(new RangeNotifier() {
+            @Override
+            public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
+                if (beacons.size() > 0) {
+                    beaconList.clear();
+                    for(Beacon beacon : beacons){
+                        beaconList.add(beacon);
+
+                        Log.d("sb","List : " + beaconList);
+                        if(beaconList.toString().equals("[]")){
+                            Log.d("sb","no");
+
+
+                        }else{
+                            STATUS =1;
+                            Log.d("sb","yes");
+                            //여기 이제 위치별 districtCd, stationNumber 받아와야함
+                        }
+
+                    }
+                    Log.d("sb", "The first beacon I see is about "+beacons.iterator().next().getDistance()+" meters away.");
+                }
+            }
+        });
+
+        try {
+            beaconManager.startRangingBeaconsInRegion(new Region("myRangingUniqueId", null, null, null));
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private static class MyHandler extends Handler{
+        private final WeakReference<MainActivity> mActivity;
+
+        public MyHandler(MainActivity activity) {
+            mActivity = new WeakReference<MainActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            MainActivity activity = mActivity.get();
+            if (activity != null) {
+                activity.handleMessage(msg);
+            }
+        }
+
+    }
+
+    public void handleMessage(Message msg){
+        Log.d("sb", "beaconlist: "+ beaconList);
+
+        Log.d("sb", "msg: "+ msg);
+
+        //비콘의 아이디와 거리를 측정하여 textvIEW에 띄움
+        for(Beacon beacon : beaconList){
+           // Double accuracy = calculateDistance(beacon.getTxPower(),beacon.getRssi());
+
+            Log.d("sb","name : " + beacon.getBluetoothName() + " / " + "ID2 : " + beacon.getId2() + " / " + String.valueOf(beacon.getDistance()));
+
+        }
+
+        if(STATUS == 1){
+
+        }else{
+            mHandler.sendEmptyMessageDelayed(0,1000);
+        }
+    }
+
+
+    //[E] 비콘 ----------------------------------------------------------------------------------------------------------------
+
     //[S] 뒤로가기 버튼 클릭 ----------------------------------------------------------------------------------------------------------------
     @Override
     public void onBackPressed() {
@@ -177,12 +295,36 @@ public class MainActivity extends Activity {
 
 
 
-        if(STATUS==0){
-            Intent i = new Intent(MainActivity.this, ActivityFavourite.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(i);
-        }
+
+        Log.d("sb", "12412412516161");
+
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Log.d("sb", "STATUS: "+ STATUS);
+
+                if(STATUS==0){
+                    Intent i = new Intent(MainActivity.this, ActivityFavourite.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(i);
+                }else if(STATUS ==1){
+                    Shared_Pref.districtCd = 2;
+                    Shared_Pref.stationNumber ="03126";
+
+                    Shared_Pref.stationName = "아주대학교 병원";
+                    Shared_Pref.stationDirect = "";
+
+                    Intent i = new Intent(MainActivity.this, ActivityStation.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(i);
+                }
+            }
+        }, 3000);
+
 
 
     }

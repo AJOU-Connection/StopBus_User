@@ -44,5 +44,7 @@ dependencies {
     compile 'com.firebase:firebase-jobdispatcher:0.6.0'
 
     compile 'com.google.code.gson:gson:2.8.2'
+
+    implementation 'org.altbeacon:android-beacon-library:2+'
 }
 apply plugin: 'com.google.gms.google-services'

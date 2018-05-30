@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -58,6 +59,20 @@ public class ActivityFavourite extends Activity{
                 new Button.OnClickListener() {
                     public void onClick(View v) {
                         Log.d("sb", "search");
+                        Intent i = new Intent(ActivityFavourite.this, ActivitySearchFav.class);
+                        i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(i);
+                    }
+                }
+        );
+
+        ImageView bus_stop_image = (ImageView) findViewById(R.id.bus_stop_image);
+        bus_stop_image.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View v) {
+                        Log.d("sb", "search for bus stop");
+
+
                         Intent i = new Intent(ActivityFavourite.this, ActivitySearchFav.class);
                         i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(i);
