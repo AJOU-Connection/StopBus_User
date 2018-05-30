@@ -14,48 +14,76 @@
         android:layout_marginLeft="10dp"
         android:layout_centerVertical="true"/>
     <TextView
-        android:id="@+id/bus_num"
+        android:id="@+id/routeNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/delete_btn"
         android:text="3007"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:textSize="20sp"
         android:textColor="#FF0000"
         android:textStyle="bold"/>
     <TextView
-        android:id="@+id/bus_type"
+        android:id="@+id/regionName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/delete_btn"
-        android:layout_below="@+id/bus_num"
-        android:text="시외버스"
-        android:layout_marginLeft="23dp"
+        android:layout_below="@+id/routeNumber"
+        android:text="수원"
+        android:layout_marginLeft="10dp"
         android:textSize="10sp"
         android:textColor="#000000"
         android:textStyle="bold"/>
     <TextView
-        android:id="@+id/bus_schedule_1"
+        android:id="@+id/routeTypeName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/bus_num"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:text="기점 평일 05:00 ~ 22:10"
-        android:textSize="15sp"
+        android:layout_toRightOf="@+id/delete_btn"
+        android:layout_below="@+id/regionName"
+        android:text="시외버스"
+        android:layout_marginLeft="5dp"
+        android:textSize="10sp"
         android:textColor="#000000"
-        />
+        android:textStyle="bold"/>
     <TextView
-        android:id="@+id/bus_schedule_2"
+        android:id="@+id/upFirstTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/bus_schedule_1"
-        android:layout_toRightOf="@+id/bus_num"
-        android:layout_marginLeft="20dp"
-        android:text="회차 평일 06:00 ~ 23:20"
+        android:layout_toRightOf="@+id/routeNumber"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:text="상행: 05:00"
+        android:textSize="15sp"
+        android:textColor="#000000" />
+    <TextView
+        android:id="@+id/upLastTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/upFirstTime"
+        android:layout_marginTop="20dp"
+        android:text="~ 22:10"
+        android:textSize="15sp"
+        android:textColor="#000000" />
+    <TextView
+        android:id="@+id/downFirstTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/upFirstTime"
+        android:layout_toRightOf="@+id/routeNumber"
+        android:layout_marginLeft="30dp"
+        android:text="하행: 06:00"
         android:textSize="15sp"
         android:textColor="#000000"/>
+    <TextView
+        android:id="@+id/downLastTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/upFirstTime"
+        android:layout_toRightOf="@+id/downFirstTime"
+        android:text="~ 22:10"
+        android:textSize="15sp"
+        android:textColor="#000000" />
 
     <com.zcw.togglebutton.ToggleButton
         android:layout_width="54dp"
