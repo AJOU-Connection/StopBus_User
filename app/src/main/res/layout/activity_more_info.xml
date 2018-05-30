@@ -71,13 +71,13 @@
                 android:layout_marginTop="23dp"
                 android:layout_marginLeft="5dp"
                 android:textSize="18dp"
-                android:text="운행지역" />
+                android:text="운행 지역" />
             <TextView
                 android:id="@+id/startStationName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/stationName"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginLeft="30dp"
                 android:text="수원버스터미널"/>
 
@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/startStationName"
                 android:layout_below="@+id/stationName"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:text="⇔"
                 android:textSize="17sp"
                 />
@@ -98,7 +98,7 @@
                 android:layout_toRightOf="@+id/divider"
                 android:text="강남역,역삼세무서"
                 android:layout_below="@+id/stationName"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="15dp"/>
             <TextView
                 android:id="@+id/regionName"
                 android:layout_width="wrap_content"
@@ -148,7 +148,7 @@
                 android:layout_below="@+id/time"
                 android:layout_marginLeft="30dp"
                 android:text="상행선"
-                android:layout_marginTop="5dp"/>
+                android:layout_marginTop="10dp"/>
             <TextView
                 android:id="@+id/down"
                 android:layout_width="wrap_content"
@@ -164,7 +164,7 @@
                 android:layout_below="@+id/time"
                 android:text="05:20"
                 android:layout_toRightOf="@+id/up"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"/>
             <TextView
                 android:id="@+id/upLastTime"
@@ -173,7 +173,7 @@
                 android:layout_below="@+id/time"
                 android:text="~23:20"
                 android:layout_toRightOf="@+id/upFirstTime"
-                android:layout_marginTop="5dp"/>
+                android:layout_marginTop="10dp"/>
             <TextView
                 android:id="@+id/downFirstTime"
                 android:layout_width="wrap_content"
