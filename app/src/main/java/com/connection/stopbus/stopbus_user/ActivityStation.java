@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +49,8 @@ public class ActivityStation extends Activity{
     TextView station_num;
     TextView station_name;
     TextView station_way;
+
+    int routeID;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -152,6 +155,29 @@ public class ActivityStation extends Activity{
 
     }
 
+    //검색 불러오는 API
+    public synchronized void getIn(final String api) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final Map<String, String> args = new HashMap<String, String>();
+                args.put("UUID",  Shared_Pref.UUID); //POST
+                args.put("routeID",  Integer.toString(routeID));
+                args.put("stationID",  Shared_Pref.stationID);
+
+                try {
+
+                    final String response = NetworkService.INSTANCE.postQuery(api, args);
+                    Log.d("sb","333333"+response);
+
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), "네트워크 연결이 불안정합니다. 다시 시도해주세요 ", Toast.LENGTH_LONG).show();
+                }
+            }
+        }).start();
+
+    }
+
 
     public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.ViewHolder> {
 
@@ -172,6 +198,25 @@ public class ActivityStation extends Activity{
         public void onBindViewHolder(final RecycleAdapter.ViewHolder holder, final int position) {
 
             try {
+                if(Shared_Pref.STATUS==0){
+                    holder.favourite_btn.setVisibility(View.VISIBLE);
+                    holder.bell.setVisibility(View.INVISIBLE);
+                }else{
+                    holder.favourite_btn.setVisibility(View.INVISIBLE);
+                    holder.bell.setVisibility(View.VISIBLE);
+                }
+
+                holder.bell.setOnClickListener(
+                        new Button.OnClickListener() {
+                            public void onClick(View v) {
+
+                                routeID = StationBusList.get(position).routeId;
+                                holder.bell.setImageResource(R.drawable.bell_red);
+                                getIn("reserv/getIn");
+                            }
+                        }
+                );
+
                 holder.locationNo1.setText(StationBusList.get(position).locationNo1 + "번째 전");
                 holder.locationNo2.setText(StationBusList.get(position).locationNo2 + "번째 전");
                 //holder.lowPlate1.setText(StationBusList.get(position).lowPlate1);
@@ -243,6 +288,8 @@ public class ActivityStation extends Activity{
             public TextView routeNumber;
             public TextView routeTypeName;
             public RelativeLayout bus_list_layout;
+            public ImageView bell;
+            public ImageView favourite_btn;
 
             public ViewHolder(final View itemView) {
                 super(itemView);
@@ -260,6 +307,9 @@ public class ActivityStation extends Activity{
                 routeTypeName= (TextView) itemView.findViewById(R.id.routeTypeName);
 
                 bus_list_layout = (RelativeLayout)itemView.findViewById(R.id.bus_list_layout);
+
+                bell = (ImageView)itemView.findViewById(R.id.bell);
+                favourite_btn = (ImageView)itemView.findViewById(R.id.favourite_btn);
 
 
             }

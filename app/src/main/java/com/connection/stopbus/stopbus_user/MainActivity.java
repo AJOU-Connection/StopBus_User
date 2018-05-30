@@ -46,7 +46,6 @@ public class MainActivity extends Activity implements BeaconConsumer{
     private long backPressedTime = 0;
     private final int REQUEST_NEED = 100;
     private final long FINISH_INTERVAL_TIME = 2000;
-    private int STATUS = 0;
     //SharedPref
     SharedPreferences pref;
 
@@ -177,7 +176,7 @@ public class MainActivity extends Activity implements BeaconConsumer{
 
 
                         }else{
-                            STATUS =1;
+                            Shared_Pref.STATUS =1;
                             Log.d("sb","yes");
                             //여기 이제 위치별 districtCd, stationNumber 받아와야함
                         }
@@ -226,7 +225,7 @@ public class MainActivity extends Activity implements BeaconConsumer{
 
         }
 
-        if(STATUS == 1){
+        if(Shared_Pref.STATUS == 1){
 
         }else{
             mHandler.sendEmptyMessageDelayed(0,1000);
@@ -267,6 +266,8 @@ public class MainActivity extends Activity implements BeaconConsumer{
             // FCM 토큰
             String refreshedToken = FirebaseInstanceId.getInstance().getToken();
 
+            Shared_Pref.UUID = deviceUuid.toString();
+
             pref = getSharedPreferences("a", MODE_PRIVATE);
 
             Log.d("sb", "Shared : " + pref.getString("Token", "") );
@@ -303,19 +304,20 @@ public class MainActivity extends Activity implements BeaconConsumer{
             @Override
             public void run()
             {
-                Log.d("sb", "STATUS: "+ STATUS);
+                Log.d("sb", "STATUS: "+ Shared_Pref.STATUS);
 
-                if(STATUS==0){
+                if(Shared_Pref.STATUS==0){
                     Intent i = new Intent(MainActivity.this, ActivityFavourite.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(i);
-                }else if(STATUS ==1){
+                }else if(Shared_Pref.STATUS ==1){
                     Shared_Pref.districtCd = 2;
                     Shared_Pref.stationNumber ="03126";
 
                     Shared_Pref.stationName = "아주대학교 병원";
                     Shared_Pref.stationDirect = "";
+                    Shared_Pref.stationID = "202000005";
 
                     Intent i = new Intent(MainActivity.this, ActivityStation.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -503,6 +503,7 @@ public class ActivitySearchFav extends Activity{
                             Shared_Pref.stationName = StationList.get(position).stationName;
                             Shared_Pref.districtCd = StationList.get(position).districtCd;
                             Shared_Pref.stationDirect = StationList.get(position).stationDirect;
+                            Shared_Pref.stationID = StationList.get(position).stationID;
 
                             Log.d("sb", "station's bus list gogo");
                             Intent i = new Intent(ActivitySearchFav.this, ActivityStation.class);

@@ -12,12 +12,16 @@ import android.content.SharedPreferences;
 public class Shared_Pref {
     private static SharedPreferences mSharedPref;
 
+    public static int STATUS=0;
+    public static String UUID = null;
+
 
     //정류장별 버스 리스트를 받아오기 위함
     public static String stationNumber =null;
     public static int districtCd = 0;
     public static String stationName =null;
     public static String stationDirect =null;
+    public static String stationID = null;
 
     //버스별 노선 정류장을 받아오기 위함
     public static int routeId = 0;
