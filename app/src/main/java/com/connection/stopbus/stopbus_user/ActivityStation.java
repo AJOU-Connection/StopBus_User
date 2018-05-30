@@ -155,7 +155,7 @@ public class ActivityStation extends Activity{
 
     }
 
-    //검색 불러오는 API
+    //승차벨
     public synchronized void getIn(final String api) {
         new Thread(new Runnable() {
             @Override

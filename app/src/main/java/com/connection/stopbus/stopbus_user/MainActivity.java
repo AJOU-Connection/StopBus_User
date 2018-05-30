@@ -53,6 +53,7 @@ public class MainActivity extends Activity implements BeaconConsumer{
 
     private BeaconManager beaconManager;
 
+    private int handlerFlag= 0;
 
     //감지된 비콘들을 임시로 담을 리스트
     private List<Beacon> beaconList = new ArrayList<>();
@@ -69,6 +70,8 @@ public class MainActivity extends Activity implements BeaconConsumer{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
+
+        Shared_Pref.STATUS = 0;
 
         Shared_Pref.init(getApplicationContext());
         Log.d("sb", "start app!!!");
@@ -225,7 +228,7 @@ public class MainActivity extends Activity implements BeaconConsumer{
 
         }
 
-        if(Shared_Pref.STATUS == 1){
+        if(handlerFlag== 1){
 
         }else{
             mHandler.sendEmptyMessageDelayed(0,1000);
@@ -305,7 +308,7 @@ public class MainActivity extends Activity implements BeaconConsumer{
             public void run()
             {
                 Log.d("sb", "STATUS: "+ Shared_Pref.STATUS);
-
+                handlerFlag =1;
                 if(Shared_Pref.STATUS==0){
                     Intent i = new Intent(MainActivity.this, ActivityFavourite.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

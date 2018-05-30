@@ -71,15 +71,15 @@ public class ActivitySearchFav extends Activity{
     private List<ApiData.Route> CopyRouteList;
     private List<ApiData.Station> CopyStationList;
 
-    private SharedPreferences pref;
-    private List<String> favourite_list =new ArrayList<>();
+
+    ArrayList<String> favouriteList;
+
 
         @Override
         protected void onCreate(final Bundle savedInstanceState) {
 
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_search_fav);
-            pref = getSharedPreferences("App_settings", MODE_PRIVATE);
 
             findViewById(R.id.back).setOnClickListener(
                     new Button.OnClickListener() {
@@ -351,22 +351,19 @@ public class ActivitySearchFav extends Activity{
         public void onBindViewHolder(final RecycleAdapter.ViewHolder holder, final int position) {
 
 
-           final Set<String> sharedString=pref.getStringSet("Favourite", new HashSet<String>());
-            Log.d("sb", "sharedString : "+ sharedString);
-            final String route_id = Integer.toString(RouteList.get(position).routeID);
+            final TinyDB tinydb = new TinyDB(ActivitySearchFav.this);
+            favouriteList= tinydb.getListString("Favourite");
+            Log.d("sb", "favouriteList: " + favouriteList);
+            Iterator<String> itr = favouriteList.iterator();
 
-            if(sharedString != null){
-                Iterator<String> iterator = sharedString.iterator();
-
-                while(iterator.hasNext()){
-                    String id = iterator.next();
-                   // Log.d("sb", "items : "+ id);
-                    if(id.equals(route_id)){
-                        holder.favourite_btn.setImageResource(R.drawable.ic_star_yellow_36dp);
-                        break;
-                    }else{
-                        holder.favourite_btn.setImageResource(R.drawable.ic_star_black_36dp);
-                    }
+            while(itr.hasNext()){
+                String id = itr.next();
+                // Log.d("sb", "items : "+ id);
+                if(id.equals(Integer.toString(RouteList.get(position).routeID))){
+                    holder.favourite_btn.setImageResource(R.drawable.ic_star_yellow_36dp);
+                    break;
+                }else{
+                    holder.favourite_btn.setImageResource(R.drawable.ic_star_black_36dp);
                 }
             }
 
@@ -376,40 +373,29 @@ public class ActivitySearchFav extends Activity{
             holder.favourite_btn.setOnClickListener(
                     new Button.OnClickListener() {
                         public void onClick(View v) {
-
-                            if(sharedString.toString().equals("[]")){
-                                Log.d("sb", "no favourite");
-                                holder.favourite_btn.setImageResource(R.drawable.ic_star_yellow_36dp);
-                                // add values for your ArrayList any where...
-
-                                favourite_list.add(route_id);
-                                addPref();
-                                SearchBusListAdapter.notifyDataSetChanged();
-
-                            }else{
-                                Iterator<String> iterator = sharedString.iterator();
-                                while(iterator.hasNext()){
-                                    String id = iterator.next();
-                                    Log.d("sb", "id : "+ id);
-                                    Log.d("sb","routeID : "+ route_id);
-                                    if(id.equals(route_id)){
-                                        Log.d("sb", "delete");
-                                        holder.favourite_btn.setImageResource(R.drawable.ic_star_black_36dp);
-
-                                        favourite_list.remove(route_id);
-                                        addPref();
-                                        SearchBusListAdapter.notifyDataSetChanged();
-                                        break;
-                                    }else{
-                                        Log.d("sb", "add");
-                                        holder.favourite_btn.setImageResource(R.drawable.ic_star_yellow_36dp);
-                                        // add values for your ArrayList any where...
-
-                                        favourite_list.add(route_id);
-                                        addPref();
-                                        SearchBusListAdapter.notifyDataSetChanged();
-                                    }
+                            favouriteList= tinydb.getListString("Favourite");
+                            Iterator<String> itr = favouriteList.iterator();
+                            int flag =0;
+                            while(itr.hasNext()){
+                                String id = itr.next();
+                                Log.d("sb", "Integer.toString(RouteList.get(position).routeID :"+ Integer.toString(RouteList.get(position).routeID));
+                                if(id.equals(Integer.toString(RouteList.get(position).routeID))){
+                                    Log.d("sb", "delete");
+                                    holder.favourite_btn.setImageResource(R.drawable.ic_star_black_36dp);
+                                    flag =1;
+                                    break;
+                                }else{
+                                    Log.d("sb", "add");
+                                    holder.favourite_btn.setImageResource(R.drawable.ic_star_yellow_36dp);
+                                    flag=0;
                                 }
+                            }
+                            if(flag==0){
+                                favouriteList.add(Integer.toString(RouteList.get(position).routeID));
+                                tinydb.putListString("Favourite",favouriteList );
+                            }else if(flag==1){
+                                favouriteList.remove(Integer.toString(RouteList.get(position).routeID));
+                                tinydb.putListString("Favourite",favouriteList );
                             }
 
                         }
@@ -456,15 +442,6 @@ public class ActivitySearchFav extends Activity{
 
     }
 
-    private void addPref() {
-        SharedPreferences.Editor editor = pref.edit();
-        Set<String> set = new HashSet<String>();
-        Log.d("sb", "favourite_list: " + favourite_list);
-        set.addAll(favourite_list);
-        editor.putStringSet("Favourite", set);
-        editor.apply();
-        Log.d("sb","add set: "+set);
-    }
 
 
     public class RecycleAdapter2 extends RecyclerView.Adapter<RecycleAdapter2.ViewHolder> {
