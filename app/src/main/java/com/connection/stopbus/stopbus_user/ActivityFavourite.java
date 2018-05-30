@@ -35,6 +35,8 @@ public class ActivityFavourite extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourite);
 
+        CallMyBusList();
+
         // Lookup the swipe container view
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
         // Setup refresh listener which triggers new data loading

@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +52,7 @@ public class ActivityStation extends Activity{
     TextView station_way;
 
     int routeID;
+    ArrayList<String> favouriteList;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -197,6 +199,22 @@ public class ActivityStation extends Activity{
         @Override
         public void onBindViewHolder(final RecycleAdapter.ViewHolder holder, final int position) {
 
+            final TinyDB tinydb = new TinyDB(ActivityStation.this);
+            favouriteList= tinydb.getListString("Favourite");
+            Log.d("sb", "favouriteList: " + favouriteList);
+            Iterator<String> itr = favouriteList.iterator();
+
+            while(itr.hasNext()){
+                String id = itr.next();
+                // Log.d("sb", "items : "+ id);
+                if(id.equals(Integer.toString(StationBusList.get(position).routeId))){
+                    holder.favourite_btn.setImageResource(R.drawable.ic_star_yellow_36dp);
+                    break;
+                }else{
+                    holder.favourite_btn.setImageResource(R.drawable.ic_star_black_36dp);
+                }
+            }
+
             try {
                 if(Shared_Pref.STATUS==0){
                     holder.favourite_btn.setVisibility(View.VISIBLE);
@@ -213,6 +231,38 @@ public class ActivityStation extends Activity{
                                 routeID = StationBusList.get(position).routeId;
                                 holder.bell.setImageResource(R.drawable.bell_red);
                                 getIn("reserv/getIn");
+                            }
+                        }
+                );
+
+                holder.favourite_btn.setOnClickListener(
+                        new Button.OnClickListener() {
+                            public void onClick(View v) {
+                                favouriteList= tinydb.getListString("Favourite");
+                                Iterator<String> itr = favouriteList.iterator();
+                                int flag =0;
+                                while(itr.hasNext()){
+                                    String id = itr.next();
+                                    Log.d("sb", "Integer.toString(RouteList.get(position).routeID :"+ Integer.toString(StationBusList.get(position).routeId));
+                                    if(id.equals(Integer.toString(StationBusList.get(position).routeId))){
+                                        Log.d("sb", "delete");
+                                        holder.favourite_btn.setImageResource(R.drawable.ic_star_black_36dp);
+                                        flag =1;
+                                        break;
+                                    }else{
+                                        Log.d("sb", "add");
+                                        holder.favourite_btn.setImageResource(R.drawable.ic_star_yellow_36dp);
+                                        flag=0;
+                                    }
+                                }
+                                if(flag==0){
+                                    favouriteList.add(Integer.toString(StationBusList.get(position).routeId));
+                                    tinydb.putListString("Favourite",favouriteList );
+                                }else if(flag==1){
+                                    favouriteList.remove(Integer.toString(StationBusList.get(position).routeId));
+                                    tinydb.putListString("Favourite",favouriteList );
+                                }
+
                             }
                         }
                 );
