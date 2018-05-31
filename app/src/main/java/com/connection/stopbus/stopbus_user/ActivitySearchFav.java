@@ -381,19 +381,19 @@ public class ActivitySearchFav extends Activity{
                                 Log.d("sb", "Integer.toString(RouteList.get(position).routeID :"+ Integer.toString(RouteList.get(position).routeID));
                                 if(id.equals(Integer.toString(RouteList.get(position).routeID))){
                                     Log.d("sb", "delete");
-                                    holder.favourite_btn.setImageResource(R.drawable.ic_star_black_36dp);
                                     flag =1;
                                     break;
                                 }else{
                                     Log.d("sb", "add");
-                                    holder.favourite_btn.setImageResource(R.drawable.ic_star_yellow_36dp);
                                     flag=0;
                                 }
                             }
                             if(flag==0){
+                                holder.favourite_btn.setImageResource(R.drawable.ic_star_yellow_36dp);
                                 favouriteList.add(Integer.toString(RouteList.get(position).routeID));
                                 tinydb.putListString("Favourite",favouriteList );
                             }else if(flag==1){
+                                holder.favourite_btn.setImageResource(R.drawable.ic_star_black_36dp);
                                 favouriteList.remove(Integer.toString(RouteList.get(position).routeID));
                                 tinydb.putListString("Favourite",favouriteList );
                             }

@@ -39,8 +39,7 @@ public class ActivityFavourite extends Activity{
     private RecyclerView recyclerView;
     private RecycleAdapter favourite_bus_list_adapter = new RecycleAdapter(this);
     private SwipeRefreshLayout swipeContainer;
-    private List<ApiData.routeInfo> RouteInfoList = new ArrayList<ApiData.routeInfo>();
-    private List<ApiData.routeInfo> CopyRouteInfoList;
+    private List<ApiData.favrouteInfo> favRouteInfoList = new ArrayList<ApiData.favrouteInfo>();
 
     ArrayList<String> favouriteList;
     Handler mHandler = new Handler();
@@ -63,13 +62,7 @@ public class ActivityFavourite extends Activity{
                 swipeContainer.setRefreshing(false);
             }
         });
-        recyclerView = (RecyclerView) findViewById(R.id.rv_favourite_bus_list);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(
-                        getBaseContext(), LinearLayoutManager.VERTICAL, false
-                )
-        );
-        recyclerView.setAdapter(favourite_bus_list_adapter);
+
 
 
         TextView search = (TextView) findViewById(R.id.search);
@@ -103,6 +96,7 @@ public class ActivityFavourite extends Activity{
 
     public void CallMyBusList(){
 
+        favRouteInfoList = new ArrayList<ApiData.favrouteInfo>();
         final TinyDB tinydb = new TinyDB(ActivityFavourite.this);
         favouriteList= tinydb.getListString("Favourite");
         Log.d("sb", "favouriteList: " + favouriteList);
@@ -113,7 +107,23 @@ public class ActivityFavourite extends Activity{
             String id = itr.next();
             CallData("routeInfo", id);
         }
-        favourite_bus_list_adapter.notifyDataSetChanged();
+
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                recyclerView = (RecyclerView) findViewById(R.id.rv_favourite_bus_list);
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new LinearLayoutManager(
+                                getBaseContext(), LinearLayoutManager.VERTICAL, false
+                        )
+                );
+                recyclerView.setAdapter(favourite_bus_list_adapter);
+
+            }
+        }, 2000);
+
     }
     //검색 불러오는 API
     public synchronized void CallData(final String api, final String routeID) {
@@ -135,12 +145,13 @@ public class ActivityFavourite extends Activity{
 
                                 Log.d("sb","jobject"+ jObject);
 
-                                ApiData.routeInfo arr= new Gson().fromJson(jObject.toString(), ApiData.routeInfo.class);
+                                ApiData.favrouteInfo arr= new Gson().fromJson(jObject.toString(), ApiData.favrouteInfo.class);
                                 Log.d("sb","4444444"+arr);
 
-                                RouteInfoList = Arrays.asList(arr);
-                                CopyRouteInfoList = new ArrayList<ApiData.routeInfo>();
-                                CopyRouteInfoList.addAll(RouteInfoList);
+                                favRouteInfoList.add(arr);
+
+                                Log.d("sb","55555555"+favRouteInfoList);
+
 
 
                             }catch (JSONException e){
@@ -177,14 +188,17 @@ public class ActivityFavourite extends Activity{
         @Override
         public void onBindViewHolder(final RecycleAdapter.ViewHolder holder, final int position) {
 
-//            holder.delete_btn.setVisibility(View.GONE);
-//            holder.routeNumber.setText(RouteInfoList.get(position).routeNumber);
-//            holder.regionName.setText(RouteInfoList.get(position).regionName);
-//            holder.routeTypeName.setText(RouteInfoList.get(position).routeTypeName);
-//            holder.upFirstTime.setText(RouteInfoList.get(position).upFirstTime);
-//            holder.upLastTime.setText(RouteInfoList.get(position).upLastTime);
-//            holder.downFirstTime.setText(RouteInfoList.get(position).downFirstTime);
-//            holder.downLastTime.setText(RouteInfoList.get(position).downLastTime);
+            Log.d("sb","666666666666"+favRouteInfoList);
+
+            holder.delete_btn.setVisibility(View.GONE);
+            holder.routeNumber.setText(favRouteInfoList.get(position).routeNumber);
+            holder.regionName.setText(favRouteInfoList.get(position).regionName);
+            holder.routeTypeName.setText(favRouteInfoList.get(position).routeTypeName);
+            holder.upFirstTime.setText("상행 : " + favRouteInfoList.get(position).upFirstTime);
+            holder.upLastTime.setText(" ~ "+ favRouteInfoList.get(position).upLastTime);
+            holder.downFirstTime.setText("하행 : " + favRouteInfoList.get(position).downFirstTime);
+            holder.downLastTime.setText(" ~ "+ favRouteInfoList.get(position).downLastTime);
+
 
         }
 

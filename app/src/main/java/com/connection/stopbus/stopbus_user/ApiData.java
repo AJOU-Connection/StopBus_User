@@ -77,6 +77,25 @@ public  class ApiData {
 
     }
 
+    static class favrouteInfo{
+        public int districtCd;
+        public String downFirstTime;
+        public String downLastTime;
+        public String endStationNumber;
+        public int endStationID;
+        public String endStationName;
+        public String regionName;
+        public int routeID;
+        public String routeNumber;
+        public String routeTypeName;
+        public String startStationNumber;
+        public int startStationID;
+        public String startStationName;
+        public String upFirstTime;
+        public String upLastTime;
+
+    }
+
     static class  busLocation{
 
         public int endBus;

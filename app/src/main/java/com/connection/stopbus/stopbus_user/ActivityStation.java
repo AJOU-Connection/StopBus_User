@@ -139,6 +139,7 @@ public class ActivityStation extends Activity{
 
                                     ApiData.StationBus[] arr = new Gson().fromJson(jarray.toString(), ApiData.StationBus[].class);
                                     StationBusList = Arrays.asList(arr);
+                                    Log.d("sb","55555555"+StationBusList);
                                     CopyStationBusList = new ArrayList<ApiData.StationBus>();
                                     CopyStationBusList.addAll(StationBusList);
 
@@ -199,6 +200,8 @@ public class ActivityStation extends Activity{
         @Override
         public void onBindViewHolder(final RecycleAdapter.ViewHolder holder, final int position) {
 
+            Log.d("sb","55555555"+StationBusList);
+
             final TinyDB tinydb = new TinyDB(ActivityStation.this);
             favouriteList= tinydb.getListString("Favourite");
             Log.d("sb", "favouriteList: " + favouriteList);
@@ -246,19 +249,20 @@ public class ActivityStation extends Activity{
                                     Log.d("sb", "Integer.toString(RouteList.get(position).routeID :"+ Integer.toString(StationBusList.get(position).routeId));
                                     if(id.equals(Integer.toString(StationBusList.get(position).routeId))){
                                         Log.d("sb", "delete");
-                                        holder.favourite_btn.setImageResource(R.drawable.ic_star_black_36dp);
                                         flag =1;
                                         break;
                                     }else{
                                         Log.d("sb", "add");
-                                        holder.favourite_btn.setImageResource(R.drawable.ic_star_yellow_36dp);
+
                                         flag=0;
                                     }
                                 }
                                 if(flag==0){
+                                    holder.favourite_btn.setImageResource(R.drawable.ic_star_yellow_36dp);
                                     favouriteList.add(Integer.toString(StationBusList.get(position).routeId));
                                     tinydb.putListString("Favourite",favouriteList );
                                 }else if(flag==1){
+                                    holder.favourite_btn.setImageResource(R.drawable.ic_star_black_36dp);
                                     favouriteList.remove(Integer.toString(StationBusList.get(position).routeId));
                                     tinydb.putListString("Favourite",favouriteList );
                                 }
