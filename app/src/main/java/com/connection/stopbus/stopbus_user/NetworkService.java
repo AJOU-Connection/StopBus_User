@@ -3,6 +3,8 @@ package com.connection.stopbus.stopbus_user;
 import android.net.Uri;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -10,6 +12,7 @@ import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -102,6 +105,8 @@ public enum NetworkService implements NetworkInterface {
         try {
             Response response = client.newCall(request).execute();
 
+            Log.d("sb","response : "+ response);
+
             if (!response.isSuccessful()) {
                 return "api not found";
             }
@@ -125,6 +130,37 @@ public enum NetworkService implements NetworkInterface {
         OkHttpClient client = new OkHttpClient();
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(JSON, jsonObject.toString());
+        Request request = new Request.Builder()
+                .url(URL_BASE+api)
+                .post(body)
+                .build();
+
+        return getData(request);
+    }
+
+    @Override
+    public String postQuery2(String api , ArrayList list, String key) {
+
+        JSONArray array =new JSONArray();
+
+        Log.d("sb","list.size:" +list.size());
+        Log.d("sb","key:" + key);
+
+        for(int i=0;i<list.size();i++){
+            array.put(list.get(i));
+        }
+        Log.d("sb","array :" + array );
+        JSONObject obj =new JSONObject();
+        try{
+                obj.put(key,array);
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+        Log.d("sb","aobj :" + obj );
+
+        OkHttpClient client = new OkHttpClient();
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON,obj.toString());
         Request request = new Request.Builder()
                 .url(URL_BASE+api)
                 .post(body)

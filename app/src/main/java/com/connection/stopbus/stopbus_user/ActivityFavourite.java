@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,6 +45,7 @@ public class ActivityFavourite extends Activity{
     ArrayList<String> favouriteList;
     Handler mHandler = new Handler();
 
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 
@@ -62,8 +64,6 @@ public class ActivityFavourite extends Activity{
                 swipeContainer.setRefreshing(false);
             }
         });
-
-
 
         TextView search = (TextView) findViewById(R.id.search);
         search.setOnClickListener(
@@ -94,69 +94,54 @@ public class ActivityFavourite extends Activity{
 
     }
 
-    public void CallMyBusList(){
+    public void CallMyBusList() {
 
         favRouteInfoList = new ArrayList<ApiData.favrouteInfo>();
         final TinyDB tinydb = new TinyDB(ActivityFavourite.this);
-        favouriteList= tinydb.getListString("Favourite");
+        favouriteList = tinydb.getListString("Favourite");
         Log.d("sb", "favouriteList: " + favouriteList);
-        Iterator<String> itr = favouriteList.iterator();
         Log.d("sb", "favouriteSize:  " + favouriteList.size());
 
-        while(itr.hasNext()){
-            String id = itr.next();
-            CallData("routeInfo", id);
-        }
-
-        new Handler().postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                recyclerView = (RecyclerView) findViewById(R.id.rv_favourite_bus_list);
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(new LinearLayoutManager(
-                                getBaseContext(), LinearLayoutManager.VERTICAL, false
-                        )
-                );
-                recyclerView.setAdapter(favourite_bus_list_adapter);
-
-            }
-        }, 2000);
+        CallData("starInfo");
+        recyclerView = (RecyclerView) findViewById(R.id.rv_favourite_bus_list);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(
+                        getBaseContext(), LinearLayoutManager.VERTICAL, false
+                )
+        );
+        recyclerView.setAdapter(favourite_bus_list_adapter);
 
     }
+
+
+
     //검색 불러오는 API
-    public synchronized void CallData(final String api, final String routeID) {
+    public synchronized void CallData(final String api) {
         new Thread(new Runnable() {
             @Override
-            public void run() {
-                final Map<String, String> args = new HashMap<String, String>();
-                args.put("routeID",  routeID);
+                public void run() {
+                Log.d("sb", "json: "+ favouriteList);
 
                 try {
-                    final String response = NetworkService.INSTANCE.postQuery(api, args);
+                    final String response = NetworkService.INSTANCE.postQuery2(api, favouriteList, "routeIDList");
                     Log.d("sb","333333"+response);
 
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
+
                             try {
-                                JSONObject jObject = new JSONObject(response).getJSONObject("body");
+                                JSONArray jarray = new JSONObject(response).getJSONArray("body");   // JSONArray 생성
+                                Log.d("sb","jarray"+jarray);
+                                ApiData.favrouteInfo[] arr= new Gson().fromJson(jarray.toString(), ApiData.favrouteInfo[].class);
+                                favRouteInfoList = Arrays.asList(arr);
 
-                                Log.d("sb","jobject"+ jObject);
+                                Log.d("sb","44444"+favRouteInfoList);
 
-                                ApiData.favrouteInfo arr= new Gson().fromJson(jObject.toString(), ApiData.favrouteInfo.class);
-                                Log.d("sb","4444444"+arr);
-
-                                favRouteInfoList.add(arr);
-
-                                Log.d("sb","55555555"+favRouteInfoList);
-
-
-
-                            }catch (JSONException e){
+                            } catch (JSONException e) {
                                 e.printStackTrace();
                             }
+                            favourite_bus_list_adapter.notifyDataSetChanged();
 
                         }
                     });
@@ -190,14 +175,19 @@ public class ActivityFavourite extends Activity{
 
             Log.d("sb","666666666666"+favRouteInfoList);
 
-            holder.delete_btn.setVisibility(View.GONE);
-            holder.routeNumber.setText(favRouteInfoList.get(position).routeNumber);
-            holder.regionName.setText(favRouteInfoList.get(position).regionName);
-            holder.routeTypeName.setText(favRouteInfoList.get(position).routeTypeName);
-            holder.upFirstTime.setText("상행 : " + favRouteInfoList.get(position).upFirstTime);
-            holder.upLastTime.setText(" ~ "+ favRouteInfoList.get(position).upLastTime);
-            holder.downFirstTime.setText("하행 : " + favRouteInfoList.get(position).downFirstTime);
-            holder.downLastTime.setText(" ~ "+ favRouteInfoList.get(position).downLastTime);
+            try {
+                holder.delete_btn.setVisibility(View.GONE);
+                holder.routeNumber.setText(favRouteInfoList.get(position).routeNumber);
+                holder.regionName.setText(favRouteInfoList.get(position).regionName);
+                holder.routeTypeName.setText(favRouteInfoList.get(position).routeTypeName);
+                holder.upFirstTime.setText("상행 : " + favRouteInfoList.get(position).upFirstTime);
+                holder.upLastTime.setText(" ~ "+ favRouteInfoList.get(position).upLastTime);
+                holder.downFirstTime.setText("하행 : " + favRouteInfoList.get(position).downFirstTime);
+                holder.downLastTime.setText(" ~ "+ favRouteInfoList.get(position).downLastTime);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
 
 
         }
