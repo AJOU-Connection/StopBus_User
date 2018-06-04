@@ -228,9 +228,11 @@ public class MainActivity extends Activity implements BeaconConsumer{
 
         }
 
+
         if(handlerFlag== 1){
 
         }else{
+
             mHandler.sendEmptyMessageDelayed(0,1000);
         }
     }
@@ -333,7 +335,7 @@ public class MainActivity extends Activity implements BeaconConsumer{
 
 
     }
-    //[E] 앱시작 ( 기기 정보 로드 및 UI ) ----------------------------------------------------------------------------------------------------------------v
+    //[E] 앱시작 ( 기기 정보 로드 및 UI ) ----------------------------------------------------------------------------------------------------------------
     public synchronized void CallData(final String api) {
         new Thread(new Runnable() {
             @Override

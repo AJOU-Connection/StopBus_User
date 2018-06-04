@@ -92,6 +92,7 @@ public class ActivitySearchFav extends Activity{
             );
 
             SearchText = (EditText) findViewById(R.id.search);
+
             SearchText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -105,9 +106,10 @@ public class ActivitySearchFav extends Activity{
                 @Override
                 public void afterTextChanged(Editable editable) {
 
+                    SearchStationListAdapter.clear();
+                    SearchBusListAdapter.clear();
                     CallData("search?type=route");
                     CallData("search?type=station");
-
 
                 }
             });
@@ -298,9 +300,7 @@ public class ActivitySearchFav extends Activity{
                                     JSONArray jarray = new JSONObject(response).getJSONArray("body");   // JSONArray 생성
 
                                         ApiData.Route[] arr = new Gson().fromJson(jarray.toString(), ApiData.Route[].class);
-                                        RouteList = Arrays.asList(arr);
-                                        CopyRouteList = new ArrayList<ApiData.Route>();
-                                        CopyRouteList.addAll(RouteList);
+                                        RouteList = new ArrayList<ApiData.Route>(Arrays.asList(arr));
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -311,10 +311,11 @@ public class ActivitySearchFav extends Activity{
                                 try {
                                     JSONArray jarray = new JSONObject(response).getJSONArray("body");   // JSONArray 생성
 
+
+                                        Log.d("sb", "jarray: "+ jarray);
                                         ApiData.Station[] arr2 = new Gson().fromJson(jarray.toString(), ApiData.Station[].class);
-                                        StationList = Arrays.asList(arr2);
-                                        CopyStationList = new ArrayList<ApiData.Station>();
-                                        CopyStationList.addAll(StationList);
+                                        StationList = new ArrayList<ApiData.Station>(Arrays.asList(arr2));
+
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -339,6 +340,12 @@ public class ActivitySearchFav extends Activity{
         public RecycleAdapter(Context context) {
             this.mContext = context;
 
+        }
+
+        public void clear() {
+            final int size = RouteList.size();
+            RouteList.clear();
+            notifyItemRangeRemoved(0, size);
         }
 
         @Override
@@ -453,6 +460,12 @@ public class ActivitySearchFav extends Activity{
 
         }
 
+        public void clear() {
+            final int size = StationList.size();
+            StationList.clear();
+            notifyItemRangeRemoved(0, size);
+        }
+
         @Override
         public RecycleAdapter2.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
             final View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.item_search_station, parent, false);
@@ -467,7 +480,9 @@ public class ActivitySearchFav extends Activity{
             holder.station_name.setText(StationList.get(position).stationName);
             if(StationList.get(position).stationDirect.equals("")){
                 holder.station_way.setVisibility(View.GONE);
+
             }else{
+                holder.station_way.setVisibility(View.VISIBLE);
                 holder.station_way.setText("| "+ StationList.get(position).stationDirect + " 방면");
             }
 
