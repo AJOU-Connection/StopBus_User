@@ -24,6 +24,7 @@ public class Shared_Pref {
 
     //버스별 노선 정류장을 받아오기 위함
     public static String routeID = null;
+    public static String plateNo =null;
 
     private Shared_Pref() {
 

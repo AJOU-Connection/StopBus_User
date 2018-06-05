@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.Gson;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -31,9 +32,13 @@ import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +53,7 @@ public class MainActivity extends Activity{
     private final long FINISH_INTERVAL_TIME = 2000;
     //SharedPref
     SharedPreferences pref;
+    Handler mHandler = new Handler();
 
 
     private static String[] PERMISSIONS = {
@@ -221,10 +227,8 @@ public class MainActivity extends Activity{
                     startActivity(i);
                 }else if(Shared_Pref.STATUS ==1){
 
-                    Shared_Pref.stationNumber ="03126";
-                    Shared_Pref.stationName = "아주대학교 병원";
-                    Shared_Pref.stationDirect = "";
-                    Shared_Pref.stationID = "202000005";
+
+                    CallName("stationName");
 
                     Intent i = new Intent(MainActivity.this, ActivityStation.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -251,6 +255,45 @@ public class MainActivity extends Activity{
                     final String response = NetworkService.INSTANCE.postQuery(api, args);
                     Log.d("sb","333333"+response);
 
+
+                } catch (Exception e) {
+                }
+            }
+        }).start();
+
+    }
+
+    public synchronized void CallName(final String api) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final Map<String, String> args = new HashMap<String, String>();
+                args.put("stationID",  Shared_Pref.stationID); //POST
+                args.put("stationNumber",  Shared_Pref.stationNumber); //POST
+
+                try {
+
+                    final String response = NetworkService.INSTANCE.postQuery(api, args);
+                    Log.d("sb","333333"+response);
+
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            try {
+
+                                JSONObject obj = new JSONObject(response).getJSONObject("body");   // JSONArray 생성
+                                Log.d("sb","obj: "+obj);
+
+
+                                Shared_Pref.stationName = obj.optString("stationName");
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
 
                 } catch (Exception e) {
                 }

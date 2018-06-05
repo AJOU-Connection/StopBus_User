@@ -76,10 +76,10 @@ public class ServiceBeacon extends Service implements BeaconConsumer{
                     for(Beacon beacon : beacons){
                         beaconList.add(beacon);
 
-                        Log.d("sb","List : " + beaconList);
+                        Log.d("beacon","List : " + beaconList);
 
                     }
-                    Log.d("sb", "The first beacon I see is about "+beacons.iterator().next().getDistance()+" meters away.");
+                    Log.d("beacon", "The first beacon I see is about "+beacons.iterator().next().getDistance()+" meters away.");
                 }
             }
         });
@@ -110,34 +110,37 @@ public class ServiceBeacon extends Service implements BeaconConsumer{
     }
 
     public void handleMessage(Message msg){
-        Log.d("sb", "beaconlist: "+ beaconList);
+        Log.d("beacon", "beaconlist: "+ beaconList);
 
-        Log.d("sb", "msg: "+ msg);
+        Log.d("beacon", "msg: "+ msg);
 
         //비콘의 아이디와 거리를 측정하여 textvIEW에 띄움
         for(Beacon beacon : beaconList){
 
             if(beaconList.toString().equals("[]")){
-                Log.d("sb","no");
+                Log.d("beacon","no");
 
 
             }else{
                 Shared_Pref.STATUS =1;
-                Log.d("sb","yes");
+                Log.d("beacon","yes");
                 //여기 이제 위치별 districtCd, stationNumber 받아와야함
                 if(beacon.getBluetoothName().substring(0,3).equals("bus")){
                     Shared_Pref.routeID = beacon.getBluetoothName().substring(3,12);
+                    Shared_Pref.plateNo = beacon.getBluetoothName().substring(3,12);
+                    Log.d("beacon","beacon route id: "+ beacon.getBluetoothName().substring(3,12));
+                    Log.d("beacon","beacon bus name: "+ beacon.getBluetoothName().substring(13,17));
 
                 }else if(beacon.getBluetoothName().substring(0,1).equals("s")){
                     Shared_Pref.stationID= beacon.getBluetoothName().substring(1,10);
                     Shared_Pref.stationNumber =beacon.getBluetoothName().substring(10,15);
-                    Log.d("sb","beacon.getBluetoothName().substring(1,10): "+ beacon.getBluetoothName().substring(1,10));
-                    Log.d("sb","beacon.getBluetoothName().substring(10,15): "+ beacon.getBluetoothName().substring(10,15));
+                    Log.d("beacon","beacon station id: "+ beacon.getBluetoothName().substring(1,10));
+                    Log.d("beacon","beacon station number:  "+ beacon.getBluetoothName().substring(10,15));
 
                 }
             }
 
-            Log.d("sb","name : " + beacon.getBluetoothName() + " / " + "ID2 : " + beacon.getId2() + " / " + String.valueOf(beacon.getDistance()));
+            Log.d("beacon","name : " + beacon.getBluetoothName() + " / " + "ID2 : " + beacon.getId2() + " / " + String.valueOf(beacon.getDistance()));
 
         }
 
