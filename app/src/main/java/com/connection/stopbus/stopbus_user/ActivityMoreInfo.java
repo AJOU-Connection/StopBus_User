@@ -49,7 +49,7 @@ public class ActivityMoreInfo extends Activity{
             @Override
             public void run() {
                 final Map<String, String> args = new HashMap<String, String>();
-                args.put("routeID",  String.valueOf(Shared_Pref.routeId));
+                args.put("routeID",  Shared_Pref.routeID);
 
                 try {
                     final String response = NetworkService.INSTANCE.postQuery(api, args);

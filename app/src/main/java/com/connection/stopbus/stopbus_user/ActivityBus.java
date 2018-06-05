@@ -70,7 +70,7 @@ public class ActivityBus extends Activity{
 
                 Object value = getIntent().getExtras().get("routeID");
                 Log.d("sb", " Value: " + value);
-                Shared_Pref.routeId =  Integer.parseInt(value.toString());
+                Shared_Pref.routeID =  value.toString();
 
         }
 
@@ -149,7 +149,7 @@ public class ActivityBus extends Activity{
             @Override
             public void run() {
                 final Map<String, String> args = new HashMap<String, String>();
-                args.put("routeID",  String.valueOf(Shared_Pref.routeId));
+                args.put("routeID",  Shared_Pref.routeID);
 
                 try {
 

@@ -25,7 +25,7 @@ public  class ApiData {
         public String districtCd;
         public String routeNumber;
         public String routeTypeName;
-        public int routeID;
+        public String routeID;
     }
     static class Station {
         public int districtCd;
@@ -36,7 +36,7 @@ public  class ApiData {
     }
 
     static class StationBus {
-        public int routeId;
+        public String routeID;
         public String routeNumber;
         public int remainSeatCnt1;
         public int remainSeatCnt2;
@@ -66,7 +66,7 @@ public  class ApiData {
         public int endStationID;
         public String endStationName;
         public String regionName;
-        public int routeID;
+        public String routeID;
         public String routeNumber;
         public String routeTypeName;
         public String startStationNumber;
@@ -85,7 +85,7 @@ public  class ApiData {
         public int endStationID;
         public String endStationName;
         public String regionName;
-        public int routeID;
+        public String routeID;
         public String routeNumber;
         public String routeTypeName;
         public String startStationNumber;

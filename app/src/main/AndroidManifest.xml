@@ -41,6 +41,7 @@
         <activity
             android:name=".ActivityMoreInfo"/>
 
+
         <!-- [START firebase_service] -->
         <service
             android:name=".MyFirebaseMessagingService">
@@ -64,11 +65,14 @@
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
             </intent-filter>
         </service>
+        <service android:name=".ServiceBeacon"></service>
 
     </application>
 
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
 </manifest>

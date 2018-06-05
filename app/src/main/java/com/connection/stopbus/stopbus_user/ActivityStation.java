@@ -51,7 +51,7 @@ public class ActivityStation extends Activity{
     TextView station_name;
     TextView station_way;
 
-    int routeID;
+    String reserve_routeID;
     ArrayList<String> favouriteList;
 
     @Override
@@ -122,8 +122,7 @@ public class ActivityStation extends Activity{
             @Override
             public void run() {
                 final Map<String, String> args = new HashMap<String, String>();
-                args.put("districtCd",  String.valueOf(Shared_Pref.districtCd)); //POST
-                args.put("stationNumber",  Shared_Pref.stationNumber);
+                args.put("stationID",  Shared_Pref.stationID);
 
                 try {
 
@@ -140,8 +139,6 @@ public class ActivityStation extends Activity{
                                     ApiData.StationBus[] arr = new Gson().fromJson(jarray.toString(), ApiData.StationBus[].class);
                                     StationBusList = Arrays.asList(arr);
                                     Log.d("sb","55555555"+StationBusList);
-                                    CopyStationBusList = new ArrayList<ApiData.StationBus>();
-                                    CopyStationBusList.addAll(StationBusList);
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -165,7 +162,7 @@ public class ActivityStation extends Activity{
             public void run() {
                 final Map<String, String> args = new HashMap<String, String>();
                 args.put("UUID",  Shared_Pref.UUID); //POST
-                args.put("routeID",  Integer.toString(routeID));
+                args.put("routeID",  reserve_routeID);
                 args.put("stationID",  Shared_Pref.stationID);
 
                 try {
@@ -210,7 +207,7 @@ public class ActivityStation extends Activity{
             while(itr.hasNext()){
                 String id = itr.next();
                 // Log.d("sb", "items : "+ id);
-                if(id.equals(Integer.toString(StationBusList.get(position).routeId))){
+                if(id.equals(StationBusList.get(position).routeID)){
                     holder.favourite_btn.setImageResource(R.drawable.ic_star_yellow_36dp);
                     break;
                 }else{
@@ -231,7 +228,7 @@ public class ActivityStation extends Activity{
                         new Button.OnClickListener() {
                             public void onClick(View v) {
 
-                                routeID = StationBusList.get(position).routeId;
+                                reserve_routeID = StationBusList.get(position).routeID;
                                 holder.bell.setImageResource(R.drawable.bell_red);
                                 getIn("reserv/getIn");
                             }
@@ -246,8 +243,8 @@ public class ActivityStation extends Activity{
                                 int flag =0;
                                 while(itr.hasNext()){
                                     String id = itr.next();
-                                    Log.d("sb", "Integer.toString(RouteList.get(position).routeID :"+ Integer.toString(StationBusList.get(position).routeId));
-                                    if(id.equals(Integer.toString(StationBusList.get(position).routeId))){
+                                    Log.d("sb", "Integer.toString(RouteList.get(position).routeID :"+ StationBusList.get(position).routeID);
+                                    if(id.equals(StationBusList.get(position).routeID)){
                                         Log.d("sb", "delete");
                                         flag =1;
                                         break;
@@ -259,11 +256,11 @@ public class ActivityStation extends Activity{
                                 }
                                 if(flag==0){
                                     holder.favourite_btn.setImageResource(R.drawable.ic_star_yellow_36dp);
-                                    favouriteList.add(Integer.toString(StationBusList.get(position).routeId));
+                                    favouriteList.add(StationBusList.get(position).routeID);
                                     tinydb.putListString("Favourite",favouriteList );
                                 }else if(flag==1){
                                     holder.favourite_btn.setImageResource(R.drawable.ic_star_black_36dp);
-                                    favouriteList.remove(Integer.toString(StationBusList.get(position).routeId));
+                                    favouriteList.remove(StationBusList.get(position).routeID);
                                     tinydb.putListString("Favourite",favouriteList );
                                 }
 
@@ -308,9 +305,9 @@ public class ActivityStation extends Activity{
                         new Button.OnClickListener() {
                             public void onClick(View v) {
 
-                                Shared_Pref.routeId = StationBusList.get(position).routeId;
+                                Shared_Pref.routeID = StationBusList.get(position).routeID;
 
-                                Log.d("sb", "bus route list gogo");
+                                Log.d("sb", "bus route list gogo: "+  StationBusList.get(position).routeID);
                                 Intent i = new Intent(ActivityStation.this, ActivityBus.class);
                                 startActivity(i);
 

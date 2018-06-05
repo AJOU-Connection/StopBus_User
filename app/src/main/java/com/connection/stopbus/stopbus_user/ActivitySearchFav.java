@@ -366,7 +366,7 @@ public class ActivitySearchFav extends Activity{
             while(itr.hasNext()){
                 String id = itr.next();
                 // Log.d("sb", "items : "+ id);
-                if(id.equals(Integer.toString(RouteList.get(position).routeID))){
+                if(id.equals(RouteList.get(position).routeID)){
                     holder.favourite_btn.setImageResource(R.drawable.ic_star_yellow_36dp);
                     break;
                 }else{
@@ -385,8 +385,8 @@ public class ActivitySearchFav extends Activity{
                             int flag =0;
                             while(itr.hasNext()){
                                 String id = itr.next();
-                                Log.d("sb", "Integer.toString(RouteList.get(position).routeID :"+ Integer.toString(RouteList.get(position).routeID));
-                                if(id.equals(Integer.toString(RouteList.get(position).routeID))){
+                                Log.d("sb", "Integer.toString(RouteList.get(position).routeID :"+ RouteList.get(position).routeID);
+                                if(id.equals(RouteList.get(position).routeID)){
                                     Log.d("sb", "delete");
                                     flag =1;
                                     break;
@@ -397,11 +397,11 @@ public class ActivitySearchFav extends Activity{
                             }
                             if(flag==0){
                                 holder.favourite_btn.setImageResource(R.drawable.ic_star_yellow_36dp);
-                                favouriteList.add(Integer.toString(RouteList.get(position).routeID));
+                                favouriteList.add(RouteList.get(position).routeID);
                                 tinydb.putListString("Favourite",favouriteList );
                             }else if(flag==1){
                                 holder.favourite_btn.setImageResource(R.drawable.ic_star_black_36dp);
-                                favouriteList.remove(Integer.toString(RouteList.get(position).routeID));
+                                favouriteList.remove(RouteList.get(position).routeID);
                                 tinydb.putListString("Favourite",favouriteList );
                             }
 
@@ -413,7 +413,7 @@ public class ActivitySearchFav extends Activity{
                     new Button.OnClickListener() {
                         public void onClick(View v) {
 
-                            Shared_Pref.routeId = RouteList.get(position).routeID;
+                            Shared_Pref.routeID = RouteList.get(position).routeID;
 
                             Log.d("sb", "bus route list gogo");
                             Intent i = new Intent(ActivitySearchFav.this, ActivityBus.class);
@@ -493,7 +493,6 @@ public class ActivitySearchFav extends Activity{
 
                             Shared_Pref.stationNumber = StationList.get(position).stationNumber.trim();
                             Shared_Pref.stationName = StationList.get(position).stationName;
-                            Shared_Pref.districtCd = StationList.get(position).districtCd;
                             Shared_Pref.stationDirect = StationList.get(position).stationDirect;
                             Shared_Pref.stationID = StationList.get(position).stationID;
 

@@ -18,13 +18,12 @@ public class Shared_Pref {
 
     //정류장별 버스 리스트를 받아오기 위함
     public static String stationNumber =null;
-    public static int districtCd = 0;
     public static String stationName =null;
     public static String stationDirect =null;
     public static String stationID = null;
 
     //버스별 노선 정류장을 받아오기 위함
-    public static int routeId = 0;
+    public static String routeID = null;
 
     private Shared_Pref() {
 
