@@ -62,7 +62,6 @@ public class MainActivity extends Activity implements BeaconConsumer{
     private static String[] PERMISSIONS = {
             Manifest.permission.BLUETOOTH,
             Manifest.permission.BLUETOOTH_ADMIN,
-            Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.READ_PHONE_STATE
     };
 
@@ -275,20 +274,18 @@ public class MainActivity extends Activity implements BeaconConsumer{
 
             pref = getSharedPreferences("a", MODE_PRIVATE);
 
+            Log.d("sb", "refreshedToken:" + refreshedToken);
             Log.d("sb", "Shared : " + pref.getString("Token", "") );
 
             if(pref.getString("Token","").equals(refreshedToken)){
                 Log.d("sb", "same token!" );
-            }else if(pref.getString("Token","").equals(null)){
-                CallData("register");
             }else{
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString("DeviceId", deviceUuid.toString());
+                editor.putString("Token", refreshedToken);
+                editor.commit();
                 CallData("register");
             }
-
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putString("DeviceId", deviceUuid.toString());
-            editor.putString("Token", refreshedToken);
-            editor.commit();
 
             Log.d("sb", "MyFirebaseInstanceIDService> Refreshed token: " + refreshedToken);
             Log.d("sb","DeviceId: "+deviceUuid.toString());
