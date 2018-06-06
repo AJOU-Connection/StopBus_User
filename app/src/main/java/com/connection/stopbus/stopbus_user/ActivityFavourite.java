@@ -2,6 +2,7 @@ package com.connection.stopbus.stopbus_user;
 
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -44,7 +45,7 @@ public class ActivityFavourite extends Activity{
 
     ArrayList<String> favouriteList;
     Handler mHandler = new Handler();
-
+    int flag=0;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -77,16 +78,46 @@ public class ActivityFavourite extends Activity{
                 }
         );
 
-        ImageView bus_stop_image = (ImageView) findViewById(R.id.bus_stop_image);
-        bus_stop_image.setOnClickListener(
+        TextView delete_fav = (TextView) findViewById(R.id.delete_fav);
+        delete_fav.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View v) {
+                        Log.d("sb", "delte_fav");
+                        if(flag==0){
+                            flag =1;
+                        }else if(flag==1){
+                            flag=0;
+                        }
+                        CallMyBusList();
+                    }
+                }
+        );
+
+        findViewById(R.id.fab).setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
                         Log.d("sb", "search for bus stop");
 
+                        if(Shared_Pref.btenable==0){
 
-                        Intent i = new Intent(ActivityFavourite.this, ActivitySearchFav.class);
-                        i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(i);
+                            Log.d("sb", "Bluetooth Enable Request");
+                            Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                            startActivityForResult(i, 1);
+
+
+                        }else if(Shared_Pref.btenable==1){
+//                            Intent intent = new Intent(
+//                                    getApplicationContext(),//현재제어권자
+//                                    ServiceBeacon.class); // 이동할 컴포넌트
+//                            startService(intent); // 서비스 시작
+
+                            Log.d("sb", "search for bus stop 222222");
+                            Intent i = new Intent(ActivityFavourite.this, ActivityStation.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(i);
+                        }
+
                     }
                 }
         );
@@ -176,7 +207,15 @@ public class ActivityFavourite extends Activity{
             Log.d("sb","666666666666"+favRouteInfoList);
 
             try {
-                holder.delete_btn.setVisibility(View.GONE);
+                if(flag==1){
+                    holder.delete_btn.setVisibility(View.VISIBLE);
+                    holder.reserve_btn.setVisibility(View.GONE);
+                }else if(flag==0){
+                    holder.delete_btn.setVisibility(View.GONE);
+                    holder.reserve_btn.setVisibility(View.VISIBLE);
+
+                }
+
                 holder.routeNumber.setText(favRouteInfoList.get(position).routeNumber);
                 holder.regionName.setText(favRouteInfoList.get(position).regionName);
                 holder.routeTypeName.setText(favRouteInfoList.get(position).routeTypeName);
@@ -209,6 +248,7 @@ public class ActivityFavourite extends Activity{
             public TextView downFirstTime;
             public TextView upLastTime;
             public TextView downLastTime;
+            public com.zcw.togglebutton.ToggleButton reserve_btn;
 
             public ViewHolder(final View itemView) {
                 super(itemView);
@@ -221,6 +261,7 @@ public class ActivityFavourite extends Activity{
                 downLastTime= (TextView) itemView.findViewById(R.id.downLastTime);
 
                 delete_btn = (ImageView) itemView.findViewById(R.id.delete_btn);
+                reserve_btn = (com.zcw.togglebutton.ToggleButton) itemView.findViewById(R.id.reserve_btn);
 
             }
         }

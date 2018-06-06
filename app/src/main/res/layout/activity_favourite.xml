@@ -18,7 +18,7 @@
         android:layout_height="40dp"
         android:layout_marginLeft="5dp"
         android:layout_centerVertical="true"
-        android:background="@drawable/bus_stop" />
+        android:background="@drawable/ic_directions_bus_white_48pt" />
     <TextView
         android:id="@+id/search"
         android:layout_width="match_parent"
@@ -32,12 +32,12 @@
         android:paddingLeft="10dp"
         android:textSize="15sp"
         android:textStyle="bold"
-        android:layout_toLeftOf="@+id/delete_btn"
+        android:layout_toLeftOf="@+id/delete_fav"
         android:textColor="#BDBDBD"
         android:background="@drawable/gray_border"
         android:layout_toRightOf="@+id/bus_stop_image" />
     <TextView
-        android:id="@+id/delete_btn"
+        android:id="@+id/delete_fav"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -80,5 +80,16 @@
             tools:listitem="@layout/item_fav_bus" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_search_white_48pt"
+        android:tint="#00ACC1"
+        app:backgroundTint="#FFFFFF"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="15dp"/>
 
 </RelativeLayout>

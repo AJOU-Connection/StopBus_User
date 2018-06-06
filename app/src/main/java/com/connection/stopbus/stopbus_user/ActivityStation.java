@@ -77,6 +77,9 @@ public class ActivityStation extends Activity{
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                station_num.setText(Shared_Pref.stationNumber);
+                station_name.setText(Shared_Pref.stationName);
+                station_way.setText(Shared_Pref.stationDirect);
                 CallData("busArrival");
                 swipeContainer.setRefreshing(false);
             }

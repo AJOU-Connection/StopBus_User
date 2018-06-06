@@ -12,36 +12,22 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.os.RemoteException;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.gson.Gson;
 
-import org.altbeacon.beacon.Beacon;
-import org.altbeacon.beacon.BeaconConsumer;
-import org.altbeacon.beacon.BeaconManager;
-import org.altbeacon.beacon.BeaconParser;
-import org.altbeacon.beacon.RangeNotifier;
-import org.altbeacon.beacon.Region;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -59,8 +45,7 @@ public class MainActivity extends Activity{
     private static String[] PERMISSIONS = {
             Manifest.permission.BLUETOOTH,
             Manifest.permission.BLUETOOTH_ADMIN,
-
-           Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.READ_PHONE_STATE
     };
 
@@ -227,9 +212,6 @@ public class MainActivity extends Activity{
                     startActivity(i);
                 }else if(Shared_Pref.STATUS ==1){
 
-
-                    CallName("stationName");
-
                     Intent i = new Intent(MainActivity.this, ActivityStation.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -263,42 +245,5 @@ public class MainActivity extends Activity{
 
     }
 
-    public synchronized void CallName(final String api) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final Map<String, String> args = new HashMap<String, String>();
-                args.put("stationID",  Shared_Pref.stationID); //POST
-                args.put("stationNumber",  Shared_Pref.stationNumber); //POST
 
-                try {
-
-                    final String response = NetworkService.INSTANCE.postQuery(api, args);
-                    Log.d("sb","333333"+response);
-
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            try {
-
-                                JSONObject obj = new JSONObject(response).getJSONObject("body");   // JSONArray 생성
-                                Log.d("sb","obj: "+obj);
-
-
-                                Shared_Pref.stationName = obj.optString("stationName");
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                    });
-
-                } catch (Exception e) {
-                }
-            }
-        }).start();
-
-    }
 }

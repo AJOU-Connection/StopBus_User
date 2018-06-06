@@ -1,6 +1,7 @@
 package com.connection.stopbus.stopbus_user;
 
 import android.app.Service;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
@@ -14,11 +15,15 @@ import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // 서비스 클래스를 구현하려면, Service 를 상속받는다
 public class ServiceBeacon extends Service implements BeaconConsumer{
@@ -26,6 +31,8 @@ public class ServiceBeacon extends Service implements BeaconConsumer{
     private final MyHandler mHandler = new MyHandler(this);
 
     private BeaconManager beaconManager;
+    private BluetoothAdapter btAdapter;
+
 
     //감지된 비콘들을 임시로 담을 리스트
     private List<Beacon> beaconList = new ArrayList<>();
@@ -39,6 +46,8 @@ public class ServiceBeacon extends Service implements BeaconConsumer{
     @Override
     public void onCreate() {
         super.onCreate();
+
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
 
         //비콘매니저 객체 초기화
         beaconManager = BeaconManager.getInstanceForApplication(this);
@@ -114,12 +123,19 @@ public class ServiceBeacon extends Service implements BeaconConsumer{
 
         Log.d("beacon", "msg: "+ msg);
 
+        if(btAdapter.isEnabled()){
+            Shared_Pref.btenable = 1;
+        }else{
+            Shared_Pref.btenable = 0;
+            beaconList.clear();
+
+        }
         //비콘의 아이디와 거리를 측정하여 textvIEW에 띄움
         for(Beacon beacon : beaconList){
 
+
             if(beaconList.toString().equals("[]")){
                 Log.d("beacon","no");
-
 
             }else{
                 Shared_Pref.STATUS =1;
@@ -127,7 +143,7 @@ public class ServiceBeacon extends Service implements BeaconConsumer{
                 //여기 이제 위치별 districtCd, stationNumber 받아와야함
                 if(beacon.getBluetoothName().substring(0,3).equals("bus")){
                     Shared_Pref.routeID = beacon.getBluetoothName().substring(3,12);
-                    Shared_Pref.plateNo = beacon.getBluetoothName().substring(3,12);
+                    Shared_Pref.plateNo = beacon.getBluetoothName().substring(13,17);
                     Log.d("beacon","beacon route id: "+ beacon.getBluetoothName().substring(3,12));
                     Log.d("beacon","beacon bus name: "+ beacon.getBluetoothName().substring(13,17));
 
@@ -137,6 +153,7 @@ public class ServiceBeacon extends Service implements BeaconConsumer{
                     Log.d("beacon","beacon station id: "+ beacon.getBluetoothName().substring(1,10));
                     Log.d("beacon","beacon station number:  "+ beacon.getBluetoothName().substring(10,15));
 
+                    CallName("stationName");
                 }
             }
 
@@ -150,5 +167,74 @@ public class ServiceBeacon extends Service implements BeaconConsumer{
 
 
     //[E] 비콘 ----------------------------------------------------------------------------------------------------------------
+    public synchronized void CallName(final String api) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final Map<String, String> args = new HashMap<String, String>();
+                args.put("stationID",  Shared_Pref.stationID); //POST
+                args.put("stationNumber",  Shared_Pref.stationNumber); //POST
+
+                try {
+
+                    final String response = NetworkService.INSTANCE.postQuery(api, args);
+                    Log.d("sb","333333"+response);
+
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            try {
+
+                                JSONObject obj = new JSONObject(response).getJSONObject("body");   // JSONArray 생성
+                                Log.d("sb","obj: "+obj);
+
+
+                                Shared_Pref.stationName = obj.optString("stationName");
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
+
+                } catch (Exception e) {
+                }
+            }
+        }).start();
+
+    }
+
+    public boolean getDeviceState() {
+
+        Log.d("beacon", "Check the Bluetooth support");
+        if(btAdapter == null) {
+
+            Log.d("beacon", "Bluetooth is not available");
+
+        return false;
+
+        } else {
+            Log.d("beacon", "Bluetooth is available");
+
+        return true;
+        }
+    }
+
+    public void enableBluetooth() {
+        Log.d("beacon", "Check the enabled Bluetooth");
+        if(btAdapter.isEnabled()) {
+            // 기기의 블루투스 상태가 On인 경우
+            Log.d("beacon", "Bluetooth Enable Now");
+            //Next Step
+        } else {
+            // 기기의 블루투스 상태가 Off인 경우
+            Log.d("beacon", "Bluetooth Enable Request");
+
+        }
+    }
+
+
 
 }
