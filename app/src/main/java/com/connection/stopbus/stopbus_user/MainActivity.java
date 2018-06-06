@@ -4,6 +4,7 @@ package com.connection.stopbus.stopbus_user;
  */
 import android.Manifest;
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,7 +41,7 @@ public class MainActivity extends Activity{
     //SharedPref
     SharedPreferences pref;
     Handler mHandler = new Handler();
-
+    private BluetoothAdapter btAdapter;
 
     private static String[] PERMISSIONS = {
             Manifest.permission.BLUETOOTH,
@@ -54,15 +55,25 @@ public class MainActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
+
         Shared_Pref.STATUS = 0;
 
         Shared_Pref.init(getApplicationContext());
         Log.d("sb", "start app!!!");
 
-        Intent intent = new Intent(
-                getApplicationContext(),//현재제어권자
-                ServiceBeacon.class); // 이동할 컴포넌트
-        startService(intent); // 서비스 시작
+        if(btAdapter.isEnabled()){
+            Shared_Pref.btenable = 1;
+
+            Intent intent = new Intent(
+                    getApplicationContext(),//현재제어권자
+                    ServiceBeacon.class); // 이동할 컴포넌트
+            startService(intent); // 서비스 시작
+        }else{
+            Shared_Pref.btenable = 0;
+
+        }
+
 
 
 
@@ -204,7 +215,7 @@ public class MainActivity extends Activity{
             public void run()
             {
                 Log.d("sb", "STATUS: "+ Shared_Pref.STATUS);
-               //s handlerFlag =1;
+
                 if(Shared_Pref.STATUS==0){
                     Intent i = new Intent(MainActivity.this, ActivityFavourite.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -98,6 +98,7 @@ public class ActivityFavourite extends Activity{
                     public void onClick(View v) {
                         Log.d("sb", "search for bus stop");
 
+
                         if(Shared_Pref.btenable==0){
 
                             Log.d("sb", "Bluetooth Enable Request");
@@ -105,11 +106,12 @@ public class ActivityFavourite extends Activity{
                             startActivityForResult(i, 1);
 
 
+
                         }else if(Shared_Pref.btenable==1){
-//                            Intent intent = new Intent(
-//                                    getApplicationContext(),//현재제어권자
-//                                    ServiceBeacon.class); // 이동할 컴포넌트
-//                            startService(intent); // 서비스 시작
+                            Intent intent = new Intent(
+                                    getApplicationContext(),//현재제어권자
+                                    ServiceBeacon.class); // 이동할 컴포넌트
+                            startService(intent); // 서비스 시작
 
                             Log.d("sb", "search for bus stop 222222");
                             Intent i = new Intent(ActivityFavourite.this, ActivityStation.class);
@@ -124,6 +126,34 @@ public class ActivityFavourite extends Activity{
 
 
     }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 1:
+                // When the request to enable Bluetooth returns
+                if (resultCode == Activity.RESULT_OK) {
+                    // 확인 눌렀을 때 //Next Step
+                    Log.d("sb", "Bluetooth is  enabled");
+                    Shared_Pref.btenable= 1;
+                    Intent intent = new Intent(
+                            getApplicationContext(),//현재제어권자
+                            ServiceBeacon.class); // 이동할 컴포넌트
+                    startService(intent); // 서비스 시작
+
+                    Log.d("sb", "search for bus stop 222222");
+                    Intent i = new Intent(ActivityFavourite.this, ActivityStation.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(i);
+                } else {
+                    // 취소 눌렀을 때
+                    Log.d("sb", "Bluetooth is not enabled");
+                    Shared_Pref.btenable= 0;
+                }
+                break;
+        }
+    }
+
 
     public void CallMyBusList() {
 
