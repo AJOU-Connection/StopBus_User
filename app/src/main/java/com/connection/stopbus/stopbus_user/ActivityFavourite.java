@@ -206,6 +206,8 @@ public class ActivityFavourite extends Activity{
 
             Log.d("sb","666666666666"+favRouteInfoList);
 
+            final TinyDB tinydb = new TinyDB(ActivityFavourite.this);
+
             try {
                 if(flag==1){
                     holder.delete_btn.setVisibility(View.VISIBLE);
@@ -215,7 +217,36 @@ public class ActivityFavourite extends Activity{
                     holder.reserve_btn.setVisibility(View.VISIBLE);
 
                 }
+                holder.delete_btn.setOnClickListener(
+                        new Button.OnClickListener() {
+                            public void onClick(View v) {
 
+                                favouriteList= tinydb.getListString("Favourite");
+                                Log.d("sb", "favouriteList: " + favouriteList);
+                                Iterator<String> itr = favouriteList.iterator();
+                                while(itr.hasNext()){
+                                    String id = itr.next();
+                                    Log.d("sb", "favRouteInfoList.get(position).routeID :"+ favRouteInfoList.get(position).routeID);
+                                    if(id.equals(favRouteInfoList.get(position).routeID)){
+
+                                        Log.d("sb", "delete");
+                                        favouriteList.remove(favRouteInfoList.get(position).routeID);
+                                        tinydb.putListString("Favourite",favouriteList );
+
+                                        Log.d("sb","delete"+favRouteInfoList);
+                                        CallMyBusList();
+                                        break;
+                                    }
+                                }
+
+
+
+                            }
+                        }
+                );
+
+                Log.d("sb", "favRouteInfoList.get(position).routeID222222222222222222: "+favRouteInfoList.get(position).routeID);
+                Log.d("sb", "favRouteInfoList.get(position).routeNumber33333333333333: "+favRouteInfoList.get(position).routeNumber);
                 holder.routeNumber.setText(favRouteInfoList.get(position).routeNumber);
                 holder.regionName.setText(favRouteInfoList.get(position).regionName);
                 holder.routeTypeName.setText(favRouteInfoList.get(position).routeTypeName);
