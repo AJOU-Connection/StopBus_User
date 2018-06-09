@@ -43,7 +43,6 @@ public class ActivityStation extends Activity{
     private SwipeRefreshLayout swipeContainer;
 
     private List<ApiData.StationBus> StationBusList = new ArrayList<ApiData.StationBus>();
-    private List<ApiData.StationBus> CopyStationBusList;
 
     Handler mHandler = new Handler();
 
@@ -61,15 +60,19 @@ public class ActivityStation extends Activity{
         setContentView(R.layout.activity_station);
 
         CallData("busArrival");
-
         station_num = (TextView) findViewById(R.id.station_num);
-        station_num.setText(Shared_Pref.stationNumber);
-
         station_name = (TextView) findViewById(R.id.station_name);
-        station_name.setText(Shared_Pref.stationName);
-
         station_way = (TextView) findViewById(R.id.station_way);
-        station_way.setText(Shared_Pref.stationDirect);
+
+        if(Shared_Pref.bt_station_flag == 0){
+            station_num.setText(Shared_Pref.stationNumber);
+            station_name.setText(Shared_Pref.stationName);
+            station_way.setText(Shared_Pref.stationDirect);
+        }else if(Shared_Pref.bt_station_flag ==1){
+            station_num.setText(Shared_Pref.beacon_stationNumber);
+            station_name.setText(Shared_Pref.beacon_stationName);
+            station_way.setText(Shared_Pref.beacon_stationDirect);
+        }
 
         // Lookup the swipe container view
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipe_layout0);
@@ -77,9 +80,17 @@ public class ActivityStation extends Activity{
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                station_num.setText(Shared_Pref.stationNumber);
-                station_name.setText(Shared_Pref.stationName);
-                station_way.setText(Shared_Pref.stationDirect);
+                if(Shared_Pref.bt_station_flag == 0){
+                    station_num.setText(Shared_Pref.stationNumber);
+                    station_name.setText(Shared_Pref.stationName);
+                    station_way.setText(Shared_Pref.stationDirect);
+                }else if(Shared_Pref.bt_station_flag == 1){
+
+                    station_num.setText(Shared_Pref.beacon_stationNumber);
+                    station_name.setText(Shared_Pref.beacon_stationName);
+                    station_way.setText(Shared_Pref.beacon_stationDirect);
+                }
+
                 CallData("busArrival");
                 swipeContainer.setRefreshing(false);
             }
@@ -125,7 +136,13 @@ public class ActivityStation extends Activity{
             @Override
             public void run() {
                 final Map<String, String> args = new HashMap<String, String>();
-                args.put("stationID",  Shared_Pref.stationID);
+
+                if(Shared_Pref.bt_station_flag == 0){
+                    args.put("stationID",  Shared_Pref.stationID);
+                }else if(Shared_Pref.bt_station_flag ==1){
+                    args.put("stationID",  Shared_Pref.beacon_stationID);
+                }
+
 
                 try {
 
@@ -166,7 +183,7 @@ public class ActivityStation extends Activity{
                 final Map<String, String> args = new HashMap<String, String>();
                 args.put("UUID",  Shared_Pref.UUID); //POST
                 args.put("routeID",  reserve_routeID);
-                args.put("stationID",  Shared_Pref.stationID);
+                args.put("stationID",  Shared_Pref.beacon_stationID);
 
                 try {
 

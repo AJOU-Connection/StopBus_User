@@ -223,6 +223,7 @@ public class MainActivity extends Activity{
                     startActivity(i);
                 }else if(Shared_Pref.STATUS ==1){
 
+                    Shared_Pref.bt_station_flag=1;
                     Intent i = new Intent(MainActivity.this, ActivityStation.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

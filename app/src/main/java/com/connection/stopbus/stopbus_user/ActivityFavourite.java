@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
@@ -113,11 +114,20 @@ public class ActivityFavourite extends Activity{
                                     ServiceBeacon.class); // 이동할 컴포넌트
                             startService(intent); // 서비스 시작
 
-                            Log.d("sb", "search for bus stop 222222");
-                            Intent i = new Intent(ActivityFavourite.this, ActivityStation.class);
-                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(i);
+
+
+                            if(Shared_Pref.beacon_stationID.equals("")){
+                                Toast.makeText(getApplicationContext(), "감지된 버스정류장이 없습니다.", Toast.LENGTH_LONG).show();
+
+                            }else{
+                                Log.d("sb", "search for bus stop 222222");
+                                Intent i = new Intent(ActivityFavourite.this, ActivityStation.class);
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(i);
+                            }
+
+
                         }
 
                     }

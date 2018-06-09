@@ -80,7 +80,6 @@ public class ServiceBeacon extends Service{
                 double bus_dis= 0.0;
                 double station_dis = 0.0;
                 Log.d(TAG, "Shared_Pref.btenable: "+ Shared_Pref.btenable);
-                Log.d(TAG,"Shared_Pref.IN_BUS : "+ Shared_Pref.IN_BUS);
 
                 if(btAdapter.isEnabled()){
                     if(minewBeacons.size()==0){
@@ -90,6 +89,11 @@ public class ServiceBeacon extends Service{
                     }
                     Shared_Pref.btenable = 1;
                 }else{
+                    Shared_Pref.beacon_routeID = null;
+                    Shared_Pref.beacon_plateNo = null;
+                    Shared_Pref.beacon_stationID = null;
+                    Shared_Pref.beacon_stationNumber =null;
+
                     minewBeacons.clear();
                     Shared_Pref.btenable = 0;
                 }
@@ -110,38 +114,27 @@ public class ServiceBeacon extends Service{
                     Shared_Pref.STATUS = 1;
                     //여기 이제 위치별 districtCd, stationNumber 받아와야함
                     if (name.substring(0, 3).equals("bus")) {
-                        Shared_Pref.routeID = name.substring(3, 12);
-                        Shared_Pref.plateNo = name.substring(13, 17);
+                        Shared_Pref.beacon_routeID = name.substring(3, 12);
+                        Shared_Pref.beacon_plateNo = name.substring(13, 17);
                         bus_dis = calculateDistance(rssi);
                         Log.d("beacon", "beacon route id: " + name.substring(3, 12));
                         Log.d("beacon", "beacon bus name: " + name.substring(13, 17));
 
                     } else if (name.substring(0, 1).equals("s")) {
-                        Shared_Pref.stationID = name.substring(1, 10);
-                        Shared_Pref.stationNumber = name.substring(10, 15);
+                        Shared_Pref.beacon_stationID = name.substring(1, 10);
+                        Shared_Pref.beacon_stationNumber = name.substring(10, 15);
                         station_dis = calculateDistance(rssi);
                         Log.d("beacon", "beacon station id: " + name.substring(1, 10));
                         Log.d("beacon", "beacon station number:  " + name.substring(10, 15));
 
                         CallName("stationName");
+                    }else{
+                        Shared_Pref.beacon_stationID = "";
+                        Shared_Pref.beacon_stationNumber = "";
+                        Shared_Pref.beacon_routeID ="";
+                        Shared_Pref.beacon_plateNo = "";
+
                     }
-
-                    if(Shared_Pref.IN_BUS==1){
-                        Shared_Pref.IN_BUS=2;
-                        Intent i2 = new Intent(ServiceBeacon.this, ActivityBus.class);
-                        startActivity(i2);
-
-                    }else if(Shared_Pref.IN_BUS==0){
-
-                        if(bus_dis<station_dis){
-                            Log.d("beacon", "in bus");
-                            Shared_Pref.IN_BUS=1;
-                        }else{
-                            Log.d("beacon", "in station");
-                            Shared_Pref.IN_BUS=0;
-                        }
-                    }
-
 
 
 
@@ -191,8 +184,8 @@ public class ServiceBeacon extends Service{
             @Override
             public void run() {
                 final Map<String, String> args = new HashMap<String, String>();
-                args.put("stationID",  Shared_Pref.stationID); //POST
-                args.put("stationNumber",  Shared_Pref.stationNumber); //POST
+                args.put("stationID",  Shared_Pref.beacon_stationID); //POST
+                args.put("stationNumber",  Shared_Pref.beacon_stationNumber); //POST
 
                 try {
 
@@ -209,7 +202,7 @@ public class ServiceBeacon extends Service{
                                 Log.d("sb","obj: "+obj);
 
 
-                                Shared_Pref.stationName = obj.optString("stationName");
+                                Shared_Pref.beacon_stationName = obj.optString("stationName");
 
                             } catch (JSONException e) {
                                 e.printStackTrace();

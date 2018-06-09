@@ -13,7 +13,6 @@ public class Shared_Pref {
     private static SharedPreferences mSharedPref;
 
     public static int STATUS=0;
-    public static int IN_BUS=0;
     public static String UUID = null;
     public static int btenable =0;
 
@@ -24,9 +23,21 @@ public class Shared_Pref {
     public static String stationDirect =null;
     public static String stationID = null;
 
+    public static String beacon_stationName=null;
+    public static String beacon_stationID = null;
+    public static String beacon_stationDirect =null;
+    public static String beacon_stationNumber = null;
+
+    public static int bt_station_flag =0;
+
     //버스별 노선 정류장을 받아오기 위함
     public static String routeID = null;
     public static String plateNo =null;
+
+    public static String beacon_plateNo =null;
+    public static String beacon_routeID = null;
+
+    public static int bt_bus_flag =0;
 
     private Shared_Pref() {
 

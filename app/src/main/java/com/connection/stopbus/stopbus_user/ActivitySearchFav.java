@@ -414,6 +414,7 @@ public class ActivitySearchFav extends Activity{
                         public void onClick(View v) {
 
                             Shared_Pref.routeID = RouteList.get(position).routeID;
+                            Shared_Pref.bt_bus_flag =0;
 
                             Log.d("sb", "bus route list gogo");
                             Intent i = new Intent(ActivitySearchFav.this, ActivityBus.class);
@@ -495,6 +496,7 @@ public class ActivitySearchFav extends Activity{
                             Shared_Pref.stationName = StationList.get(position).stationName;
                             Shared_Pref.stationDirect = StationList.get(position).stationDirect;
                             Shared_Pref.stationID = StationList.get(position).stationID;
+                            Shared_Pref.bt_station_flag =0;
 
                             Log.d("sb", "station's bus list gogo");
                             Intent i = new Intent(ActivitySearchFav.this, ActivityStation.class);
