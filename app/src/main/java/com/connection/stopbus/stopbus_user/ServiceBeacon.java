@@ -77,17 +77,25 @@ public class ServiceBeacon extends Service{
 
                 String name;
                 double rssi;
+                double bus_dis= 0.0;
+                double station_dis = 0.0;
                 Log.d(TAG, "Shared_Pref.btenable: "+ Shared_Pref.btenable);
+                Log.d(TAG,"Shared_Pref.IN_BUS : "+ Shared_Pref.IN_BUS);
 
                 if(btAdapter.isEnabled()){
-                    Shared_Pref.btenable = 1;
+                    if(minewBeacons.size()==0){
 
+                        mMinewBeaconManager.stopScan();
+                        mMinewBeaconManager.startScan();
+                    }
+                    Shared_Pref.btenable = 1;
                 }else{
-                    Shared_Pref.btenable = 0;
                     minewBeacons.clear();
+                    Shared_Pref.btenable = 0;
                 }
 
                 for(int i = 0 ; i < minewBeacons.size() ; i++){
+
                     name = minewBeacons.get(i).getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_Name).getStringValue();
                     if(name.equals("N/A"))
                         continue;
@@ -99,30 +107,45 @@ public class ServiceBeacon extends Service{
                     }
                     rssi = mRssiMap.get(name).update(rssi);
 
-                  // Log.d(TAG, "NAME : " + name + "\n"+ "RSSI : " + rssi + "\n"+ "Distance : " + calculateDistance(rssi)+ "\n");
+                    Shared_Pref.STATUS = 1;
+                    //여기 이제 위치별 districtCd, stationNumber 받아와야함
+                    if (name.substring(0, 3).equals("bus")) {
+                        Shared_Pref.routeID = name.substring(3, 12);
+                        Shared_Pref.plateNo = name.substring(13, 17);
+                        bus_dis = calculateDistance(rssi);
+                        Log.d("beacon", "beacon route id: " + name.substring(3, 12));
+                        Log.d("beacon", "beacon bus name: " + name.substring(13, 17));
 
-                    if(minewBeacons.toString().equals("[]")){
-                        Log.d("beacon","no");
+                    } else if (name.substring(0, 1).equals("s")) {
+                        Shared_Pref.stationID = name.substring(1, 10);
+                        Shared_Pref.stationNumber = name.substring(10, 15);
+                        station_dis = calculateDistance(rssi);
+                        Log.d("beacon", "beacon station id: " + name.substring(1, 10));
+                        Log.d("beacon", "beacon station number:  " + name.substring(10, 15));
 
-                    }else {
-                        Shared_Pref.STATUS = 1;
-                        Log.d("beacon", "yes");
-                        //여기 이제 위치별 districtCd, stationNumber 받아와야함
-                        if (name.substring(0, 3).equals("bus")) {
-                            Shared_Pref.routeID = name.substring(3, 12);
-                            Shared_Pref.plateNo = name.substring(13, 17);
-                            Log.d("beacon", "beacon route id: " + name.substring(3, 12));
-                            Log.d("beacon", "beacon bus name: " + name.substring(13, 17));
+                        CallName("stationName");
+                    }
 
-                        } else if (name.substring(0, 1).equals("s")) {
-                            Shared_Pref.stationID = name.substring(1, 10);
-                            Shared_Pref.stationNumber = name.substring(10, 15);
-                            Log.d("beacon", "beacon station id: " + name.substring(1, 10));
-                            Log.d("beacon", "beacon station number:  " + name.substring(10, 15));
+                    if(Shared_Pref.IN_BUS==1){
+                        Shared_Pref.IN_BUS=2;
+                        Intent i2 = new Intent(ServiceBeacon.this, ActivityBus.class);
+                        startActivity(i2);
 
-                            CallName("stationName");
+                    }else if(Shared_Pref.IN_BUS==0){
+
+                        if(bus_dis<station_dis){
+                            Log.d("beacon", "in bus");
+                            Shared_Pref.IN_BUS=1;
+                        }else{
+                            Log.d("beacon", "in station");
+                            Shared_Pref.IN_BUS=0;
                         }
                     }
+
+
+
+
+
                 }
             }
         });

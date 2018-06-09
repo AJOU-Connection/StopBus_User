@@ -13,6 +13,7 @@ public class Shared_Pref {
     private static SharedPreferences mSharedPref;
 
     public static int STATUS=0;
+    public static int IN_BUS=0;
     public static String UUID = null;
     public static int btenable =0;
 
