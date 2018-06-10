@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -30,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -45,13 +47,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
 import devlight.io.library.ntb.NavigationTabBar;
 
 /**
  * Created by Danbk on 2018-04-05.
  */
 
-public class ActivitySearchFav extends Activity{
+public class ActivitySearchFav extends AppCompatActivity {
 
 
     private SwipeRefreshLayout swipeContainer0;
@@ -484,6 +487,18 @@ public class ActivitySearchFav extends Activity{
                 holder.station_way.setText("| "+ StationList.get(position).stationDirect + " 방면");
             }
 
+            holder.map.setOnClickListener(
+                    new Button.OnClickListener() {
+                        public void onClick(View v) {
+
+
+                            GoogleMapDialog dialog = GoogleMapDialog.newInstance(StationList.get(position).stationName, new LatLng(StationList.get(position).longitude,StationList.get(position).latitude));
+                            dialog.show(getSupportFragmentManager(), "dialog");
+
+
+                        }
+                    }
+            );
 
             holder.item_search_station.setOnClickListener(
                     new Button.OnClickListener() {
@@ -516,6 +531,7 @@ public class ActivitySearchFav extends Activity{
             public TextView station_num;
             public TextView station_way;
             public RelativeLayout item_search_station;
+            public ImageView map;
 
 
             public ViewHolder(final View itemView) {
@@ -525,6 +541,7 @@ public class ActivitySearchFav extends Activity{
                 station_num = (TextView) itemView.findViewById(R.id.station_num);
                 station_way = (TextView) itemView.findViewById(R.id.station_way);
                 item_search_station = (RelativeLayout) itemView.findViewById(R.id.item_search_station);
+                map = (ImageView)itemView.findViewById(R.id.map);
             }
         }
 

@@ -33,6 +33,8 @@ public  class ApiData {
         public String stationName;
         public String stationDirect;
         public String stationID;
+        public double longitude;
+        public double latitude;
     }
 
     static class StationBus {

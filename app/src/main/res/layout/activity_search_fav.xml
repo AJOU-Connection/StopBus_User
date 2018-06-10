@@ -59,6 +59,7 @@
             android:padding="5dp"
             app:ntb_titled="true"
             app:ntb_typeface="fonts/agency.ttf"
+            android:paddingBottom="5dp"
             tools:layout_editor_absoluteY="439dp" />
 
     </LinearLayout>

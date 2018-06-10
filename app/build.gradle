@@ -43,5 +43,9 @@ dependencies {
     compile 'org.altbeacon:android-beacon-library:2+'
     implementation files('libs/gson-2.4.jar')
     implementation files('libs/minewBeaconScan.jar')
+
+    implementation 'com.google.android.gms:play-services-maps:+'
+    implementation 'com.google.android.gms:play-services-maps:15.0.1'
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
 }
 apply plugin: 'com.google.gms.google-services'

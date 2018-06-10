@@ -39,5 +39,12 @@
       android:layout_height="wrap_content"
       android:text="| 창현고교.아주대학교.유신고교 방면"/>
 
+  <ImageView
+      android:id="@+id/map"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      android:layout_alignParentRight="true"
+      android:background="@drawable/map"/>
+
 
 </RelativeLayout>
