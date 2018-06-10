@@ -60,14 +60,12 @@ public class MainActivity extends Activity{
         Log.d("sb", "start app!!!");
 
         if(btAdapter.isEnabled()){
-            Shared_Pref.btenable = 1;
 
             Intent intent = new Intent(
                     getApplicationContext(),//현재제어권자
                     ServiceBeacon.class); // 이동할 컴포넌트
             startService(intent); // 서비스 시작
         }else{
-            Shared_Pref.btenable = 0;
 
         }
 
@@ -213,12 +211,12 @@ public class MainActivity extends Activity{
             {
                 Log.d("sb", "STATUS: "+ Shared_Pref.STATUS);
 
-                if(Shared_Pref.STATUS==0){
+                if(Shared_Pref.beacon_stationID.equals("")){
                     Intent i = new Intent(MainActivity.this, ActivityFavourite.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(i);
-                }else if(Shared_Pref.STATUS ==1){
+                }else {
 
                     Shared_Pref.bt_station_flag=1;
                     Shared_Pref.stationID= Shared_Pref.beacon_stationID;

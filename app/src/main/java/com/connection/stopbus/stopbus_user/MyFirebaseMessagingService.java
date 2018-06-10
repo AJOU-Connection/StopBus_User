@@ -39,12 +39,16 @@ import com.firebase.jobdispatcher.Job;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import static android.support.v4.app.NotificationCompat.DEFAULT_SOUND;
 import static android.support.v4.app.NotificationCompat.DEFAULT_VIBRATE;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "sb";
+    private TextToSound ts;
     /**
      * Called when message is received.
      *
@@ -126,11 +130,28 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * Create and show a simple notification containing the received FCM message.
      *
      */
-    private void sendNotification(String Title, String Message) {
+    private void sendNotification(String Title, final String Message) {
 
 
 
         Log.d(TAG, "_______________ sendNotification");
+        Log.d(TAG, "Message: "+Message);
+        ts = new TextToSound(this);
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                //아래에 있는 handleMessage를 부르는 함수. 맨 처음에는 0초 간격. 한번 호출된다음부터는 1초마다!
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    Log.d(TAG, "_______________ sendNotification111111111111111111111111111111");
+                    ts.ttsGreater21(Message);
+                } else {
+                    Log.d(TAG, "_______________ sendNotification2222222222222222222222222222222222");
+                    ts.ttsUnder20(Message);
+                }
+            }
+        }, 120);
+
+
 
         Intent intent = new Intent(this, ActivityBus.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

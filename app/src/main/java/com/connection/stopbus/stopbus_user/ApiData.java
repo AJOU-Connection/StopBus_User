@@ -54,6 +54,7 @@ public  class ApiData {
     static class BusStation{
         public String stationNumber;
         public String stationName;
+        public String stationID;
         public int stationSeq;
 
     }

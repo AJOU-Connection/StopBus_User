@@ -2,8 +2,10 @@ package com.connection.stopbus.stopbus_user;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -68,11 +70,15 @@ public class ActivityFavourite extends Activity{
 
     private List<ApiData.BusStation> BusStationList = new ArrayList<ApiData.BusStation>();
     private List<ApiData.busLocation> busLocationList = new ArrayList<ApiData.busLocation>();
+    private BluetoothAdapter btAdapter;
 
     TextView bus_type;
     TextView bus_num;
     TextView startStationName;
     TextView endStationName;
+
+    int station_now =0;
+    String target_station;
 
 
     @Override
@@ -80,6 +86,7 @@ public class ActivityFavourite extends Activity{
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
 
         initUI();
     }
@@ -160,15 +167,7 @@ public class ActivityFavourite extends Activity{
                                     Log.d("sb", "search for bus stop");
                                     Shared_Pref.stationID= Shared_Pref.beacon_stationID;
 
-                                    if(Shared_Pref.btenable==0){
-
-                                        Log.d("sb", "Bluetooth Enable Request");
-                                        Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                                        startActivityForResult(i, 1);
-
-
-
-                                    }else if(Shared_Pref.btenable==1){
+                                    if(btAdapter.isEnabled()){
                                         Intent intent = new Intent(
                                                 getApplicationContext(),//현재제어권자
                                                 ServiceBeacon.class); // 이동할 컴포넌트
@@ -186,6 +185,13 @@ public class ActivityFavourite extends Activity{
                                             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                             startActivity(i);
                                         }
+
+
+                                    }else{
+
+                                        Log.d("sb", "Bluetooth Enable Request");
+                                        Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                                        startActivityForResult(i, 1);
 
 
                                     }
@@ -241,6 +247,8 @@ public class ActivityFavourite extends Activity{
                             )
                     );
                     recyclerView2.setAdapter(bus_station_list_adapter);
+
+
 
                     view.findViewById(R.id.back).setVisibility(View.INVISIBLE);
 
@@ -350,7 +358,6 @@ public class ActivityFavourite extends Activity{
                 if (resultCode == Activity.RESULT_OK) {
                     // 확인 눌렀을 때 //Next Step
                     Log.d("sb", "Bluetooth is  enabled");
-                    Shared_Pref.btenable= 1;
                     Intent intent = new Intent(
                             getApplicationContext(),//현재제어권자
                             ServiceBeacon.class); // 이동할 컴포넌트
@@ -364,7 +371,6 @@ public class ActivityFavourite extends Activity{
                 } else {
                     // 취소 눌렀을 때
                     Log.d("sb", "Bluetooth is not enabled");
-                    Shared_Pref.btenable= 0;
                 }
                 break;
         }
@@ -389,7 +395,28 @@ public class ActivityFavourite extends Activity{
 
     }
 
+    //하차예약
+    public synchronized void getOut(final String api) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final Map<String, String> args = new HashMap<String, String>();
+                args.put("UUID",  Shared_Pref.UUID);
+                args.put("routeID",  Shared_Pref.beacon_routeID); //Shared_Pref.beacon_routeID
+                args.put("stationID",  target_station); //target_station
+                args.put("plateNo",  Shared_Pref.beacon_plateNo); //Shared_Pref.beacon_plateNo
 
+
+                try {
+                    final String response = NetworkService.INSTANCE.postQuery(api , args);
+                    Log.d("sb","333333"+response);
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), "네트워크 연결이 불안정합니다. 다시 시도해주세요 ", Toast.LENGTH_LONG).show();
+                }
+            }
+        }).start();
+
+    }
 
     //검색 불러오는 API
     public synchronized void CallData(final String api) {
@@ -462,9 +489,11 @@ public class ActivityFavourite extends Activity{
                                     BusStationList = Arrays.asList(arr);
 
 
+
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+                                Log.d("sb","station_now: "+ station_now);
                                 bus_station_list_adapter.notifyDataSetChanged();
 
                             } else if(api.equals("routeInfo")) {
@@ -677,10 +706,44 @@ public class ActivityFavourite extends Activity{
 
                 holder.stationName.setText(BusStationList.get(position).stationName);
                 holder.stationNumber.setText(BusStationList.get(position).stationNumber.trim());
-                Log.d("sb","position: "+ position);
+                if(BusStationList.get(position).stationNumber.trim().equals(Shared_Pref.beacon_stationNumber)){
+
+                    holder.station_layout.setBackgroundColor(Color.parseColor("#BDBDBD"));
+                }else{
+                    holder.station_layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                }
+
+                holder.station_layout.setOnClickListener(
+                        new Button.OnClickListener() {
+                            public void onClick(View v) {
+
+                                AlertDialog.Builder alert_confirm = new AlertDialog.Builder(ActivityFavourite.this);
+                                alert_confirm.setMessage("하차 예약을 하시겠습니까?").setCancelable(false).setPositiveButton("확인",
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                // 'YES'
+                                                target_station = BusStationList.get(position).stationID;
+                                                getOut("reserv/getOut");
+                                            }
+                                        }).setNegativeButton("취소",
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                // 'No'
+                                                return;
+                                            }
+                                        });
+                                AlertDialog alert = alert_confirm.create();
+                                alert.show();
+
+
+                            }
+                        }
+                );
+
 
                 for(int i =0; i < busLocationList.size(); i++){
-                    Log.d("sb","busLocationList.get(i).stationSeq: "+ busLocationList.get(i).stationSeq +" i : " + i);
 
                     if(busLocationList.get(i).stationSeq ==position+1){
 
@@ -729,6 +792,7 @@ public class ActivityFavourite extends Activity{
             public TextView plateNo;
             public TextView remainSeatCnt;
             public RelativeLayout bus_info_layout;
+            public RelativeLayout station_layout;
 
             public ViewHolder(final View itemView) {
                 super(itemView);
@@ -739,6 +803,7 @@ public class ActivityFavourite extends Activity{
                 plateNo = (TextView) itemView.findViewById(R.id.plateNo);
                 remainSeatCnt = (TextView) itemView.findViewById(R.id.remainSeatCnt);
                 bus_info_layout = (RelativeLayout) itemView.findViewById(R.id.bus_info_layout);
+                station_layout = (RelativeLayout) itemView.findViewById(R.id.station_layout);
 
 
             }

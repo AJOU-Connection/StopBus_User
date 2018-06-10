@@ -14,7 +14,6 @@ public class Shared_Pref {
 
     public static int STATUS=0;
     public static String UUID = null;
-    public static int btenable =0;
 
 
     //정류장별 버스 리스트를 받아오기 위함

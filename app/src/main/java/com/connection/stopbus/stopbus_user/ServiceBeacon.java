@@ -51,7 +51,7 @@ public class ServiceBeacon extends Service{
                     if(minewBeacon.getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_Name).getStringValue().equals("N/A"))
                         continue;
                     String deviceName = minewBeacon.getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_Name).getStringValue();
-                    Toast.makeText(getApplicationContext(), deviceName + "  out range", Toast.LENGTH_SHORT).show();
+                   //Toast.makeText(getApplicationContext(), deviceName + "  out range", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -79,23 +79,19 @@ public class ServiceBeacon extends Service{
                 double rssi;
                 double bus_dis= 0.0;
                 double station_dis = 0.0;
-                Log.d(TAG, "Shared_Pref.btenable: "+ Shared_Pref.btenable);
+
+                Shared_Pref.beacon_routeID = "";
+                Shared_Pref.beacon_plateNo = "";
+                Shared_Pref.beacon_stationID = "";
+                Shared_Pref.beacon_stationNumber ="";
 
                 if(btAdapter.isEnabled()){
                     if(minewBeacons.size()==0){
-
-                        mMinewBeaconManager.stopScan();
                         mMinewBeaconManager.startScan();
                     }
-                    Shared_Pref.btenable = 1;
-                }else{
-                    Shared_Pref.beacon_routeID = "";
-                    Shared_Pref.beacon_plateNo = "";
-                    Shared_Pref.beacon_stationID = "";
-                    Shared_Pref.beacon_stationNumber ="";
 
+                }else{
                     minewBeacons.clear();
-                    Shared_Pref.btenable = 0;
                 }
 
                 for(int i = 0 ; i < minewBeacons.size() ; i++){
@@ -103,15 +99,12 @@ public class ServiceBeacon extends Service{
                     name = minewBeacons.get(i).getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_Name).getStringValue();
                     if(name.equals("N/A"))
                         continue;
-
-                    Log.d(TAG, "result: " + mRssiMap.containsKey(name) + "");
                     rssi = minewBeacons.get(i).getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_RSSI).getFloatValue();
                     if(!mRssiMap.containsKey(name)) {
                         mRssiMap.put(name, new KalmanFilter(0.0f));
                     }
                     rssi = mRssiMap.get(name).update(rssi);
 
-                    Shared_Pref.STATUS = 1;
                     //여기 이제 위치별 districtCd, stationNumber 받아와야함
                     if (name.substring(0, 3).equals("bus")) {
                         Shared_Pref.beacon_routeID = name.substring(3, 12);
@@ -119,15 +112,7 @@ public class ServiceBeacon extends Service{
                         bus_dis = calculateDistance(rssi);
                         Log.d("beacon", "beacon route id: " + name.substring(3, 12));
                         Log.d("beacon", "beacon bus name: " + name.substring(13, 17));
-
                     }else if (name.substring(0, 1).equals("s")) {
-
-                    }else{
-                        Shared_Pref.beacon_routeID ="";
-                        Shared_Pref.beacon_plateNo = "";
-                    }
-
-                    if (name.substring(0, 1).equals("s")) {
                         Shared_Pref.beacon_stationID = name.substring(1, 10);
                         Shared_Pref.beacon_stationNumber = name.substring(10, 15);
                         station_dis = calculateDistance(rssi);
@@ -136,15 +121,7 @@ public class ServiceBeacon extends Service{
                         Log.d("beacon", "beacon station number:  " + name.substring(10, 15));
 
                         CallName("stationName");
-                    }else if (name.substring(0, 3).equals("bus")){
-
-
-                    }else{
-                        Shared_Pref.beacon_stationID = "";
-                        Shared_Pref.beacon_stationNumber = "";
                     }
-
-
 
 
                 }
