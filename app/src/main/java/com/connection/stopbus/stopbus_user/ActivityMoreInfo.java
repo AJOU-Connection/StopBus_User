@@ -49,7 +49,12 @@ public class ActivityMoreInfo extends Activity{
             @Override
             public void run() {
                 final Map<String, String> args = new HashMap<String, String>();
-                args.put("routeID",  Shared_Pref.routeID);
+
+                if(Shared_Pref.bt_bus_flag == 0){
+                    args.put("routeID",  Shared_Pref.routeID);
+                }else if(Shared_Pref.bt_bus_flag ==1){
+                    args.put("routeID",  Shared_Pref.beacon_routeID);
+                }
 
                 try {
                     final String response = NetworkService.INSTANCE.postQuery(api, args);

@@ -103,6 +103,11 @@ public class ActivityStation extends Activity{
         );
         recyclerView.setAdapter(station_bus_list_adapter);
 
+        if(Shared_Pref.bt_station_flag==1){
+            findViewById(R.id.back).setVisibility(View.GONE);
+        }else if(Shared_Pref.bt_station_flag==0){
+            findViewById(R.id.back).setVisibility(View.VISIBLE);
+        }
 
         findViewById(R.id.back).setOnClickListener(
                 new Button.OnClickListener() {
@@ -236,19 +241,26 @@ public class ActivityStation extends Activity{
             }
 
             try {
-                if(Shared_Pref.STATUS==0){
-                    holder.favourite_btn.setVisibility(View.VISIBLE);
-                    holder.bell.setVisibility(View.INVISIBLE);
-                }else{
+                Log.d("sb", "Shared_Pref.beacon_stationName: " + Shared_Pref.beacon_stationName);
+                Log.d("sb", "Shared_Pref.stationName: " + Shared_Pref.stationName);
+
+                if(Shared_Pref.beacon_stationID.equals(Shared_Pref.stationID)){
+
                     holder.favourite_btn.setVisibility(View.INVISIBLE);
                     holder.bell.setVisibility(View.VISIBLE);
+                }else{
+                    holder.favourite_btn.setVisibility(View.VISIBLE);
+                    holder.bell.setVisibility(View.INVISIBLE);
                 }
 
                 holder.bell.setOnClickListener(
                         new Button.OnClickListener() {
                             public void onClick(View v) {
 
+
                                 reserve_routeID = StationBusList.get(position).routeID;
+
+
                                 holder.bell.setImageResource(R.drawable.bell_red);
                                 getIn("reserv/getIn");
                             }
@@ -327,6 +339,7 @@ public class ActivityStation extends Activity{
 
                                 Shared_Pref.routeID = StationBusList.get(position).routeID;
 
+                                Shared_Pref.bt_bus_flag=0;
                                 Log.d("sb", "bus route list gogo: "+  StationBusList.get(position).routeID);
                                 Intent i = new Intent(ActivityStation.this, ActivityBus.class);
                                 startActivity(i);

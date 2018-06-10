@@ -68,9 +68,6 @@ public class ActivitySearchFav extends Activity{
 
     private List<ApiData.Station> StationList = new ArrayList<ApiData.Station>();
     private List<ApiData.Route> RouteList = new ArrayList<ApiData.Route>();
-    private List<ApiData.Route> CopyRouteList;
-    private List<ApiData.Station> CopyStationList;
-
 
     ArrayList<String> favouriteList;
 

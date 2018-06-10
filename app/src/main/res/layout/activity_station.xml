@@ -33,7 +33,7 @@
             android:textColor="#FFFFFF"
             android:textSize="15sp"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/back" />
+            android:layout_below="@+id/home" />
 
         <TextView
             android:id="@+id/station_name"

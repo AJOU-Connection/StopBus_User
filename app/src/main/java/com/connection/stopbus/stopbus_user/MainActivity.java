@@ -23,9 +23,6 @@ import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 import java.util.HashMap;
@@ -224,6 +221,7 @@ public class MainActivity extends Activity{
                 }else if(Shared_Pref.STATUS ==1){
 
                     Shared_Pref.bt_station_flag=1;
+                    Shared_Pref.stationID= Shared_Pref.beacon_stationID;
                     Intent i = new Intent(MainActivity.this, ActivityStation.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

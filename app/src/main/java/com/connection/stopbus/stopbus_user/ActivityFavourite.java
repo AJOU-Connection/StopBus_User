@@ -5,17 +5,22 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,10 +33,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import devlight.io.library.ntb.NavigationTabBar;
 
 /**
  * Created by Danbk on 2018-04-04.
@@ -39,100 +50,295 @@ import java.util.Map;
 
 public class ActivityFavourite extends Activity{
 
-    private RecyclerView recyclerView;
-    private RecycleAdapter favourite_bus_list_adapter = new RecycleAdapter(this);
-    private SwipeRefreshLayout swipeContainer;
-    private List<ApiData.favrouteInfo> favRouteInfoList = new ArrayList<ApiData.favrouteInfo>();
-
     ArrayList<String> favouriteList;
     Handler mHandler = new Handler();
     int flag=0;
+
+    private RecyclerView recyclerView;
+    private RecycleAdapter favourite_bus_list_adapter = new RecycleAdapter(this);
+    private SwipeRefreshLayout swipeContainer0;
+
+    private List<ApiData.favrouteInfo> favRouteInfoList = new ArrayList<ApiData.favrouteInfo>();
+
+    private RecyclerView recyclerView2;
+    private RecycleAdapter2 bus_station_list_adapter = new RecycleAdapter2(this);
+    private RecycleAdapter2 bus_location_list_adapter= new RecycleAdapter2(this);
+    private RecycleAdapter2 route_info_list_adapter= new RecycleAdapter2(this);
+    private SwipeRefreshLayout swipeContainer1;
+
+    private List<ApiData.BusStation> BusStationList = new ArrayList<ApiData.BusStation>();
+    private List<ApiData.busLocation> busLocationList = new ArrayList<ApiData.busLocation>();
+
+    TextView bus_type;
+    TextView bus_num;
+    TextView startStationName;
+    TextView endStationName;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favourite);
+        setContentView(R.layout.activity_main);
 
-        CallMyBusList();
-
-        // Lookup the swipe container view
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
-        // Setup refresh listener which triggers new data loading
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        initUI();
+    }
+    private void initUI() {
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
+        viewPager.setAdapter(new PagerAdapter() {
             @Override
-            public void onRefresh() {
-                CallMyBusList();
-                swipeContainer.setRefreshing(false);
+            public int getCount() {
+                return 2;
+            }
+
+            @Override
+            public boolean isViewFromObject(final View view, final Object object) {
+                return view.equals(object);
+            }
+
+            @Override
+            public void destroyItem(final View container, final int position, final Object object) {
+                ((ViewPager) container).removeView((View) object);
+            }
+
+            @Override
+            public Object instantiateItem(final ViewGroup container, final int position) {
+                View view = null;
+
+                if (position == 0) {  //작업 이력 레이아웃
+                    view = LayoutInflater.from(
+                            getBaseContext()).inflate(R.layout.activity_favourite, null, false);
+                    recyclerView = (RecyclerView) view.findViewById(R.id.rv_favourite_bus_list);
+                    CallMyBusList();
+
+                    // Lookup the swipe container view
+                    swipeContainer0 = (SwipeRefreshLayout) view.findViewById(R.id.swipe_layout);
+                    // Setup refresh listener which triggers new data loading
+                    swipeContainer0.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                        @Override
+                        public void onRefresh() {
+                            CallMyBusList();
+                            swipeContainer0.setRefreshing(false);
+                        }
+                    });
+
+                    TextView search = (TextView) view.findViewById(R.id.search);
+                    search.setOnClickListener(
+                            new Button.OnClickListener() {
+                                public void onClick(View v) {
+                                    Log.d("sb", "search");
+                                    Intent i = new Intent(ActivityFavourite.this, ActivitySearchFav.class);
+                                    i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(i);
+                                }
+                            }
+                    );
+
+
+                    final TextView delete_fav = (TextView) view.findViewById(R.id.delete_fav);
+                    delete_fav.setOnClickListener(
+                            new Button.OnClickListener() {
+                                public void onClick(View v) {
+                                    Log.d("sb", "delte_fav");
+                                    if(flag==0){
+                                        flag =1;
+                                        delete_fav.setText("완료");
+                                    }else if(flag==1){
+                                        flag=0;
+                                        delete_fav.setText("편집");
+                                    }
+                                    CallMyBusList();
+                                }
+                            }
+                    );
+
+
+
+                    view.findViewById(R.id.fab).setOnClickListener(
+                            new Button.OnClickListener() {
+                                public void onClick(View v) {
+                                    Log.d("sb", "search for bus stop");
+                                    Shared_Pref.stationID= Shared_Pref.beacon_stationID;
+
+                                    if(Shared_Pref.btenable==0){
+
+                                        Log.d("sb", "Bluetooth Enable Request");
+                                        Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                                        startActivityForResult(i, 1);
+
+
+
+                                    }else if(Shared_Pref.btenable==1){
+                                        Intent intent = new Intent(
+                                                getApplicationContext(),//현재제어권자
+                                                ServiceBeacon.class); // 이동할 컴포넌트
+                                        startService(intent); // 서비스 시작
+
+                                        Shared_Pref.bt_station_flag=1;
+
+                                        if(Shared_Pref.beacon_stationID.equals("")){
+                                            Toast.makeText(getApplicationContext(), "감지된 버스정류장이 없습니다.", Toast.LENGTH_LONG).show();
+
+                                        }else{
+                                            Log.d("sb", "search for bus stop 222222");
+                                            Intent i = new Intent(ActivityFavourite.this, ActivityStation.class);
+                                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(i);
+                                        }
+
+
+                                    }
+
+                                }
+                            }
+                    );
+
+
+
+
+
+
+                } else if (position == 1) {
+                    view = LayoutInflater.from(
+                            getBaseContext()).inflate(R.layout.activity_bus, null, false);
+
+                    Shared_Pref.bt_bus_flag=1;
+
+                    CallData2("busStationList");
+                    CallData2("routeInfo");
+                    CallData2("busLocationList");
+
+                    if(Shared_Pref.beacon_routeID.equals("")){
+                        view.findViewById(R.id.bus_layout).setVisibility(View.GONE);
+                        view.findViewById(R.id.swipe_layout0).setVisibility(View.GONE);
+
+                        view.findViewById(R.id. no_bus_layout).setVisibility(View.VISIBLE);
+
+                    }else{
+                        view.findViewById(R.id.bus_layout).setVisibility(View.VISIBLE);
+                        view.findViewById(R.id.swipe_layout0).setVisibility(View.VISIBLE);
+                        view.findViewById(R.id. no_bus_layout).setVisibility(View.GONE);
+                    }
+
+                    // Lookup the swipe container view
+                    swipeContainer1 = (SwipeRefreshLayout) view.findViewById(R.id.swipe_layout0);
+                    // Setup refresh listener which triggers new data loading
+                    swipeContainer1.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                        @Override
+                        public void onRefresh() {
+                            Shared_Pref.bt_bus_flag=1;
+                            CallData2("routeInfo");
+                            CallData2("busStationList");
+                            CallData2("busLocationList");
+                            swipeContainer1.setRefreshing(false);
+                        }
+                    });
+                    recyclerView2 = (RecyclerView) view.findViewById(R.id.rv_station_list);
+                    recyclerView2.setHasFixedSize(true);
+                    recyclerView2.setLayoutManager(new LinearLayoutManager(
+                                    getBaseContext(), LinearLayoutManager.VERTICAL, false
+                            )
+                    );
+                    recyclerView2.setAdapter(bus_station_list_adapter);
+
+                    view.findViewById(R.id.back).setVisibility(View.INVISIBLE);
+
+                    view.findViewById(R.id.home).setVisibility(View.INVISIBLE);
+
+                    view.findViewById(R.id.moreInfo).setOnClickListener(
+                            new Button.OnClickListener() {
+                                public void onClick(View v) {
+                                    Log.d("sb", "more info button pressed");
+                                    Intent i = new Intent(ActivityFavourite.this, ActivityMoreInfo.class);
+                                    i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(i);
+
+                                }
+                            }
+                    );
+
+                }
+
+                container.addView(view);
+                return view;
+
             }
         });
 
-        TextView search = (TextView) findViewById(R.id.search);
-        search.setOnClickListener(
-                new Button.OnClickListener() {
-                    public void onClick(View v) {
-                        Log.d("sb", "search");
-                        Intent i = new Intent(ActivityFavourite.this, ActivitySearchFav.class);
-                        i.addFlags(i.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(i);
-                    }
-                }
+        final String[] colors = getResources().getStringArray(R.array.default_preview);
+
+        final NavigationTabBar navigationTabBar = (NavigationTabBar) findViewById(R.id.ntb_horizontal);
+        final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
+        models.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.ic_directions_bus_white_48pt),
+                        Color.parseColor(colors[4]))
+                        .title("즐겨찾기")
+                        .build()
+        );
+        models.add(
+                new NavigationTabBar.Model.Builder(
+                        getResources().getDrawable(R.drawable.bus_stop),
+                        Color.parseColor(colors[4]))
+                        .title("비콘버스")
+                        .build()
         );
 
-        TextView delete_fav = (TextView) findViewById(R.id.delete_fav);
-        delete_fav.setOnClickListener(
-                new Button.OnClickListener() {
-                    public void onClick(View v) {
-                        Log.d("sb", "delte_fav");
-                        if(flag==0){
-                            flag =1;
-                        }else if(flag==1){
-                            flag=0;
-                        }
-                        CallMyBusList();
+
+        navigationTabBar.setModels(models);
+        navigationTabBar.setViewPager(viewPager, 0);
+
+        //IMPORTANT: ENABLE SCROLL BEHAVIOUR IN COORDINATOR LAYOUT
+        navigationTabBar.setBehaviorEnabled(false);
+
+        navigationTabBar.setOnTabBarSelectedIndexListener(new NavigationTabBar.OnTabBarSelectedIndexListener() {
+            @Override
+            public void onStartTabSelected(final NavigationTabBar.Model model, final int index) {
+            }
+
+            @Override
+            public void onEndTabSelected(final NavigationTabBar.Model model, final int index) {
+                model.hideBadge();
+            }
+        });
+
+        navigationTabBar.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
+                Log.d("dd", "11111111111111111");
+
+
+
+            }
+
+            @Override
+            public void onPageSelected(final int position) {
+                Log.d("dd", "22222222222222222222");
+                if(position==1){
+                    if(Shared_Pref.beacon_routeID.equals("")){
+                        findViewById(R.id.bus_layout).setVisibility(View.GONE);
+                        findViewById(R.id.swipe_layout0).setVisibility(View.GONE);
+                        findViewById(R.id. no_bus_layout).setVisibility(View.VISIBLE);
+
+                    }else{
+                        findViewById(R.id.bus_layout).setVisibility(View.VISIBLE);
+                        findViewById(R.id.swipe_layout0).setVisibility(View.VISIBLE);
+                        findViewById(R.id. no_bus_layout).setVisibility(View.GONE);
+
+                        CallData2("busStationList");
+                        CallData2("routeInfo");
+                        CallData2("busLocationList");
                     }
                 }
-        );
 
-        findViewById(R.id.fab).setOnClickListener(
-                new Button.OnClickListener() {
-                    public void onClick(View v) {
-                        Log.d("sb", "search for bus stop");
+            }
 
-
-                        if(Shared_Pref.btenable==0){
-
-                            Log.d("sb", "Bluetooth Enable Request");
-                            Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                            startActivityForResult(i, 1);
-
-
-
-                        }else if(Shared_Pref.btenable==1){
-                            Intent intent = new Intent(
-                                    getApplicationContext(),//현재제어권자
-                                    ServiceBeacon.class); // 이동할 컴포넌트
-                            startService(intent); // 서비스 시작
-
-
-
-                            if(Shared_Pref.beacon_stationID.equals("")){
-                                Toast.makeText(getApplicationContext(), "감지된 버스정류장이 없습니다.", Toast.LENGTH_LONG).show();
-
-                            }else{
-                                Log.d("sb", "search for bus stop 222222");
-                                Intent i = new Intent(ActivityFavourite.this, ActivityStation.class);
-                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(i);
-                            }
-
-
-                        }
-
-                    }
-                }
-        );
+            @Override
+            public void onPageScrollStateChanged(final int state) {
+                Log.d("dd", "3333333333333333333");
+            }
+        });
 
 
     }
@@ -174,7 +380,6 @@ public class ActivityFavourite extends Activity{
         Log.d("sb", "favouriteSize:  " + favouriteList.size());
 
         CallData("starInfo");
-        recyclerView = (RecyclerView) findViewById(R.id.rv_favourite_bus_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(
                         getBaseContext(), LinearLayoutManager.VERTICAL, false
@@ -224,6 +429,117 @@ public class ActivityFavourite extends Activity{
         }).start();
 
     }
+    //검색 불러오는 API
+    public synchronized void CallData2(final String api) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final Map<String, String> args = new HashMap<String, String>();
+                if(Shared_Pref.bt_bus_flag == 0){
+                    args.put("routeID",  Shared_Pref.routeID);
+                }else if(Shared_Pref.bt_bus_flag ==1){
+                    args.put("routeID",  Shared_Pref.beacon_routeID);
+                }
+
+
+                try {
+
+                    final String response = NetworkService.INSTANCE.postQuery(api, args);
+                    Log.d("sb","333333"+response);
+
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (api.equals("busStationList")) {
+                                try {
+
+                                    JSONArray jarray = new JSONObject(response).getJSONArray("body");   // JSONArray 생성
+
+
+                                    Log.d("sb","asdf2222");
+
+                                    ApiData.BusStation[] arr = new Gson().fromJson(jarray.toString(), ApiData.BusStation[].class);
+                                    BusStationList = Arrays.asList(arr);
+
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                bus_station_list_adapter.notifyDataSetChanged();
+
+                            } else if(api.equals("routeInfo")) {
+                                try {
+
+
+                                    Log.d("sb","asdfasdfasdf");
+                                    JSONObject jObject = new JSONObject(response).getJSONObject("body");
+
+                                    Log.d("sb","jobject"+ jObject);
+
+                                    ApiData.routeInfo routeInfo = new Gson().fromJson(jObject.toString(), ApiData.routeInfo.class);
+
+                                    Log.d("sb","routeInfo: "+ routeInfo.toString());
+
+                                    bus_type = (TextView) findViewById(R.id.bus_type);
+                                    bus_type.setText(routeInfo.routeTypeName);
+
+                                    bus_num = (TextView) findViewById(R.id.bus_num);
+                                    bus_num.setText(routeInfo.routeNumber);
+
+                                    startStationName = (TextView) findViewById(R.id.startStationName);
+                                    startStationName.setText(routeInfo.startStationName);
+
+                                    endStationName = (TextView) findViewById(R.id.endStationName);
+                                    endStationName.setText(routeInfo.endStationName);
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                route_info_list_adapter.notifyDataSetChanged();
+
+                            }else if(api.equals("busLocationList")) {
+                                try {
+
+                                    JSONArray jarray = new JSONObject(response).getJSONArray("body");   // JSONArray 생성
+
+                                    ApiData.busLocation[] arr = new Gson().fromJson(jarray.toString(), ApiData.busLocation[].class);
+                                    busLocationList = Arrays.asList(arr);
+
+
+                                    Log.d("sb","busLocationList: "+ busLocationList);
+
+                                    Collections.sort(busLocationList, new Comparator<ApiData.busLocation>() {
+                                        @Override
+                                        public int compare(ApiData.busLocation first, ApiData.busLocation second) {
+                                            if(first.getStationSeq()  > second.getStationSeq()){
+                                                return 1;
+                                            }else if(first.getStationSeq()  < second.getStationSeq()){
+                                                return -1;
+                                            }else {
+                                                return 0;
+                                            }
+                                        }
+                                    });
+
+                                    Log.d("sb","busLocationList2: "+ busLocationList);
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                bus_location_list_adapter.notifyDataSetChanged();
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), "네트워크 연결이 불안정합니다. 다시 시도해주세요 ", Toast.LENGTH_LONG).show();
+                }
+            }
+        }).start();
+
+    }
+
+
+
 
 
     public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.ViewHolder> {
@@ -333,6 +649,97 @@ public class ActivityFavourite extends Activity{
 
                 delete_btn = (ImageView) itemView.findViewById(R.id.delete_btn);
                 reserve_btn = (com.zcw.togglebutton.ToggleButton) itemView.findViewById(R.id.reserve_btn);
+
+            }
+        }
+
+    }
+
+    public class RecycleAdapter2 extends RecyclerView.Adapter<RecycleAdapter2.ViewHolder> {
+
+        Context mContext;
+
+        public RecycleAdapter2(Context context) {
+            this.mContext = context;
+
+        }
+
+        @Override
+        public RecycleAdapter2.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
+            final View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.item_route, parent, false);
+            return new RecycleAdapter2.ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(final RecycleAdapter2.ViewHolder holder, final int position) {
+
+            try {
+
+                holder.stationName.setText(BusStationList.get(position).stationName);
+                holder.stationNumber.setText(BusStationList.get(position).stationNumber.trim());
+                Log.d("sb","position: "+ position);
+
+                for(int i =0; i < busLocationList.size(); i++){
+                    Log.d("sb","busLocationList.get(i).stationSeq: "+ busLocationList.get(i).stationSeq +" i : " + i);
+
+                    if(busLocationList.get(i).stationSeq ==position+1){
+
+                        holder.bus.setVisibility(View.VISIBLE);
+                        holder.plateNo.setVisibility(View.VISIBLE);
+                        holder.remainSeatCnt.setVisibility(View.VISIBLE);
+                        holder.bus_info_layout.setVisibility(View.VISIBLE);
+
+                        holder.plateNo.setText(busLocationList.get(i).plateNo.substring(5));
+
+                        if(busLocationList.get(i).remainSeatCnt.equals("-1")){
+                            holder.remainSeatCnt.setVisibility(View.INVISIBLE);
+                        }
+                        else{
+                            holder.remainSeatCnt.setText(busLocationList.get(i).remainSeatCnt+"석");
+                        }
+
+
+                        break;
+                    }else{
+                        holder.bus.setVisibility(View.INVISIBLE);
+                        holder.plateNo.setVisibility(View.INVISIBLE);
+                        holder.remainSeatCnt.setVisibility(View.INVISIBLE);
+                        holder.bus_info_layout.setVisibility(View.INVISIBLE);
+                    }
+
+                }
+
+
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return BusStationList.size();
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+
+            public TextView stationName;
+            public TextView stationNumber;
+            public ImageView bus;
+            public TextView plateNo;
+            public TextView remainSeatCnt;
+            public RelativeLayout bus_info_layout;
+
+            public ViewHolder(final View itemView) {
+                super(itemView);
+
+                stationName = (TextView) itemView.findViewById(R.id.stationName);
+                stationNumber = (TextView) itemView.findViewById(R.id.stationNumber);
+                bus = (ImageView) itemView.findViewById(R.id.bus);
+                plateNo = (TextView) itemView.findViewById(R.id.plateNo);
+                remainSeatCnt = (TextView) itemView.findViewById(R.id.remainSeatCnt);
+                bus_info_layout = (RelativeLayout) itemView.findViewById(R.id.bus_info_layout);
+
 
             }
         }

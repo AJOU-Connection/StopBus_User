@@ -89,10 +89,10 @@ public class ServiceBeacon extends Service{
                     }
                     Shared_Pref.btenable = 1;
                 }else{
-                    Shared_Pref.beacon_routeID = null;
-                    Shared_Pref.beacon_plateNo = null;
-                    Shared_Pref.beacon_stationID = null;
-                    Shared_Pref.beacon_stationNumber =null;
+                    Shared_Pref.beacon_routeID = "";
+                    Shared_Pref.beacon_plateNo = "";
+                    Shared_Pref.beacon_stationID = "";
+                    Shared_Pref.beacon_stationNumber ="";
 
                     minewBeacons.clear();
                     Shared_Pref.btenable = 0;
@@ -120,20 +120,28 @@ public class ServiceBeacon extends Service{
                         Log.d("beacon", "beacon route id: " + name.substring(3, 12));
                         Log.d("beacon", "beacon bus name: " + name.substring(13, 17));
 
-                    } else if (name.substring(0, 1).equals("s")) {
+                    }else if (name.substring(0, 1).equals("s")) {
+
+                    }else{
+                        Shared_Pref.beacon_routeID ="";
+                        Shared_Pref.beacon_plateNo = "";
+                    }
+
+                    if (name.substring(0, 1).equals("s")) {
                         Shared_Pref.beacon_stationID = name.substring(1, 10);
                         Shared_Pref.beacon_stationNumber = name.substring(10, 15);
                         station_dis = calculateDistance(rssi);
+
                         Log.d("beacon", "beacon station id: " + name.substring(1, 10));
                         Log.d("beacon", "beacon station number:  " + name.substring(10, 15));
 
                         CallName("stationName");
+                    }else if (name.substring(0, 3).equals("bus")){
+
+
                     }else{
                         Shared_Pref.beacon_stationID = "";
                         Shared_Pref.beacon_stationNumber = "";
-                        Shared_Pref.beacon_routeID ="";
-                        Shared_Pref.beacon_plateNo = "";
-
                     }
 
 

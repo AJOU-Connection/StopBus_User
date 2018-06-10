@@ -23,10 +23,10 @@ public class Shared_Pref {
     public static String stationDirect =null;
     public static String stationID = null;
 
-    public static String beacon_stationName=null;
-    public static String beacon_stationID = null;
-    public static String beacon_stationDirect =null;
-    public static String beacon_stationNumber = null;
+    public static String beacon_stationName="";
+    public static String beacon_stationID = "";
+    public static String beacon_stationDirect ="";
+    public static String beacon_stationNumber = "";
 
     public static int bt_station_flag =0;
 
@@ -34,8 +34,8 @@ public class Shared_Pref {
     public static String routeID = null;
     public static String plateNo =null;
 
-    public static String beacon_plateNo =null;
-    public static String beacon_routeID = null;
+    public static String beacon_plateNo ="";
+    public static String beacon_routeID = "";
 
     public static int bt_bus_flag =0;
 

@@ -46,10 +46,8 @@ public class ActivityBus extends Activity{
     private SwipeRefreshLayout swipeContainer;
 
     private List<ApiData.BusStation> BusStationList = new ArrayList<ApiData.BusStation>();
-    private List<ApiData.BusStation> CopyBusStationList;
 
     private List<ApiData.busLocation> busLocationList = new ArrayList<ApiData.busLocation>();
-    private List<ApiData.busLocation> CopybusLocationList;
 
 
 
@@ -174,8 +172,7 @@ public class ActivityBus extends Activity{
 
                                     ApiData.BusStation[] arr = new Gson().fromJson(jarray.toString(), ApiData.BusStation[].class);
                                     BusStationList = Arrays.asList(arr);
-                                    CopyBusStationList = new ArrayList<ApiData.BusStation>();
-                                    CopyBusStationList.addAll(BusStationList);
+
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -219,8 +216,7 @@ public class ActivityBus extends Activity{
 
                                     ApiData.busLocation[] arr = new Gson().fromJson(jarray.toString(), ApiData.busLocation[].class);
                                     busLocationList = Arrays.asList(arr);
-                                    CopybusLocationList = new ArrayList<ApiData.busLocation>();
-                                    CopybusLocationList.addAll(busLocationList);
+
 
                                     Log.d("sb","busLocationList: "+ busLocationList);
 

@@ -4,6 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
+        android:id="@+id/no_bus_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="#00ACC1">
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/logo"
+            android:layout_centerInParent="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="현재 버스 안에 있지 않습니다."
+            android:textColor="#FFFFFF"
+            android:layout_centerHorizontal="true"
+            android:textSize="20dp"
+            android:layout_below="@+id/logo"/>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
         android:id="@+id/bus_layout"
         android:layout_width="match_parent"
         android:layout_height="180dp"
