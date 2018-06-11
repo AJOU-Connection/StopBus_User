@@ -1,7 +1,9 @@
 package com.connection.stopbus.stopbus_user;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -241,14 +243,15 @@ public class ActivityStation extends Activity{
             }
 
             try {
-                Log.d("sb", "Shared_Pref.beacon_stationName: " + Shared_Pref.beacon_stationName);
-                Log.d("sb", "Shared_Pref.stationName: " + Shared_Pref.stationName);
+                Log.d("sb", "Shared_Pref.beacon_stationName: " + Shared_Pref.beacon_stationID);
+                Log.d("sb", "Shared_Pref.stationName: " + Shared_Pref.stationID);
 
                 if(Shared_Pref.beacon_stationID.equals(Shared_Pref.stationID)){
-
+                    Log.d("sb", "Shared_Pref.11111");
                     holder.favourite_btn.setVisibility(View.INVISIBLE);
                     holder.bell.setVisibility(View.VISIBLE);
                 }else{
+                    Log.d("sb", "Shared_Pref.22222");
                     holder.favourite_btn.setVisibility(View.VISIBLE);
                     holder.bell.setVisibility(View.INVISIBLE);
                 }
@@ -257,12 +260,27 @@ public class ActivityStation extends Activity{
                         new Button.OnClickListener() {
                             public void onClick(View v) {
 
+                                AlertDialog.Builder alert_confirm = new AlertDialog.Builder(ActivityStation.this);
+                                alert_confirm.setMessage("승차 예약을 하시겠습니까?").setCancelable(false).setPositiveButton("확인",
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                // 'YES'
+                                                reserve_routeID = StationBusList.get(position).routeID;
+                                                getIn("reserv/getIn");
+                                            }
+                                        }).setNegativeButton("취소",
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                // 'No'
+                                                return;
+                                            }
+                                        });
+                                AlertDialog alert = alert_confirm.create();
+                                alert.show();
 
-                                reserve_routeID = StationBusList.get(position).routeID;
 
-
-                                holder.bell.setImageResource(R.drawable.bell_red);
-                                getIn("reserv/getIn");
                             }
                         }
                 );

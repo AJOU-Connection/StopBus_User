@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
+import com.zcw.togglebutton.ToggleButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -314,9 +315,6 @@ public class ActivityFavourite extends Activity{
         navigationTabBar.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
-                Log.d("dd", "11111111111111111");
-
-
 
             }
 
@@ -324,6 +322,7 @@ public class ActivityFavourite extends Activity{
             public void onPageSelected(final int position) {
                 Log.d("dd", "22222222222222222222");
                 if(position==1){
+                    Shared_Pref.bt_bus_flag=1;
                     if(Shared_Pref.beacon_routeID.equals("")){
                         findViewById(R.id.bus_layout).setVisibility(View.GONE);
                         findViewById(R.id.swipe_layout0).setVisibility(View.GONE);
@@ -358,11 +357,13 @@ public class ActivityFavourite extends Activity{
                 if (resultCode == Activity.RESULT_OK) {
                     // 확인 눌렀을 때 //Next Step
                     Log.d("sb", "Bluetooth is  enabled");
+
                     Intent intent = new Intent(
                             getApplicationContext(),//현재제어권자
                             ServiceBeacon.class); // 이동할 컴포넌트
                     startService(intent); // 서비스 시작
 
+                    Shared_Pref.bt_station_flag=1;
                     Log.d("sb", "search for bus stop 222222");
                     Intent i = new Intent(ActivityFavourite.this, ActivityStation.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -623,12 +624,30 @@ public class ActivityFavourite extends Activity{
                                         break;
                                     }
                                 }
-
-
-
                             }
                         }
                 );
+
+//                Log.d("sb","favRouteInfoList.get(position).isOn : " +favRouteInfoList.get(position).isOn);
+//                if(favRouteInfoList.get(position).isOn==1){
+//                    holder.reserve_btn.setToggleOn();
+//                }else{
+//                    holder.reserve_btn.setToggleOff();
+//                }
+//
+//                holder.reserve_btn.setOnToggleChanged(new ToggleButton.OnToggleChanged(){
+//                    @Override
+//                    public void onToggle(boolean on) {
+//                        if(on){
+//                            favRouteInfoList.get(position).isOn =1;
+//                        }else{
+//                            favRouteInfoList.get(position).isOn =0;
+//                        }
+//                        Log.d("sb", "on: "+on);
+//                    }
+//                });
+
+
 
                 Log.d("sb", "favRouteInfoList.get(position).routeID222222222222222222: "+favRouteInfoList.get(position).routeID);
                 Log.d("sb", "favRouteInfoList.get(position).routeNumber33333333333333: "+favRouteInfoList.get(position).routeNumber);
@@ -664,7 +683,7 @@ public class ActivityFavourite extends Activity{
             public TextView downFirstTime;
             public TextView upLastTime;
             public TextView downLastTime;
-            public com.zcw.togglebutton.ToggleButton reserve_btn;
+            public ToggleButton reserve_btn;
 
             public ViewHolder(final View itemView) {
                 super(itemView);
@@ -677,7 +696,7 @@ public class ActivityFavourite extends Activity{
                 downLastTime= (TextView) itemView.findViewById(R.id.downLastTime);
 
                 delete_btn = (ImageView) itemView.findViewById(R.id.delete_btn);
-                reserve_btn = (com.zcw.togglebutton.ToggleButton) itemView.findViewById(R.id.reserve_btn);
+                reserve_btn = (ToggleButton) itemView.findViewById(R.id.reserve_btn);
 
             }
         }
@@ -751,6 +770,7 @@ public class ActivityFavourite extends Activity{
                         holder.plateNo.setVisibility(View.VISIBLE);
                         holder.remainSeatCnt.setVisibility(View.VISIBLE);
                         holder.bus_info_layout.setVisibility(View.VISIBLE);
+                        holder.pointer.setVisibility(View.INVISIBLE);
 
                         holder.plateNo.setText(busLocationList.get(i).plateNo.substring(5));
 
@@ -760,15 +780,15 @@ public class ActivityFavourite extends Activity{
                         else{
                             holder.remainSeatCnt.setText(busLocationList.get(i).remainSeatCnt+"석");
                         }
-
-
                         break;
                     }else{
                         holder.bus.setVisibility(View.INVISIBLE);
                         holder.plateNo.setVisibility(View.INVISIBLE);
                         holder.remainSeatCnt.setVisibility(View.INVISIBLE);
                         holder.bus_info_layout.setVisibility(View.INVISIBLE);
+                        holder.pointer.setVisibility(View.VISIBLE);
                     }
+
 
                 }
 
@@ -789,6 +809,7 @@ public class ActivityFavourite extends Activity{
             public TextView stationName;
             public TextView stationNumber;
             public ImageView bus;
+            public ImageView pointer;
             public TextView plateNo;
             public TextView remainSeatCnt;
             public RelativeLayout bus_info_layout;
@@ -800,6 +821,7 @@ public class ActivityFavourite extends Activity{
                 stationName = (TextView) itemView.findViewById(R.id.stationName);
                 stationNumber = (TextView) itemView.findViewById(R.id.stationNumber);
                 bus = (ImageView) itemView.findViewById(R.id.bus);
+                pointer = (ImageView) itemView.findViewById(R.id.pointer);
                 plateNo = (TextView) itemView.findViewById(R.id.plateNo);
                 remainSeatCnt = (TextView) itemView.findViewById(R.id.remainSeatCnt);
                 bus_info_layout = (RelativeLayout) itemView.findViewById(R.id.bus_info_layout);

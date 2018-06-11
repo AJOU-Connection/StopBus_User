@@ -87,6 +87,8 @@ public class ServiceBeacon extends Service{
 
                 if(btAdapter.isEnabled()){
                     if(minewBeacons.size()==0){
+                        Log.d(TAG, "111111111111111111111111");
+                        mMinewBeaconManager.stopScan();
                         mMinewBeaconManager.startScan();
                     }
 
@@ -188,7 +190,7 @@ public class ServiceBeacon extends Service{
 
 
                                 Shared_Pref.beacon_stationName = obj.optString("stationName");
-                                //Shared_Pref.beacon_stationDirect = obj.optString("stationDirect");
+                                Shared_Pref.beacon_stationDirect = obj.optString("stationDirect");
 
                             } catch (JSONException e) {
                                 e.printStackTrace();

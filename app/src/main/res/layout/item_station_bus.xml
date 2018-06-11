@@ -80,7 +80,7 @@
         android:id="@+id/bell"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:background="@drawable/bell_gray"
+        android:background="@drawable/bell"
         android:layout_marginRight="15dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"/>

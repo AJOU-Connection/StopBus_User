@@ -78,6 +78,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String routeID = remoteMessage.getData().get("routeID");
 
         Shared_Pref.routeID = routeID.toString();
+        Shared_Pref.bt_bus_flag =0;
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
