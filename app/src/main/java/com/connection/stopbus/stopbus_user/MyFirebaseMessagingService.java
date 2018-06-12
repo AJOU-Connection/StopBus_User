@@ -150,7 +150,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     ts.ttsUnder20(Message);
                 }
             }
-        }, 120);
+        }, 300);
 
 
 

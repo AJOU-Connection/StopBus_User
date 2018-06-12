@@ -26,9 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
-import com.zcw.togglebutton.ToggleButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,6 +70,7 @@ public class ActivityFavourite extends Activity{
     private List<ApiData.BusStation> BusStationList = new ArrayList<ApiData.BusStation>();
     private List<ApiData.busLocation> busLocationList = new ArrayList<ApiData.busLocation>();
     private BluetoothAdapter btAdapter;
+
 
     TextView bus_type;
     TextView bus_num;
@@ -430,25 +429,31 @@ public class ActivityFavourite extends Activity{
                     final String response = NetworkService.INSTANCE.postQuery2(api, favouriteList, "routeIDList");
                     Log.d("sb","333333"+response);
 
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
+                    if(response==null){
 
-                            try {
-                                JSONArray jarray = new JSONObject(response).getJSONArray("body");   // JSONArray 생성
-                                Log.d("sb","jarray"+jarray);
-                                ApiData.favrouteInfo[] arr= new Gson().fromJson(jarray.toString(), ApiData.favrouteInfo[].class);
-                                favRouteInfoList = Arrays.asList(arr);
+                    }else{
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
 
-                                Log.d("sb","44444"+favRouteInfoList);
+                                try {
+                                    JSONArray jarray = new JSONObject(response).getJSONArray("body");   // JSONArray 생성
+                                    Log.d("sb","jarray"+jarray);
+                                    ApiData.favrouteInfo[] arr= new Gson().fromJson(jarray.toString(), ApiData.favrouteInfo[].class);
+                                    favRouteInfoList = Arrays.asList(arr);
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                                    Log.d("sb","44444"+favRouteInfoList);
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                favourite_bus_list_adapter.notifyDataSetChanged();
+
                             }
-                            favourite_bus_list_adapter.notifyDataSetChanged();
+                        });
+                    }
 
-                        }
-                    });
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -491,7 +496,7 @@ public class ActivityFavourite extends Activity{
 
 
 
-                                } catch (JSONException e) {
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                                 Log.d("sb","station_now: "+ station_now);
@@ -522,7 +527,7 @@ public class ActivityFavourite extends Activity{
                                     endStationName = (TextView) findViewById(R.id.endStationName);
                                     endStationName.setText(routeInfo.endStationName);
 
-                                } catch (JSONException e) {
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                                 route_info_list_adapter.notifyDataSetChanged();
@@ -553,7 +558,7 @@ public class ActivityFavourite extends Activity{
 
                                     Log.d("sb","busLocationList2: "+ busLocationList);
 
-                                } catch (JSONException e) {
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                                 bus_location_list_adapter.notifyDataSetChanged();
@@ -597,12 +602,28 @@ public class ActivityFavourite extends Activity{
             try {
                 if(flag==1){
                     holder.delete_btn.setVisibility(View.VISIBLE);
-                    holder.reserve_btn.setVisibility(View.GONE);
                 }else if(flag==0){
                     holder.delete_btn.setVisibility(View.GONE);
-                    holder.reserve_btn.setVisibility(View.VISIBLE);
 
                 }
+
+                holder.favourite_list_layout.setOnClickListener(
+                        new Button.OnClickListener() {
+                            public void onClick(View v) {
+
+                                Shared_Pref.routeID = favRouteInfoList.get(position).routeID;
+                                Shared_Pref.bt_bus_flag =0;
+
+                                Log.d("sb", "bus route list gogo");
+                                Intent i = new Intent(ActivityFavourite.this, ActivityBus.class);
+
+                                startActivity(i);
+
+
+                            }
+                        }
+                );
+
                 holder.delete_btn.setOnClickListener(
                         new Button.OnClickListener() {
                             public void onClick(View v) {
@@ -627,25 +648,6 @@ public class ActivityFavourite extends Activity{
                             }
                         }
                 );
-
-//                Log.d("sb","favRouteInfoList.get(position).isOn : " +favRouteInfoList.get(position).isOn);
-//                if(favRouteInfoList.get(position).isOn==1){
-//                    holder.reserve_btn.setToggleOn();
-//                }else{
-//                    holder.reserve_btn.setToggleOff();
-//                }
-//
-//                holder.reserve_btn.setOnToggleChanged(new ToggleButton.OnToggleChanged(){
-//                    @Override
-//                    public void onToggle(boolean on) {
-//                        if(on){
-//                            favRouteInfoList.get(position).isOn =1;
-//                        }else{
-//                            favRouteInfoList.get(position).isOn =0;
-//                        }
-//                        Log.d("sb", "on: "+on);
-//                    }
-//                });
 
 
 
@@ -683,7 +685,7 @@ public class ActivityFavourite extends Activity{
             public TextView downFirstTime;
             public TextView upLastTime;
             public TextView downLastTime;
-            public ToggleButton reserve_btn;
+            public RelativeLayout favourite_list_layout;
 
             public ViewHolder(final View itemView) {
                 super(itemView);
@@ -696,8 +698,8 @@ public class ActivityFavourite extends Activity{
                 downLastTime= (TextView) itemView.findViewById(R.id.downLastTime);
 
                 delete_btn = (ImageView) itemView.findViewById(R.id.delete_btn);
-                reserve_btn = (ToggleButton) itemView.findViewById(R.id.reserve_btn);
 
+                favourite_list_layout = (RelativeLayout) itemView.findViewById(R.id.favourite_list_layout);
             }
         }
 
@@ -760,6 +762,7 @@ public class ActivityFavourite extends Activity{
                             }
                         }
                 );
+
 
 
                 for(int i =0; i < busLocationList.size(); i++){
@@ -826,6 +829,7 @@ public class ActivityFavourite extends Activity{
                 remainSeatCnt = (TextView) itemView.findViewById(R.id.remainSeatCnt);
                 bus_info_layout = (RelativeLayout) itemView.findViewById(R.id.bus_info_layout);
                 station_layout = (RelativeLayout) itemView.findViewById(R.id.station_layout);
+
 
 
             }

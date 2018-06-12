@@ -8,24 +8,25 @@
 
     <ImageView
         android:id="@+id/delete_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@drawable/trash"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="20dp"
         android:layout_centerVertical="true"/>
 
     <RelativeLayout
         android:id="@+id/bus_info_layout"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginLeft="15dp"
+        android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/delete_btn">
 
         <TextView
             android:id="@+id/routeNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="3007"
+            android:text=""
             android:layout_marginTop="10dp"
             android:textSize="20sp"
             android:textColor="#FF0000"
@@ -36,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/routeNumber"
-            android:text="수원"
+            android:text=""
             android:textSize="10sp"
             android:layout_centerHorizontal="true"
             android:textColor="#000000"
@@ -46,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/regionName"
-            android:text="시외버스"
+            android:text=""
             android:textSize="10sp"
             android:layout_centerHorizontal="true"
             android:textColor="#000000"
@@ -54,59 +55,50 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/upFirstTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:text="상행: 05:00"
-        android:layout_toRightOf="@+id/bus_info_layout"
-        android:textSize="15sp"
-        android:textColor="#000000" />
-    <TextView
-        android:id="@+id/upLastTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/upFirstTime"
-        android:layout_marginTop="20dp"
-        android:text="~ 22:10"
-        android:textSize="15sp"
-        android:textColor="#000000" />
-    <TextView
-        android:id="@+id/downFirstTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/upFirstTime"
-        android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@+id/bus_info_layout"
-        android:text="하행: 06:00"
-        android:textSize="15sp"
-        android:textColor="#000000"/>
-    <TextView
-        android:id="@+id/downLastTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/upFirstTime"
-        android:layout_toRightOf="@+id/downFirstTime"
-        android:text="~ 22:10"
-        android:textSize="15sp"
-        android:textColor="#000000" />
+    <RelativeLayout
+        android:layout_width="match_parent"
 
-    <com.zcw.togglebutton.ToggleButton
-        android:id="@+id/reserve_btn"
-        android:layout_width="54dp"
-        toggle:tbOnColor=   "#4BED90"
-        toggle:tbOffColor="#BDBDBD"
-        toggle:tbSpotColor="#FFFFFF"
-        toggle:tbOffBorderColor="#BDBDBD"
-        toggle:tbBorderWidth="2dp"
-        android:layout_height="30dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_centerVertical="true"
-        >
+        android:layout_height="match_parent"
 
-    </com.zcw.togglebutton.ToggleButton>
+        android:layout_toRightOf="@+id/bus_info_layout">
+
+        <TextView
+            android:id="@+id/upFirstTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:text=""
+            android:textSize="15sp"
+            android:textColor="#000000" />
+        <TextView
+            android:id="@+id/upLastTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/upFirstTime"
+            android:layout_marginTop="20dp"
+            android:text=""
+            android:textSize="15sp"
+            android:textColor="#000000" />
+        <TextView
+            android:id="@+id/downFirstTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/upFirstTime"
+            android:layout_marginLeft="20dp"
+            android:text=""
+            android:textSize="15sp"
+            android:textColor="#000000"/>
+        <TextView
+            android:id="@+id/downLastTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/upFirstTime"
+            android:layout_toRightOf="@+id/downFirstTime"
+            android:text=""
+            android:textSize="15sp"
+            android:textColor="#000000" />
+
+    </RelativeLayout>
+
 </RelativeLayout>

@@ -3,6 +3,7 @@ package com.connection.stopbus.stopbus_user;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -274,6 +275,12 @@ public class ActivityBus extends Activity{
                 holder.stationName.setText(BusStationList.get(position).stationName);
                 holder.stationNumber.setText(BusStationList.get(position).stationNumber.trim());
 
+                if(BusStationList.get(position).stationNumber.trim().equals(Shared_Pref.beacon_stationNumber)){
+
+                    holder.station_layout.setBackgroundColor(Color.parseColor("#BDBDBD"));
+                }else{
+                    holder.station_layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                }
 
                 for(int i =0; i < busLocationList.size(); i++){
 
@@ -327,6 +334,7 @@ public class ActivityBus extends Activity{
             public TextView plateNo;
             public TextView remainSeatCnt;
             public RelativeLayout bus_info_layout;
+            public RelativeLayout station_layout;
 
             public ViewHolder(final View itemView) {
                 super(itemView);
@@ -338,6 +346,7 @@ public class ActivityBus extends Activity{
                 plateNo = (TextView) itemView.findViewById(R.id.plateNo);
                 remainSeatCnt = (TextView) itemView.findViewById(R.id.remainSeatCnt);
                 bus_info_layout = (RelativeLayout) itemView.findViewById(R.id.bus_info_layout);
+                station_layout = (RelativeLayout) itemView.findViewById(R.id.station_layout);
 
 
             }
