@@ -17,6 +17,7 @@ import com.minew.beacon.MinewBeaconManagerListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +52,7 @@ public class ServiceBeacon extends Service{
                     if(minewBeacon.getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_Name).getStringValue().equals("N/A"))
                         continue;
                     String deviceName = minewBeacon.getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_Name).getStringValue();
-                   //Toast.makeText(getApplicationContext(), deviceName + "  out range", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), deviceName + "  out range", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -79,11 +80,14 @@ public class ServiceBeacon extends Service{
                 double rssi;
                 double bus_dis= 0.0;
                 double station_dis = 0.0;
+                String minBusName= "";
+                double minDistance =Double.MAX_VALUE;
 
                 Shared_Pref.beacon_routeID = "";
                 Shared_Pref.beacon_plateNo = "";
                 Shared_Pref.beacon_stationID = "";
                 Shared_Pref.beacon_stationNumber ="";
+//              TinyDB tinydb = new TinyDB(ServiceBeacon.this);
 
                 if(btAdapter.isEnabled()){
 
@@ -99,25 +103,40 @@ public class ServiceBeacon extends Service{
                     if(name.length()<10)
                         continue;
                     rssi = minewBeacons.get(i).getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_RSSI).getFloatValue();
+
+//                    double dis =calculateDistance(rssi);
+//                    ArrayList<Double> disList;
+//                    disList= tinydb.getListDouble("original");
+//                    disList.add(dis);
+//                    tinydb.putListDouble("original", disList);
+//                    Log.d("beacon", "original: " +  disList);
+
                     if(!mRssiMap.containsKey(name)) {
                         mRssiMap.put(name, new KalmanFilter(0.0f));
                     }
                     rssi = mRssiMap.get(name).update(rssi);
 
+//                    ArrayList<Double> diskalList;
+//                    diskalList= tinydb.getListDouble("kalman");
+//                    double disKal =calculateDistance(rssi);
+//                    diskalList.add(disKal);
+//                    tinydb.putListDouble("kalman", diskalList);
+//                    Log.d("beacon", "disKal: " +  diskalList);
+
+                    bus_dis = calculateDistance(rssi);
 
                     //여기 이제 위치별 districtCd, stationNumber 받아와야함
                     if (name.substring(0, 3).equals("bus")) {
-                        Shared_Pref.beacon_routeID = name.substring(3, 12);
-                        Shared_Pref.beacon_plateNo = name.substring(13, 17);
-                        bus_dis = calculateDistance(rssi);
-                        Log.d("beacon", "beacon route id: " + name.substring(3, 12));
-                        Log.d("beacon", "beacon bus name: " + name.substring(13, 17));
+                        if(minDistance > bus_dis){
+                            minBusName = name;
+                            minDistance = bus_dis;
+                        }
+
                     }else if (name.substring(0, 1).equals("s")) {
 
 
                         Shared_Pref.beacon_stationID = name.substring(1, 10);
                         Shared_Pref.beacon_stationNumber = name.substring(10, 15);
-                        station_dis = calculateDistance(rssi);
 
                         Log.d("beacon", "beacon station id: " + name.substring(1, 10));
                         Log.d("beacon", "beacon station number:  " + name.substring(10, 15));
@@ -129,6 +148,15 @@ public class ServiceBeacon extends Service{
 
 
                 }
+                Log.d("kalman", "IF START");
+                if( minDistance != Double.MAX_VALUE){
+                    Log.d("beacon", "IF IN");
+
+                    Shared_Pref.beacon_routeID = minBusName.substring(3, 12);
+                    Shared_Pref.beacon_plateNo = minBusName.substring(13, 17);
+                }
+                Log.d("beacon", "IF OUT");
+
             }
         });
         mMinewBeaconManager.startScan();
