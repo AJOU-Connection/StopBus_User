@@ -363,11 +363,19 @@ public class ActivityFavourite extends Activity{
                     startService(intent); // 서비스 시작
 
                     Shared_Pref.bt_station_flag=1;
-                    Log.d("sb", "search for bus stop 222222");
-                    Intent i = new Intent(ActivityFavourite.this, ActivityStation.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(i);
+
+                    if(Shared_Pref.beacon_stationID.equals("")){
+                        Log.d("sb", "There are no bus stop");
+                        Toast.makeText(getApplicationContext(), "감지된 버스정류장이 없습니다.", Toast.LENGTH_LONG).show();
+                    }else{
+                        Log.d("sb", "search for bus stop 222222");
+                        Intent i = new Intent(ActivityFavourite.this, ActivityStation.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(i);
+                    }
+
+
                 } else {
                     // 취소 눌렀을 때
                     Log.d("sb", "Bluetooth is not enabled");

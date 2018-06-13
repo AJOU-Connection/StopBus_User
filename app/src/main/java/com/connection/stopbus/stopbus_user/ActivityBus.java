@@ -277,11 +277,13 @@ public class ActivityBus extends Activity{
 
                 Log.d("sb","this: " + BusStationList.get(position).stationNumber.trim()+ "beacon: " + Shared_Pref.beacon_stationNumber);
                 if(BusStationList.get(position).stationNumber.trim().equals("")){
+                    Log.d("sb","white");
                     holder.station_layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
                 } else if(BusStationList.get(position).stationNumber.trim().equals(Shared_Pref.beacon_stationNumber)){
-
+                    Log.d("sb","gray");
                     holder.station_layout.setBackgroundColor(Color.parseColor("#BDBDBD"));
                 }else{
+                    Log.d("sb","white");
                     holder.station_layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
                 }
 
