@@ -167,7 +167,7 @@ public class ActivityStation extends Activity{
                                     StationBusList = Arrays.asList(arr);
                                     Log.d("sb","55555555"+StationBusList);
 
-                                } catch (JSONException e) {
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                                 station_bus_list_adapter.notifyDataSetChanged();

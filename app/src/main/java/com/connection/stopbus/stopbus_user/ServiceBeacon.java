@@ -193,7 +193,7 @@ public class ServiceBeacon extends Service{
                                 Shared_Pref.beacon_stationName = obj.optString("stationName");
                                 Shared_Pref.beacon_stationDirect = obj.optString("stationDirect");
 
-                            } catch (JSONException e) {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
 
